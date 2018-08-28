@@ -20,9 +20,10 @@ public class XMLConverter {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
 			String fileExt = FilenameUtils.getExtension(Constants.SOURCE_XML_FILE);
+			List<Attribute> attributeList = null;
 			if (Constants.XML.equals(fileExt)) {
 				XMLReader xmlReader = new XMLReader();
-				List<Attribute> attributeList = xmlReader.readXML(file);
+				attributeList = xmlReader.readXML(file);
 				System.out.println(attributeList);
 			}
 			
@@ -33,7 +34,7 @@ public class XMLConverter {
 			fileExt = FilenameUtils.getExtension(Constants.SOURCE_FILE);
 			if (Constants.DOCX_EXT.equals(fileExt)) {
 				DocxFileConverter converter = new DocxFileConverter();
-				converter.docxFileConverter(file);
+				converter.docxFileConverter(file,attributeList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

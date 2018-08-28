@@ -16,7 +16,7 @@ public class WordDocumentConverter {
 			String fileExt = FilenameUtils.getExtension(Constants.SOURCE_FILE);
 			if (Constants.DOCX_EXT.equals(fileExt)) {
 				DocxFileConverter converter = new DocxFileConverter();
-				converter.docxFileConverter(file);
+				converter.docxFileConverter(file,null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

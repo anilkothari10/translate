@@ -6,33 +6,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFFieldRun;
-import org.apache.poi.xwpf.usermodel.XWPFHyperlinkRun;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class DocxFileConverter {
 
-	public void docxFileConverter(File file) throws Exception {
+	public void docxFileConverter(File file, List<Attribute> attributeList) throws Exception {
 		XWPFDocument docx = openDocxFile(file);
 		if (docx != null) {
-			for (XWPFTable tbl : docx.getTables()) {
-				for (XWPFTableRow row : tbl.getRows()) {
-					for (XWPFTableCell cell : row.getTableCells()) {
-						translateParagraph(cell.getParagraphs());
-					}
-				}
-			}
+			XWPFTable table = docx.createTable();
+            XWPFTableRow tableRowOne = table.getRow(0);
+            tableRowOne.getCell(0).setText("Name");
+            tableRowOne.addNewTableCell().setText("Variable Name");
+            tableRowOne.addNewTableCell().setText("Data Type");
+
+            for (Attribute attribute : attributeList) {
+                XWPFTableRow tempRow = table.createRow();
+                tempRow.getCell(0).setText(attribute.getName());
+                tempRow.getCell(1).setText(attribute.getVariableName());
+                tempRow.getCell(2).setText(attribute.getDataType());
+            }
 			saveDocxFile(docx, Constants.SOURCE_FILE.replace("input", "output"));
 		}
 	}
 
-	private void translateParagraph(List<XWPFParagraph> paragraphs) {
+	/*private void translateParagraph(List<XWPFParagraph> paragraphs) {
 		StringBuilder sb = null;
 		for (XWPFParagraph paragraph : paragraphs) {
 			if(StringUtils.isNotBlank(paragraph.getParagraphText())){
@@ -51,9 +50,9 @@ public class DocxFileConverter {
 									run instanceof XWPFFieldRun)){
 								paragraph.removeRun(i);
 							}
-							/*else{
+							else{
 								System.out.println("Cannot remove Hyperlink : " +run.getText(run.getTextPosition()));
-							}*/
+							}
 						}
 					}
 					XWPFRun run = runs.get(0);
@@ -61,7 +60,7 @@ public class DocxFileConverter {
 				}
 			}
 		}
-	}
+	}*/
 
 	private XWPFDocument openDocxFile(File file) throws Exception {
 		XWPFDocument document = null;
