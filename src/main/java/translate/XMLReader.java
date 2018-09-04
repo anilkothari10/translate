@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 
 public class XMLReader {
 
-	public List<Attribute> readXML(File file) throws ParserConfigurationException, SAXException, IOException{
+	public List<Attribute> readAttrXML(File file) throws ParserConfigurationException, SAXException, IOException{
 		//Get Document Builder
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -63,5 +63,54 @@ public class XMLReader {
 			attributeList.add(attribute);
 		}
 		return attributeList;
+	}
+	
+	public List<Rule> readRuleXML(File file) throws ParserConfigurationException, SAXException, IOException{
+		//Get Document Builder
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
+		List<Rule> ruleList = new ArrayList<Rule>();
+		Rule rule = null;
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			rule = new Rule();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("name".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
+									rule.setName(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
+					if("variable_name".equals(childNode.getNodeName())){
+						//System.out.println("Variable Name : " + childNode.getTextContent());
+						rule.setVariableName(childNode.getTextContent().trim());
+					}
+					if("rule_type".equals(childNode.getNodeName())){
+						//System.out.println("Data Type : " + childNode.getTextContent());
+						rule.setRuleType(childNode.getTextContent().trim());
+					}
+				}
+			}
+			ruleList.add(rule);
+		}
+		return ruleList;
 	}
 }

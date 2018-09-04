@@ -6,32 +6,43 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.poi.xwpf.usermodel.PositionInParagraph;
-import org.apache.poi.xwpf.usermodel.TextSegement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import org.apache.xmlbeans.XmlCursor;
 
 public class DocxFileConverter {
 
-	public void docxFileConverter(File file, List<Attribute> attributeList) throws Exception {
+	public void docxFileConverter(File file, List<Attribute> attributeList, List<Rule> ruleList) throws Exception {
 		XWPFDocument docx = openDocxFile(file);
 		if (docx != null) {
-			XWPFTable table = docx.createTable();
-            XWPFTableRow tableRowOne = table.getRow(0);
+			// Add Atrribute List
+			XWPFTable attributeTable = docx.createTable();
+            XWPFTableRow tableRowOne = attributeTable.getRow(0);
             tableRowOne.getCell(0).setText("Name");
             tableRowOne.addNewTableCell().setText("Variable Name");
             tableRowOne.addNewTableCell().setText("Data Type");
 
             for (Attribute attribute : attributeList) {
-                XWPFTableRow tempRow = table.createRow();
+                XWPFTableRow tempRow = attributeTable.createRow();
                 tempRow.getCell(0).setText(attribute.getName());
                 tempRow.getCell(1).setText(attribute.getVariableName());
                 tempRow.getCell(2).setText(attribute.getDataType());
             }
+            
+            // Add Rule List
+            XWPFTable ruleTable = docx.createTable();
+            XWPFTableRow tableRowTwo = ruleTable.getRow(0);
+            tableRowTwo.getCell(0).setText("Name");
+            tableRowTwo.addNewTableCell().setText("Variable Name");
+            tableRowTwo.addNewTableCell().setText("Rule Type");
+
+            for (Rule rule : ruleList) {
+                XWPFTableRow tempRow = ruleTable.createRow();
+                tempRow.getCell(0).setText(rule.getName());
+                tempRow.getCell(1).setText(rule.getVariableName());
+                tempRow.getCell(2).setText(rule.getRuleType());
+            }
+            
 			saveDocxFile(docx, Constants.SOURCE_FILE.replace("input", "output"));
 		}
 	}
@@ -68,7 +79,7 @@ public class DocxFileConverter {
 	}*/
 	
 	/* Replaces table */
-	private long replaceTable(XWPFDocument doc) {
+	/*private long replaceTable(XWPFDocument doc) {
 		XWPFTable table = null;
 		long count = 0;
 		for (XWPFParagraph paragraph : doc.getParagraphs()) {
@@ -110,7 +121,7 @@ public class DocxFileConverter {
 			}     
 		}
 		return count;
-	}
+	}*/
 
 	private XWPFDocument openDocxFile(File file) throws Exception {
 		XWPFDocument document = null;
