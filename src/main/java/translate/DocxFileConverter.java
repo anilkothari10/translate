@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
@@ -17,6 +19,10 @@ public class DocxFileConverter {
 		if (docx != null) {
 			
 			// Add Atrribute List
+			XWPFParagraph paragraph = docx.createParagraph();
+			XWPFRun run = paragraph.createRun();
+			run.setText("Atrribute Table",0);
+			
 			XWPFTable attributeTable = docx.createTable();
             XWPFTableRow tableRowOne = attributeTable.getRow(0);
             tableRowOne.getCell(0).setText("Name");
@@ -31,6 +37,10 @@ public class DocxFileConverter {
             }
             
             // Add Rule List
+            paragraph = docx.createParagraph();
+			run = paragraph.createRun();
+			run.setText("Rule Table",0);
+			
             XWPFTable ruleTable = docx.createTable();
             XWPFTableRow tableRowTwo = ruleTable.getRow(0);
             tableRowTwo.getCell(0).setText("Name");
