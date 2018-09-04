@@ -15,6 +15,7 @@ public class DocxFileConverter {
 	public void docxFileConverter(File file, List<Attribute> attributeList, List<Rule> ruleList) throws Exception {
 		XWPFDocument docx = openDocxFile(file);
 		if (docx != null) {
+			
 			// Add Atrribute List
 			XWPFTable attributeTable = docx.createTable();
             XWPFTableRow tableRowOne = attributeTable.getRow(0);
