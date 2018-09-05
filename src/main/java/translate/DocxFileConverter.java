@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -14,7 +15,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class DocxFileConverter {
 
-	public void docxFileConverter(File file, List<Attribute> attributeList, List<Rule> ruleList) throws Exception {
+	public void docxFileConverter(File file, List<Attribute> attributeList, List<Rule> ruleList, Map<String, List<Util>> utilMap) throws Exception {
 		XWPFDocument docx = openDocxFile(file);
 		if (docx != null) {
 			
@@ -24,10 +25,10 @@ public class DocxFileConverter {
 			run.setText("Atrribute Table",0);
 			
 			XWPFTable attributeTable = docx.createTable();
-            XWPFTableRow tableRowOne = attributeTable.getRow(0);
-            tableRowOne.getCell(0).setText("Name");
-            tableRowOne.addNewTableCell().setText("Variable Name");
-            tableRowOne.addNewTableCell().setText("Data Type");
+            XWPFTableRow attributeRow = attributeTable.getRow(0);
+            attributeRow.getCell(0).setText("Name");
+            attributeRow.addNewTableCell().setText("Variable Name");
+            attributeRow.addNewTableCell().setText("Data Type");
 
             for (Attribute attribute : attributeList) {
                 XWPFTableRow tempRow = attributeTable.createRow();
@@ -42,10 +43,10 @@ public class DocxFileConverter {
 			run.setText("Rule Table",0);
 			
             XWPFTable ruleTable = docx.createTable();
-            XWPFTableRow tableRowTwo = ruleTable.getRow(0);
-            tableRowTwo.getCell(0).setText("Name");
-            tableRowTwo.addNewTableCell().setText("Variable Name");
-            tableRowTwo.addNewTableCell().setText("Rule Type");
+            XWPFTableRow ruleRow = ruleTable.getRow(0);
+            ruleRow.getCell(0).setText("Name");
+            ruleRow.addNewTableCell().setText("Variable Name");
+            ruleRow.addNewTableCell().setText("Rule Type");
 
             for (Rule rule : ruleList) {
                 XWPFTableRow tempRow = ruleTable.createRow();
@@ -54,41 +55,30 @@ public class DocxFileConverter {
                 tempRow.getCell(2).setText(rule.getRuleType());
             }
             
+            // Add Data Table List
+            
+            // Add Util Libraries map
+            paragraph = docx.createParagraph();
+			run = paragraph.createRun();
+			run.setText("Util Libraries Table",0);
+			XWPFTable utilTable = docx.createTable();
+            XWPFTableRow UtilTableRow = utilTable.getRow(0);
+            UtilTableRow.getCell(0).setText("Name");
+            UtilTableRow.addNewTableCell().setText("Variable Name");
+            UtilTableRow.addNewTableCell().setText("Script Text");
+			for(String utilName : utilMap.keySet()){
+	            for (Util util : utilMap.get(utilName)) {
+	                XWPFTableRow tempRow = utilTable.createRow();
+	                tempRow.getCell(0).setText(util.getName());
+	                tempRow.getCell(1).setText(util.getVariableName());
+	                tempRow.getCell(2).setText(util.getScriptText());
+	            }
+			}
+            
 			saveDocxFile(docx, Constants.SOURCE_FILE.replace("input", "output"));
 		}
 	}
 
-	/*private void translateParagraph(List<XWPFParagraph> paragraphs) {
-		StringBuilder sb = null;
-		for (XWPFParagraph paragraph : paragraphs) {
-			if(StringUtils.isNotBlank(paragraph.getParagraphText())){
-				System.out.println("paragraph : " + paragraph.getParagraphText());
-				String sentences[] = OpenNLPDetect.getNLPDetector().getSentences(paragraph.getParagraphText());
-				sb = new StringBuilder();
-				for(String sentence : sentences){
-					sb.append(sentence.toUpperCase());
-				}
-				List<XWPFRun> runs = paragraph.getRuns();
-				if(runs.size() > 0){
-					for(int i = runs.size()-1 ; i>0 ; i--){
-						XWPFRun run = runs.get(i);
-						if(StringUtils.isNotBlank(run.getText(run.getTextPosition()))){
-							if(!(run instanceof XWPFHyperlinkRun ||
-									run instanceof XWPFFieldRun)){
-								paragraph.removeRun(i);
-							}
-							else{
-								System.out.println("Cannot remove Hyperlink : " +run.getText(run.getTextPosition()));
-							}
-						}
-					}
-					XWPFRun run = runs.get(0);
-					run.setText(sb.toString(),0);
-				}
-			}
-		}
-	}*/
-	
 	/* Replaces table */
 	/*private long replaceTable(XWPFDocument doc) {
 		XWPFTable table = null;

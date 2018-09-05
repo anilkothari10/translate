@@ -1,0 +1,720 @@
+<bm_lib_func_zip_deploy><id>36266121</id><container_id>4133367</container_id><func_type>1</func_type><data>[B@1e92cffe</data><_children><bm_lib_func><id>38699283</id><name><en><![CDATA[Update File Attachment]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_UpdateFileAttachment]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699282</function_id><main_script_text></main_script_text><date_modified>1519065708000</date_modified><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699282</id><ref_type>16</ref_type><script_text><![CDATA[response = dict("string");
+url = siteUrl+"/rest/v2"+
+"/commerceProcesses/" + processVarName+
+"/transactions/" + string(transactionId) +
+"/attachments/" + attachmentVarname;
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// add json data
+usePrintContext = "false";
+if(NOT hasBrowse){
+usePrintContext = "true";
+}
+jsonObj = json();
+jsonput(jsonObj, "mediaType", fileType);
+jsonput(jsonObj, "fileContent", fileContent);
+jsonput(jsonObj, "useTempTable", usePrintContext);
+jsonput(jsonObj, "usePrintContext", usePrintContext);
+jsonput(jsonObj, "fileName", fileName);
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+if( get(xlsxResponse, "Status-Code") <> "200" ){
+put(response, "error", get(xlsxResponse, "Error-Message"));
+return response;
+}else{
+return xlsxResponse;
+}]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_UpdateFileAttachment_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519065708000</date_modified><guid><![CDATA[fd1417ae-8a7b-491b-90b1-319e49446ae8]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699285</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699286</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699287</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699288</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519065708000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699289</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[attachmentVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_attachmentVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699290</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[fileType]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_fileType_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699291</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[fileContent]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>7</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_fileContent_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699292</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[fileName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065708000</date_modified><order_no>8</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_fileName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699293</id><bm_lib_func_id>38699283</bm_lib_func_id><param_name><![CDATA[hasBrowse]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>0</datatype><date_modified>1519065708000</date_modified><order_no>9</order_no><guid><![CDATA[bm_lib_func_util_CN_UpdateFileAttachment.bm_lib_func_param_hasBrowse_0]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699420</id><name><en><![CDATA[Compare Docx]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_CompareDocx]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699419</function_id><main_script_text></main_script_text><date_modified>1519072751000</date_modified><guid><![CDATA[bm_lib_func_util_CN_CompareDocx]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699419</id><ref_type>16</ref_type><script_text><![CDATA[response = dict("string");
+// GENERATE DIFF REST CALL
+url = siteUrl+"/rest/v2/docxCompare";
+jsonObj = json();
+jsonput(jsonObj, "processVarname", processVarName);
+jsonput(jsonObj, "transactionId", transactionId);
+jsonput(jsonObj, "oldDocAttachId", prevFileAttachId);
+jsonput(jsonObj, "newDocAttachId", curFileAttachId);
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+if( get(xlsxResponse, "Status-Code") <> "200" ){
+err = get(xlsxResponse, "Error-Message");
+if(len(err) <= 5){
+err = get(xlsxResponse, "Message-Body");
+}
+put(response, "error", err);
+return response;
+}else{
+mb = get(xlsxResponse, "Message-Body");
+jmb = json(mb);
+diffs = jsonget(jmb , "diffs" );
+if(len(diffs) > 3){
+put(response, "jsonString", mb);
+}
+}
+print("COMPARE COMPLETE");
+return response;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_CompareDocx_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519072751000</date_modified><guid><![CDATA[3b77085d-64f1-420c-bf96-a6107ff03ad2]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699422</id><bm_lib_func_id>38699420</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072751000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_CompareDocx.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699423</id><bm_lib_func_id>38699420</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072751000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_CompareDocx.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699424</id><bm_lib_func_id>38699420</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072751000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_CompareDocx.bm_lib_func_param_processVarName_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699425</id><bm_lib_func_id>38699420</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072751000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_CompareDocx.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699426</id><bm_lib_func_id>38699420</bm_lib_func_id><param_name><![CDATA[prevFileAttachId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072751000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_CompareDocx.bm_lib_func_param_prevFileAttachId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699427</id><bm_lib_func_id>38699420</bm_lib_func_id><param_name><![CDATA[curFileAttachId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072751000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_CompareDocx.bm_lib_func_param_curFileAttachId_6]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>36791389</id><name><en><![CDATA[Parse CSV]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[parseCSV]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>12</return_type><func_type>1</func_type><function_id>36791388</function_id><main_script_text></main_script_text><date_modified>1511378850000</date_modified><guid><![CDATA[bm_lib_func_util_parseCSV]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>36791388</id><ref_type>16</ref_type><script_text><![CDATA[arr = string[][];
+raw = urldatabyget(fileLocation, "", "ERROR");
+if(raw == "ERROR"){
+	return arr;
+}
+goodLines = 0;
+knownColumns = 0;
+rawLines = split(raw,"\n");
+for rl in rawLines{
+	rawCols = split(rl,",");
+	if(goodLines == 0){
+		knownColumns = sizeofarray(rawCols);
+	}
+	if(sizeofarray(rawCols) <> knownColumns){
+		break;
+	}
+	else{
+	goodLines = goodLines + 1;
+	}
+}
+rows = range(goodLines);
+cols = range(knownColumns);
+for row in rows{
+	rawColumns = split(rawLines[row],",");
+	for col in cols{
+		arr[row][col] = rawColumns[col];
+	}
+}
+return arr;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_parseCSV_1]]></java_class_name><child_class_names></child_class_names><date_modified>1511378871000</date_modified><guid><![CDATA[e16a57be-17f4-45b9-8713-3afc48de5ac9]]></guid><_children></_children></bm_function><bm_lib_func_param><id>36791390</id><bm_lib_func_id>36791389</bm_lib_func_id><param_name><![CDATA[fileLocation]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1511378851000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_parseCSV.bm_lib_func_param_fileLocation_2]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699341</id><name><en><![CDATA[Print Email Designer BML]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_PrintEmailDesigner]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699340</function_id><main_script_text></main_script_text><date_modified>1519066029000</date_modified><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699340</id><ref_type>16</ref_type><script_text><![CDATA[// Prints a Email Designer Template. Returns "error" or "subject" & "body".
+response = dict("string");
+/* ************************************** */
+// PRINT TEMPLATE
+url = siteUrl+"/rest/v2/emailGenerator/";
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// add json data
+jsonObj = json();
+jsonput(jsonObj, "processVarname", processVarName);
+jsonput(jsonObj, "templateName", templateName);
+jsonput(jsonObj, "transactionId", transactionId);
+jsonput(jsonObj, "languageCode", templateLanguage);
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+// CHECK OUTPUT, UPDATE STATUS
+statusCode = get(xlsxResponse, "Status-Code");
+printStatus = "";
+if( statusCode <> "204" ){
+printStatus = "Print FAILED: " + templateName + "\n" +
+"Error: " + get(xlsxResponse, "Error-Message");
+put(response, "error", printStatus);
+return response;
+/* ************************************** */
+}else{
+printStatus = "Print Completed: " + templateName + "\n";
+}
+/* ************************************** */
+// GET PRINT OUTPUT
+url = get(xlsxResponse, "Location");
+headers = dict("string");
+put(headers, "Authorization", userAuth);
+put(headers, "Accept", "application/json");
+// get print output call
+xlsxResponse = urldata( url, "GET", headers );
+mb = get(xlsxResponse, "Message-Body");
+if(len(mb) > 0){
+jmb = json(mb);
+printOutput = jsonget(jmb , "subject" );
+put(response, "subject", printOutput);
+printOutput = jsonget(jmb , "body" );
+put(response, "body", printOutput);
+}else{
+put(response, "error", "Email Output was empty.");
+}
+print("PRINT COMPLETE");
+print("");
+return response;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_PrintEmailDesigner_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519066029000</date_modified><guid><![CDATA[fad858b0-dcbf-45e6-8e0b-b419b894d990]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699343</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699344</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699345</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699346</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519066029000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699347</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[templateName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_templateName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699348</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[templateLanguage]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519066029000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_templateLanguage_6]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>40840852</id><name><en><![CDATA[Vertiv Rec Item BOM]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[recItemBOM]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>1</return_type><func_type>1</func_type><function_id>40840851</function_id><main_script_text></main_script_text><date_modified>1528272724000</date_modified><guid><![CDATA[bm_lib_func_util_recItemBOM]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>40840851</id><ref_type>16</ref_type><script_text><![CDATA[retString		= "";
+selectedAttrValueDict	= selectedAttrDict;
+BOMItemDict		= dict("string");
+retStringDict		= dict("string");
+Quanitity		= 0;
+
+keysOfSelectAttrValDict = keys(selectedAttrValueDict);
+
+results = bmql("Select BOMItemName, ParentBOMItemName, Qty, "
+		+ "Attr1, Op1, Val1, "
+		+ "Attr2, Op2, Val2 "
+		+ "FROM Vertiv_InternalParts"
+		+ " WHERE"
+		+ " (Attr1 IN $keysOfSelectAttrValDict OR Attr1 IS NULL)"
+		+ " AND (Attr2 IN $keysOfSelectAttrValDict OR Attr2 IS NULL)");
+		
+
+for eachRec in results
+{
+	flagCheck1		= false;
+	finalFlag		= false;
+	Quantity1		= 0;
+	BOMItemName 		= get(eachRec, "BOMItemName");
+	ParentBOMItemName	= get(eachRec, "ParentBOMItemName");
+	Quantity		= atoi(get(eachRec, "Qty"));
+	Attr1			= get(eachRec, "Attr1");
+	Op1			= get(eachRec, "Op1");
+	Val1			= get(eachRec, "Val1");
+	Attr2			= get(eachRec, "Attr2");
+	Op2			= get(eachRec, "Op2");
+	Val2			= get(eachRec, "Val2");
+	
+	if(Op1 == "=")
+	{
+		if(get(selectedAttrValueDict, Attr1) == Val1)
+		{
+			flagCheck1 = true;
+		}
+	}
+	elif(Op1 == "<>")
+	{
+		if(get(selectedAttrValueDict, Attr1) <> Val1)
+		{
+			flagCheck1 = true;
+		}
+	}
+	if(flagCheck1 == true)
+	{
+		if(isnull(Attr2))
+		{
+			finalFlag  = true;
+		}
+		elif(Op2 == "=")
+		{
+			if(get(selectedAttrValueDict, Attr2) == Val2)
+			{
+				finalFlag = true;
+			}
+		}
+		elif(Op2 == "<>")
+		{
+			if(get(selectedAttrValueDict, Attr2) <> Val2)
+			{
+				finalFlag = true;
+			}
+		}
+	}
+		
+	if(finalFlag == true)
+	{
+		/*if(not containskey(BOMItemDict, BOMItemName))
+		{
+			put(BOMItemDict, BOMItemName, string(Quantity));
+			Quantity1	=	Quantity;
+			
+		}
+		else
+		{
+			Quantity1 = Quanitity + atoi(get(BOMItemDict, BOMItemName));
+			put(BOMItemDict, BOMItemName, string(Quantity1));
+			
+		}*/
+		retString	= retString + BOMItemName + "~" + string(Quantity) + "~" + BOMItemName + "~" + "0.0" + "|^|";
+	}
+}	
+
+if(substring(retString,len(retString) - 3, len(retString)) == "|^|")
+{
+		retString	= substring(retString, 0, len(retString) - 3);
+}
+		
+return retString;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_recItemBOM_1]]></java_class_name><child_class_names></child_class_names><date_modified>1528272724000</date_modified><guid><![CDATA[a70f17d3-ed97-45f0-91b5-27bfbaa33cc3]]></guid><_children></_children></bm_function><bm_lib_func_param><id>40840854</id><bm_lib_func_id>40840852</bm_lib_func_id><param_name><![CDATA[selectedAttrDict]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>13</datatype><date_modified>1528272724000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_recItemBOM.bm_lib_func_param_selectedAttrDict_13]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699532</id><name><en><![CDATA[getBasicAuthCredentials]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_GetBasicAuthCredentials]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>1</return_type><func_type>1</func_type><function_id>38699531</function_id><main_script_text></main_script_text><date_modified>1519067045000</date_modified><guid><![CDATA[bm_lib_func_util_CN_GetBasicAuthCredentials]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699531</id><ref_type>16</ref_type><script_text><![CDATA[//get credentials for JCS-SXs 2 legged OAuth client that was stored by you in secure columns of custom data tables
+clientname = accountName;
+clients = bmql("select username, password from CN_Credentials where integrationName=$clientname");
+//base 64 encode the credentials, per Basic Authorization standard
+for client in clients {
+encodedCreds= encodebase64( get(client, "username") + ":" + get(client, "password"));
+return encodedCreds;
+}
+//allow appropriate message to user, if integration client information was not located
+return defaultReturnValue;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_GetBasicAuthCredentials_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519067045000</date_modified><guid><![CDATA[e56a56b7-c5f6-4dd4-8391-0004f27c3dec]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699534</id><bm_lib_func_id>38699532</bm_lib_func_id><param_name><![CDATA[accountName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519067045000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_GetBasicAuthCredentials.bm_lib_func_param_accountName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699535</id><bm_lib_func_id>38699532</bm_lib_func_id><param_name><![CDATA[defaultReturnValue]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519067045000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_GetBasicAuthCredentials.bm_lib_func_param_defaultReturnValue_2]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699245</id><name><en><![CDATA[Get File Attachment Data]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_GetFileAttachmentData]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699244</function_id><main_script_text></main_script_text><date_modified>1519065478000</date_modified><guid><![CDATA[bm_lib_func_util_CN_GetFileAttachmentData]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699244</id><ref_type>16</ref_type><script_text><![CDATA[response = dict("string");
+url = siteUrl+"/rest/v2"+
+"/commerceProcesses/"+ processVarName+
+"/transactions/"+ string(transactionId)+
+"/attachments/"+ attachmentVarName+"/";
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+// call rest method
+xlsxResponse = urldata( url, "GET", headers );
+if( get(xlsxResponse, "Status-Code") <> "200" ){
+put(response, "error", get(xlsxResponse, "Error-Message"));
+return response;
+/* ************************************** */
+}else{
+mb = get(xlsxResponse, "Message-Body");
+jmb = json(mb);
+fileContent = jsonget(jmb, "fileContent");
+if( len(fileContent) < 5 ){
+put(response, "error", "GetFileAttachment: Could not locate document in Response.");
+return response;
+}
+put(response, "base64doc", fileContent);
+return response;
+}]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_GetFileAttachmentData_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519065478000</date_modified><guid><![CDATA[4c712dbe-137b-4f63-b0aa-5fe6531a9dbb]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699247</id><bm_lib_func_id>38699245</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065478000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_GetFileAttachmentData.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699248</id><bm_lib_func_id>38699245</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065478000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_GetFileAttachmentData.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699249</id><bm_lib_func_id>38699245</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065478000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_GetFileAttachmentData.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699250</id><bm_lib_func_id>38699245</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519065478000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_GetFileAttachmentData.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699251</id><bm_lib_func_id>38699245</bm_lib_func_id><param_name><![CDATA[attachmentVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519065478000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_GetFileAttachmentData.bm_lib_func_param_attachmentVarName_2]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699453</id><name><en><![CDATA[Merge DOCX BML]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_MergeDocx]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699452</function_id><main_script_text></main_script_text><date_modified>1519072766000</date_modified><guid><![CDATA[bm_lib_func_util_CN_MergeDocx]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699452</id><ref_type>16</ref_type><script_text><![CDATA[response = dict("string");
+// GENERATE MERGE REST CALL
+url = siteUrl+"/rest/v2/docxMerge";
+jsonObj = json();
+jsonput(jsonObj, "processVarname", processVarName);
+jsonput(jsonObj, "transactionId", transactionId);
+jsonput(jsonObj, "sourceFileAttachId", sourceFileId);
+jsonput(jsonObj, "targetFileAttachId", targetFileId);
+jsonput(jsonObj, "approvedChanges", jsonarray(compareJsonString));
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+if( get(xlsxResponse, "Status-Code") <> "200" ){
+er = get(xlsxResponse, "Error-Message");
+if(len(er) <= 5){
+er = get(xlsxResponse, "Message-Body");
+}
+put(response, "error", er );
+return response;
+}else{
+mb = get(xlsxResponse, "Message-Body");
+jmb = json(mb);
+errors = jsonget(jmb , "errors" );
+if(len(errors) > 5){
+put(response, "errArray", errors);
+print("MERGE COMPLETE WITH ERRORS");
+return response;
+}
+document = jsonget(jmb , "base64Doc" );
+put(response, "base64doc", document);
+print("MERGE COMPLETE");
+return response;
+}]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_MergeDocx_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519072766000</date_modified><guid><![CDATA[0c805e24-4503-4881-a1cf-9790d58f1e90]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699455</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699456</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699457</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699458</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072766000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699459</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[sourceFileId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072766000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_sourceFileId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699460</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[targetFileId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072766000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_targetFileId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699461</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[compareJsonString]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>7</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_compareJsonString_2]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>40904100</id><name><en><![CDATA[abotester_doUpdateAsset]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[abotester_doUpdateAsset]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>36</return_type><func_type>1</func_type><function_id>40904099</function_id><main_script_text></main_script_text><date_modified>1528690629000</date_modified><guid><![CDATA[bm_lib_func_util_abotester_doUpdateAsset]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>40904099</id><ref_type>16</ref_type><script_text><![CDATA[//Function Name: abotester_doUpdateAsset
+//input:txn_json(json), lines_json_array(jsonarray)
+//output: response(json)
+//Description: 
+//    Entry level utility BML for header level 'Update Asset' test action. 
+//    For the given txn and list of lines in that txn as passed in the input, it will aggregate the lines for that 
+//    same product instance in order of request date to calculate the final project state and compare it with the 
+//    asset state to generate CRUD operation on the asset for all lines in an atomic RESTful call.
+//Logic:
+//     1. sort the line array by assetkey and request date.
+//     2. group the lines with the same asset key into the following structure.
+//         {  instace_id:,  final_action:, final_date, lines: {  line_seq, action, txn_date}.
+//     3. For each group,  
+//            load base asset configuration and convert that to BOM struture
+//            load BOM for each line in the group and place them as open orderline array
+//            invoke abo_apply with asset and open orderline array to caculated final projected BOM
+//            use abo_delta to caculate the delta state between original base asset BOM and projected BOM
+//            convert the delta BOM to sync asset json format for local asset repository sync.
+//     4. put all the invidual sync asset json into an array and invoke asset servcie as single atomic call.
+
+//Step 1: Setup context
+abocontext =  util._ORCL_ABO.abo_getContext();
+bDiagnosisOff=jsonget(abocontext, "AboDiagnosticDisabled", "boolean", true);  
+callContext="doUpdateAsset";
+
+if(not bDiagnosisOff){//log the input
+   dummy=util._ORCL_ABO.abo_addDiagnosticInfo(callContext+"_input_txnjson", txn_json,"addToSummary");
+   lineJson=json(); jsonput(lineJson, "lineArray",lines_json_array);
+   dummy=util._ORCL_ABO.abo_addDiagnosticInfo(callContext+"_input_linejson", lineJson,"addToSummary");
+}
+localAssetSvc =  jsonpathgetsingle(abocontext, "$.siteInfo.localAssetSvc");
+
+//Step 2: Declare constants
+//Constants used for line data structure
+DOCUMENT_NUMBER  = "documentNumber";
+CUSTOMER_ID = "customer_id";
+TRANSACTION_ID = "transactionId";
+CURRENCY_CODE = "currency_code";
+REQUEST_DATE =  "requestDate";
+ACTION_CODE =  "actionCode";
+ITEM_INSTANCE_ID = "itemInstanceId";
+FINALACTION = "finalAction";
+FINALDATE = "finalDate";
+TERMINATE =  "TERMINATE";
+ORIGINALACTION = "OriginalAction";
+ORIGINALREQUESTDATE =  "OriginalRequestDate";
+ADD =  "ADD";
+UPDATE =  "UPDATE";
+SUSPEND = "SUSPEND";
+RESUME = "RESUME";
+RENEW = "RENEW";
+SUSPENDDATE = "suspendDate";
+RESUMEDATE = "resumeDate";
+RENEWDATE = "renewDate";
+
+//Constants used for getBom query
+TRANSACTIONDATE = "requestDate_l"; 
+ACTION = "oRCL_ABO_ActionCode_l";
+ITEM_INSTANCE_NAME = "itemInstanceName_l";
+
+//Constants for internal logic
+LINES = "Lines";
+
+//List of fields need to be retrieved in getBom call
+extraAssetFields =  jsonget(abocontext, "extraLineFieldForAsset", "json", json());
+lineFields =  jsonKeys(extraAssetFields);
+sizeofExtraAssetFieldLst =  sizeofarray(lineFields);
+
+lineFields[sizeofExtraAssetFieldLst] = ACTION;
+lineFields[sizeofExtraAssetFieldLst+1] = TRANSACTIONDATE;
+lineFields[sizeofExtraAssetFieldLst+2] = ITEM_INSTANCE_NAME;
+
+// Initialize the arrays
+jsonArrforSync =  jsonarray();
+syncAssetJson = json();
+    
+//Step 3:  Sort the lines by assetKey and then date in ascending
+// If line.txnDate is empty, updateAsset action script will populate it with today's date during lineJson creation
+jsoncrit =  jsonarray();
+jsoncrit = jsonarray();
+crit1= json("{\"field\":\"itemInstanceId\",\"order\":\"desc\"}");//type default to string
+crit2= json("{\"field\":\"requestDate\",\"order\":\"asc\",\"dateFormat\": \"yyyy-MM-dd\"}");
+jsonarrayappend(jsoncrit,crit1);
+jsonarrayappend(jsoncrit,crit2);
+linesJsonArr =  util._ORCL_ABO.abo_jsonSort(lines_json_array, jsoncrit);
+
+if(not bDiagnosisOff){//log the sorted array
+   logJson=json(); 
+   jsonput(logJson, "sortedLines",linesJsonArr);
+   jsonput(logJson, "crit",jsoncrit);   
+   dummy=util._ORCL_ABO.abo_addDiagnosticInfo(callContext+"_sortingResult", logJson,"");
+}
+
+//Step 4: Since it has already been sorted, we just need to scan it in one pass
+sizeoflineArr =  jsonarraysize(linesjsonarr);
+dummyTraverseArray = string[sizeoflineArr];
+
+//retrieve transaction data
+transactionId =  jsonget(txn_json, TRANSACTION_ID, "string", "");
+bsId =  atoi(transactionId );
+
+jsonArrforSync =  jsonarray();
+curAssetkey="";
+index =  0;
+finalActionforCurGrp = "";
+grpJsonforProcessing =  jsonarray();
+lineGrpJsonArr =  jsonarray();
+curGrpJson =  json();
+
+// since lines_json_array is already sorted based on assetKey, requestDate, we just need to scan them once
+for oneItem in dummyTraverseArray{
+   oneLine = jsonarrayget(linesJsonArr, index, "json");
+   index = index + 1;
+
+   nextAssetKey= jsonget(oneLine, ITEM_INSTANCE_ID, "string", "");
+   reqDate =  jsonget(oneLine, REQUEST_DATE, "string", "");
+   actionCode = jsonget(oneLine, ACTION_CODE, "string", "");
+      
+   if(curAssetKey <> nextAssetKey){ 
+      //now it is a new group,  notice we initialize curAssetKey to "", so first line will trigger this logic as well
+      curGrpJson =  json();
+      lineGrpJsonArr = jsonArray();
+      jsonput(curGrpJson, ITEM_INSTANCE_ID, nextAssetKey);
+      curGrpJson = jsonarrayappend(grpJsonforProcessing, curGrpJson);
+      lineGrpJsonArr =  jsonput(curGrpJson,  LINES, lineGrpJsonArr);
+      curAssetKey =  nextAssetKey;
+      finalActionforCurGrp = "";       
+      jsonput(curGrpJson, ORIGINALACTION, actionCode);
+      jsonput(curGrpJson, ORIGINALREQUESTDATE, reqDate);
+   }   
+   //add line to current group
+   jsonarrayappend(lineGrpJsonArr, oneLine); 
+   
+   if(finalActionforCurGrp==TERMINATE){ 
+       // all lines after terminate will be igored.
+       // PLACEHOLDER, you could choose to throw error in this case as well.
+       // You could run into this situation if user does a Follow-On Order on d2, and then terminate on d1,
+       // Assuming "d1" and "d2" are referring to dates 
+       // or additional logic can be added in abo_prepareInstance to prevent this to happen
+       continue;
+   }
+   
+   if( actionCode == TERMINATE ){ 
+      //keep track of first terminate line
+      finalActionforCurGrp = TERMINATE;
+      jsonput(curGrpJson, FINALACTION , actionCode);
+      jsonput(curGrpJson, FINALDATE, reqDate);
+   }      
+   
+   if (actionCode == SUSPEND) {
+      jsonput(curGrpJson, SUSPENDDATE, reqDate);    
+  }
+  
+  if (actionCode == RESUME) {
+      jsonput(curGrpJson, RESUMEDATE, reqDate); 
+  }
+  
+  if (actionCode == RENEW) {
+      jsonput(curGrpJson, RENEWDATE, reqDate);  
+  }
+}// end of loop through lines to group them together by assetKey.
+
+if(not bDiagnosisOff){//log the output of group
+   logJson=json(); jsonput(logJson, "arrGroups", grpJsonforProcessing);
+   dummy=util._ORCL_ABO.abo_addDiagnosticInfo(callContext+"_groupedLines", logJson,"addToSummary");
+}
+
+//Step 5: Loop through each group, Call apply, delta and add the resultant json for sync in jsonArrforSync
+//calculate today's date in db format. If txnDate is emtpy in getBom, we will replace it with today
+//so that down stream procesing will not need to worry about this.
+tranDate = getDate(false);
+today =  datetostr(tranDate, "yyyy-MM-dd HH:mm:ss");
+
+sizeofgrpForProcessing =  jsonarraysize(grpJsonforProcessing);
+dummyArr =  string[sizeofgrpForProcessing];
+index = 0;
+curGrpJson =  json();
+
+for oneItem in dummyArr{//loop thru groups
+   oneJson =  jsonarrayget(grpJsonforProcessing, index, "json");
+   index = index+1;
+   
+   //Step 5.1: Load base asset and convert to BOM structure
+   assetId =  jsonget(oneJson, ITEM_INSTANCE_ID, "string", "");   
+    
+   baseBom = util._ORCL_ABO.abo_loadAsset(assetId);
+
+   //Step 5.2: Loop through order lines, and retrieve corresponding BOM.
+   lineGrpJsonArray = jsonget(oneJson, LINES, "jsonarray");
+   numberofLines =  jsonarraysize(lineGrpJsonArray);
+   dummytraverseArr = string[numberofLines];
+   arrBomtoApply = jsonarray();
+   //prepare open quote BOM array 
+   docNum = "";
+   lineGrpJsonArrIndex = 0;
+   actionCodeofOneQuoteBom = "";     
+   
+   for item in dummytraverseArr{ //loop through lines within a group
+
+      oneLineJson =  jsonarrayget(lineGrpJsonArray, lineGrpJsonArrIndex, "json");
+      lineGrpJsonArrIndex = lineGrpJsonArrIndex +1;     
+
+      //check if it is external process or internal -  This value is set to true in updateExternal function ONLY
+      isExternal=jsonget(oneLineJson, "isExternal", "string","false");
+ 
+      // intialize json
+      oneQuoteBom = json();
+ 
+      // if it is an external process, retrieve the BOM from the config integration table
+     if(isExternal == "true"){
+     
+          //  Get the config id from line
+          config_id = jsonget(oneLineJson, "_document_number", "string","");
+          
+          // get flatten BOM 
+           oneQuoteBom = getconfigbom(atoi(config_id),true);
+           
+           oneQuoteBom = jsonarrayappend(arrBomtoApply, oneQuoteBom); 
+           
+       } else {
+           // This is CPQ Transaction - hence retrieve data using the transactionId
+           transactionId =  jsonget(txn_json, TRANSACTION_ID, "string", "");
+           docNum =  jsonget(oneLineJson, DOCUMENT_NUMBER, "string");
+           lineNum =  atoi(docNum);
+           bsId =  atoi(transactionId );
+        
+           oneQuoteBom = getbom(bsId, lineNum, lineFields, 
+                false,  //validate
+                true,  //flatten
+                true); //isSalesBom
+           oneQuoteBom = jsonarrayappend(arrBomtoApply, oneQuoteBom); 
+      }
+      fieldJsonofOneQuoteBom =  jsonget(oneQuoteBom, "fields", "json", json());
+      
+      //adjust the action code for apply as current apply logic will throw error when trying to apply terminate lines
+      //here we just leverage the apply logic to calculate the projected BOM state. This removes the child of terminate lines which is marked for delete.
+      //Terminate line will be the last line to apply(as enforced in Step 4 grouping logic).
+      actionCodeofOneQuoteBom =  jsonget(fieldJsonofOneQuoteBom, ACTION, "string", "");  
+      if(actionCodeofOneQuoteBom==TERMINATE){
+          jsonput(fieldJsonofOneQuoteBom, ACTION, UPDATE);
+      }
+      
+      //if line did not specify transactionDate, put in the default date of today 
+      requestDateinOneQuoteBom = jsonget(fieldJsonofOneQuoteBom, TRANSACTIONDATE, "string", "");  
+      if(requestDateinOneQuoteBom == ""){         
+         jsonput(fieldJsonofOneQuoteBom, TRANSACTIONDATE, today);
+      }      
+      reqDate =  jsonget(oneLineJson, REQUEST_DATE, "string",today);
+            
+      // for terminate, suspend resume case set the group summary
+      
+      if (actionCodeofOneQuoteBom == ADD) {
+         jsonput(oneJson, ORIGINALACTION, actionCodeofOneQuoteBom);
+         jsonput(oneJson, ORIGINALREQUESTDATE,today);
+       }
+      if (actionCodeofOneQuoteBom == TERMINATE)  {
+         jsonput(oneJson, FINALACTION,actionCodeofOneQuoteBom);
+         jsonput(oneJson, FINALDATE,reqDate);
+       }
+      if (actionCodeofOneQuoteBom == SUSPEND)  {
+         jsonput(oneJson, SUSPENDDATE, reqDate);
+      }
+      if (actionCodeofOneQuoteBom == RESUME)  {
+         jsonput(oneJson, RESUMEDATE, reqDate);
+      }
+      if (actionCodeofOneQuoteBom == RENEW)  {
+         jsonput(oneJson, RENEWDATE, reqDate);
+       }    
+   } //end of Step 5.2 loop through lines within a group to generate open order BOM array
+  
+   //Step 5.3: Apply open order on base asset to calculate the projected final asset state
+   baseBomCopy = jsoncopy(baseBom);
+   pacBom = util._ORCL_ABO.abo_apply(baseBom, arrBomtoApply);   
+   
+   //Step 5.4: Compare projected state with base asset to get delta
+   deltaBom = util._ORCL_ABO.abo_processDeltaBom(baseBomCopy, pacBom);   
+   jsonput(deltaBom,  "groupSummary", oneJson);
+   
+   //Step 5.5: Convert delta BOM to sync asset json format
+   syncAssetJson =  util._ORCL_ABO.abo_convertDeltaBomtoAsset(deltaBom, txn_json);
+   jsonarrayappend(jsonArrforSync, syncAssetJson);   
+   
+}//end of Step 5, loop through groups of assets
+
+//Step 6: Invoke local asset repository sync servcie to apply the change on asset repository atomically.
+//
+//prepare final payload to invoke local asset repository
+itemsjson = json();
+jsonput(itemsjson, "items", jsonArrforSync);
+jsonforpost = json();
+jsonput(jsonforpost, "_client_driven_action",true );
+jsonput(jsonforpost, "documents",itemsjson );
+
+finalUrl = localAssetSvc+"/actions/synchronize";
+
+returnVal =  json();
+instructionJson=json();
+jsonput(instructionJson,"Url",finalUrl);
+jsonput(instructionJson,"payload",jsonforpost);
+jsonput(instructionJson,"method","post");
+
+//if (runService <> false) {
+if (true) {//updated by Piyush on 06/10/2018 for testing
+    responseJson = util._ORCL_ABO.abo_invokeRESTService("post",finalUrl, jsonforpost);
+    jsonput(instructionJson,"response",responseJson);
+    jsonput(returnVal,"Successfully Invoked Asset Service with following details:",instructionJson);   
+}
+else
+{
+    jsonput(returnVal,"Please Invoke Asset Service with following details:",instructionJson);   
+}
+return returnVal;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_abotester_doUpdateAsset_1]]></java_class_name><child_class_names></child_class_names><date_modified>1528690629000</date_modified><guid><![CDATA[91fe2a7e-58c1-4886-b684-bb43d2df8830]]></guid><_children><bm_lib_func_assoc><id>40904102</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882538</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[df120244-c64f-49a9-8087-8e27d786394e]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904103</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882576</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[9b5573f2-c4ee-4ac9-a875-c420a1228b81]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904104</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882567</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[456bea19-1be8-4d61-9956-18b1a799f061]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904105</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882641</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[6ac2d1e8-5099-434f-9a6a-bdfaf8e54e98]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904106</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882682</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[47fcd051-7e1e-460d-9c39-cea79d4ecef0]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904107</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882979</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[6ed39fed-6f94-4226-8787-ee5bf1322a1a]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904108</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40883163</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[4ddaa76b-6a90-4ac5-8d92-bab53a8c177f]]></guid></bm_lib_func_assoc><bm_lib_func_assoc><id>40904109</id><caller_func_id>40904099</caller_func_id><called_lib_func_id>40882623</called_lib_func_id><rule_area><![CDATA[abotester_doUpdateAsset]]></rule_area><area_num>-1</area_num><ref_id>-1</ref_id><ref_location>5</ref_location><date_modified>1528690629000</date_modified><called_lib_func_type>1</called_lib_func_type><guid><![CDATA[3f47bd34-57a9-4092-ac7a-9ee0d66878fc]]></guid></bm_lib_func_assoc></_children></bm_function><bm_lib_func_param><id>40904110</id><bm_lib_func_id>40904100</bm_lib_func_id><param_name><![CDATA[txn_json]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>31</datatype><date_modified>1528690629000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_abotester_doUpdateAsset.bm_lib_func_param_txn_json_31]]></guid></bm_lib_func_param><bm_lib_func_param><id>40904111</id><bm_lib_func_id>40904100</bm_lib_func_id><param_name><![CDATA[lines_json_array]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>32</datatype><date_modified>1528690629000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_abotester_doUpdateAsset.bm_lib_func_param_lines_json_array_32]]></guid></bm_lib_func_param><bm_lib_func_param><id>40905242</id><bm_lib_func_id>40904100</bm_lib_func_id><param_name><![CDATA[runAutomatically]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>0</datatype><date_modified>1528690629000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_abotester_doUpdateAsset.bm_lib_func_param_runAutomatically_0]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699377</id><name><en><![CDATA[Print Doc Designer]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_PrintDocDesigner]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699376</function_id><main_script_text></main_script_text><date_modified>1519066247000</date_modified><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699376</id><ref_type>16</ref_type><script_text><![CDATA[// Prints a Document Designer Document. Returns "error" or "base64doc".
+response = dict("string");
+/* ************************************** */
+// PRINT TEMPLATE
+url = siteUrl+"/rest/v2/documentGenerator/";
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// add json data
+jsonObj = json();
+jsonput(jsonObj, "processVarname", processVarName);
+jsonput(jsonObj, "templateName", templateName);
+jsonput(jsonObj, "transactionId", transactionId);
+jsonput(jsonObj, "languageCode", templateLanguage);
+jsonput(jsonObj, "outputFormat", outputFormat);
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+/* ************************************** */
+// CHECK OUTPUT, UPDATE STATUS
+statusCode = get(xlsxResponse, "Status-Code");
+printStatus = "";
+if( statusCode <> "204" ){
+printStatus = "Print FAILED: " + templateName + "\n" +
+"Error: " + get(xlsxResponse, "Error-Message");
+put(response, "error", printStatus);
+return response;
+/* ************************************** */
+}else{
+printStatus = "Print Completed: " + templateName + "\n";
+}
+/* ************************************** */
+// GET PRINT OUTPUT
+url = get(xlsxResponse, "Location");
+headers = dict("string");
+put(headers, "Authorization", userAuth);
+put(headers, "Accept", "application/json");
+// get print output call
+xlsxResponse = urldata( url, "GET", headers );
+mb = get(xlsxResponse, "Message-Body");
+if(len(mb) > 0){
+jmb = json(mb);
+printOutput = jsonget(jmb , "document" );
+put(response, "base64doc", printOutput);
+}else{
+put(response, "error", "Document Output was empty.");
+}
+print("PRINT COMPLETE");
+print("");
+return response;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_PrintDocDesigner_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519066247000</date_modified><guid><![CDATA[60e1e6cb-06b4-4726-ac24-8eba38ed33de]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699379</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066247000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699380</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066247000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699381</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066247000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699382</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519066247000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699383</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[templateName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066247000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_templateName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699384</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[templateLanguage]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519066247000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_templateLanguage_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699385</id><bm_lib_func_id>38699377</bm_lib_func_id><param_name><![CDATA[outputFormat]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066247000</date_modified><order_no>7</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintDocDesigner.bm_lib_func_param_outputFormat_2]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>38699304</id><name><en><![CDATA[Get File Id From Response]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_GetFileIdFromResponse]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>3</return_type><func_type>1</func_type><function_id>38699303</function_id><main_script_text></main_script_text><date_modified>1519065772000</date_modified><guid><![CDATA[bm_lib_func_util_CN_GetFileIdFromResponse]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699303</id><ref_type>16</ref_type><script_text><![CDATA[mb = get(response, "Message-Body");
+jmb = json(mb);
+ids = jsonget(jmb, "fileId");
+if( isnumber(ids) ){
+return atoi(ids);
+}
+return -1;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_GetFileIdFromResponse_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519065772000</date_modified><guid><![CDATA[54a2794d-7747-4260-8864-6cca05265c37]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699306</id><bm_lib_func_id>38699304</bm_lib_func_id><param_name><![CDATA[response]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>13</datatype><date_modified>1519065772000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_GetFileIdFromResponse.bm_lib_func_param_response_13]]></guid></bm_lib_func_param></_children></bm_lib_func><bm_lib_func><id>36803918</id><name><en><![CDATA[Quote Analysis PL]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[quoteAnalysisPL]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>1</return_type><func_type>1</func_type><function_id>36803917</function_id><main_script_text></main_script_text><date_modified>1511378850000</date_modified><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>36803917</id><ref_type>16</ref_type><script_text><![CDATA[result="";
+
+monthlyRate = pow( 1 + (discountRate / 100.0), 1 / 12.0);
+term = range(6);
+decimalPlace = 2; // round values to this many decimal places
+
+for t in term{
+	years = t;
+	months = 12 * years;
+	nominalRevenue = oneTimeRevenue + (months * monthlyRevenue);
+	nominalCost = oneTimeCost + (months * monthlyCost);
+	nominalPL = nominalRevenue - nominalCost;
+	nominalReturn = 0.0;
+	if(nominalCost <> 0.0){
+		nominalReturn = ((nominalRevenue / nominalCost) - 1.00) * 100.0;
+		nominalReturn = round(nominalReturn, decimalPlace); // added on 2014.12.29 to resolve rounding error that emerged after the 2014R2 upgrade
+	}
+
+
+	counter = range(months);
+	NPVRevenue = oneTimeRevenue;
+	NPVCost = oneTimeCost;
+	for c in counter{
+		NPVRevenue = NPVRevenue + monthlyRevenue / pow(monthlyRate, c + 1.0);
+		NPVCost = NPVCost + monthlyCost / pow(monthlyRate, c + 1.0);
+	}
+
+	NPVPL = NPVRevenue - NPVCost;
+	NPVreturn = 0.0;
+	if(NPVCost <> 0.0){
+		NPVreturn = ((NPVRevenue / NPVCost) - 1.00) * 100.0;
+		NPVreturn = round(NPVreturn, decimalPlace); // added on 2014.12.29 to resolve rounding error that emerged after the 2014R2 upgrade
+	}
+
+	if(t == 0){
+		result = result + "1~nominalRevenue_t~" + string (nominalRevenue) + "|" ;
+		result = result + "1~nominalCost_t~" + string (nominalCost) + "|";
+		result = result + "1~nominalPL_t~" + string (nominalPL) + "|";
+		result = result + "1~nominalReturn_t~" + string (nominalReturn) + "|";
+		
+		
+		result = result + "1~nPVRevenue_t~" + string (NPVRevenue) + "|";
+		result = result + "1~nPVCost_t~" + string (NPVCost) + "|";
+		result = result + "1~nPVPL_t~" + string (NPVPL) + "|";
+		result = result + "1~nPVReturn_t~" + string (NPVreturn) + "|";
+	}
+	else{
+		result = result + "1~year" + string(t) + "NominalRevenue_t~" + string (nominalRevenue) + "|";
+		result = result + "1~year" + string(t) + "NominalCost_t~" + string (nominalCost) + "|";
+		result = result + "1~year" + string(t) + "NominalPL_t~" + string (nominalPL) + "|";
+		result = result + "1~year" + string(t) + "NominalReturn_t~" + string (nominalReturn) + "|";
+		
+		
+		result = result + "1~year" + string(t) + "NPVRevenue_t~" + string (NPVRevenue) + "|";
+		result = result + "1~year" + string(t) + "NPVCost_t~" + string (NPVCost) + "|";
+		result = result + "1~year" + string(t) + "NPVPL_t~" + string (NPVPL) + "|";
+		result = result + "1~year" + string(t) + "NPVReturn_t~" + string (NPVreturn) + "|";
+	}
+}
+
+return result;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_quoteAnalysisPL_1]]></java_class_name><child_class_names></child_class_names><date_modified>1511378885000</date_modified><guid><![CDATA[29076503-7259-4cda-844f-7064154b12f5]]></guid><_children></_children></bm_function><bm_lib_func_param><id>36803919</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[discountRate]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_discountRate_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803920</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[oneTimeRevenue]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_oneTimeRevenue_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803921</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[monthlyRevenue]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_monthlyRevenue_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803922</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[oneTimeCost]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_oneTimeCost_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803923</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[monthlyCost]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_monthlyCost_4]]></guid></bm_lib_func_param></_children></bm_lib_func></_children></bm_lib_func_zip_deploy>

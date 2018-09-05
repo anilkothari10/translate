@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><bm_lib_func><id>38699453</id><name><en><![CDATA[Merge DOCX BML]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_MergeDocx]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699452</function_id><main_script_text></main_script_text><date_modified>1519072766000</date_modified><guid><![CDATA[bm_lib_func_util_CN_MergeDocx]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699452</id><ref_type>16</ref_type><script_text><![CDATA[response = dict("string");
+// GENERATE MERGE REST CALL
+url = siteUrl+"/rest/v2/docxMerge";
+jsonObj = json();
+jsonput(jsonObj, "processVarname", processVarName);
+jsonput(jsonObj, "transactionId", transactionId);
+jsonput(jsonObj, "sourceFileAttachId", sourceFileId);
+jsonput(jsonObj, "targetFileAttachId", targetFileId);
+jsonput(jsonObj, "approvedChanges", jsonarray(compareJsonString));
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+if( get(xlsxResponse, "Status-Code") <> "200" ){
+er = get(xlsxResponse, "Error-Message");
+if(len(er) <= 5){
+er = get(xlsxResponse, "Message-Body");
+}
+put(response, "error", er );
+return response;
+}else{
+mb = get(xlsxResponse, "Message-Body");
+jmb = json(mb);
+errors = jsonget(jmb , "errors" );
+if(len(errors) > 5){
+put(response, "errArray", errors);
+print("MERGE COMPLETE WITH ERRORS");
+return response;
+}
+document = jsonget(jmb , "base64Doc" );
+put(response, "base64doc", document);
+print("MERGE COMPLETE");
+return response;
+}]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_MergeDocx_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519072766000</date_modified><guid><![CDATA[0c805e24-4503-4881-a1cf-9790d58f1e90]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699455</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699456</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699457</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699458</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072766000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699459</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[sourceFileId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072766000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_sourceFileId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699460</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[targetFileId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519072766000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_targetFileId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699461</id><bm_lib_func_id>38699453</bm_lib_func_id><param_name><![CDATA[compareJsonString]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519072766000</date_modified><order_no>7</order_no><guid><![CDATA[bm_lib_func_util_CN_MergeDocx.bm_lib_func_param_compareJsonString_2]]></guid></bm_lib_func_param></_children></bm_lib_func>

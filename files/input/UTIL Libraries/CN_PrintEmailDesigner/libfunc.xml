@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><bm_lib_func><id>38699341</id><name><en><![CDATA[Print Email Designer BML]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[CN_PrintEmailDesigner]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>15</return_type><func_type>1</func_type><function_id>38699340</function_id><main_script_text></main_script_text><date_modified>1519066029000</date_modified><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>38699340</id><ref_type>16</ref_type><script_text><![CDATA[// Prints a Email Designer Template. Returns "error" or "subject" & "body".
+response = dict("string");
+/* ************************************** */
+// PRINT TEMPLATE
+url = siteUrl+"/rest/v2/emailGenerator/";
+headers = dict("string");
+put(headers, "Authorization", userAuth );
+put(headers, "Accept", "application/json");
+put(headers, "Content-Type", "application/json");
+// add json data
+jsonObj = json();
+jsonput(jsonObj, "processVarname", processVarName);
+jsonput(jsonObj, "templateName", templateName);
+jsonput(jsonObj, "transactionId", transactionId);
+jsonput(jsonObj, "languageCode", templateLanguage);
+// call rest method
+xlsxResponse = urldata( url, "POST", headers, jsontostr(jsonObj) );
+// CHECK OUTPUT, UPDATE STATUS
+statusCode = get(xlsxResponse, "Status-Code");
+printStatus = "";
+if( statusCode <> "204" ){
+printStatus = "Print FAILED: " + templateName + "\n" +
+"Error: " + get(xlsxResponse, "Error-Message");
+put(response, "error", printStatus);
+return response;
+/* ************************************** */
+}else{
+printStatus = "Print Completed: " + templateName + "\n";
+}
+/* ************************************** */
+// GET PRINT OUTPUT
+url = get(xlsxResponse, "Location");
+headers = dict("string");
+put(headers, "Authorization", userAuth);
+put(headers, "Accept", "application/json");
+// get print output call
+xlsxResponse = urldata( url, "GET", headers );
+mb = get(xlsxResponse, "Message-Body");
+if(len(mb) > 0){
+jmb = json(mb);
+printOutput = jsonget(jmb , "subject" );
+put(response, "subject", printOutput);
+printOutput = jsonget(jmb , "body" );
+put(response, "body", printOutput);
+}else{
+put(response, "error", "Email Output was empty.");
+}
+print("PRINT COMPLETE");
+print("");
+return response;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_CN_PrintEmailDesigner_1]]></java_class_name><child_class_names></child_class_names><date_modified>1519066029000</date_modified><guid><![CDATA[fad858b0-dcbf-45e6-8e0b-b419b894d990]]></guid><_children></_children></bm_function><bm_lib_func_param><id>38699343</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[siteUrl]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_siteUrl_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699344</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[userAuth]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_userAuth_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699345</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[processVarName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_processVarName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699346</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[transactionId]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519066029000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_transactionId_6]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699347</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[templateName]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>2</datatype><date_modified>1519066029000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_templateName_2]]></guid></bm_lib_func_param><bm_lib_func_param><id>38699348</id><bm_lib_func_id>38699341</bm_lib_func_id><param_name><![CDATA[templateLanguage]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>6</datatype><date_modified>1519066029000</date_modified><order_no>6</order_no><guid><![CDATA[bm_lib_func_util_CN_PrintEmailDesigner.bm_lib_func_param_templateLanguage_6]]></guid></bm_lib_func_param></_children></bm_lib_func>

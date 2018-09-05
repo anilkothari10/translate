@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><bm_lib_func><id>36803918</id><name><en><![CDATA[Quote Analysis PL]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></name><variable_name><![CDATA[quoteAnalysisPL]]></variable_name><description><en><![CDATA[]]></en><de><![CDATA[]]></de><fr><![CDATA[]]></fr><es><![CDATA[]]></es><it><![CDATA[]]></it><zh_CN><![CDATA[]]></zh_CN><zh_TW><![CDATA[]]></zh_TW><fr_CA><![CDATA[]]></fr_CA><ja_JP><![CDATA[]]></ja_JP><ko_KR><![CDATA[]]></ko_KR><pt_BR><![CDATA[]]></pt_BR><ru_RU><![CDATA[]]></ru_RU><pt_PT><![CDATA[]]></pt_PT></description><return_type>1</return_type><func_type>1</func_type><function_id>36803917</function_id><main_script_text></main_script_text><date_modified>1511378850000</date_modified><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL]]></guid><folder_id>4133367</folder_id><namespace></namespace><func_override_id>-1</func_override_id><namespace_permissions>0</namespace_permissions><_children><bm_function><id>36803917</id><ref_type>16</ref_type><script_text><![CDATA[result="";
+
+monthlyRate = pow( 1 + (discountRate / 100.0), 1 / 12.0);
+term = range(6);
+decimalPlace = 2; // round values to this many decimal places
+
+for t in term{
+	years = t;
+	months = 12 * years;
+	nominalRevenue = oneTimeRevenue + (months * monthlyRevenue);
+	nominalCost = oneTimeCost + (months * monthlyCost);
+	nominalPL = nominalRevenue - nominalCost;
+	nominalReturn = 0.0;
+	if(nominalCost <> 0.0){
+		nominalReturn = ((nominalRevenue / nominalCost) - 1.00) * 100.0;
+		nominalReturn = round(nominalReturn, decimalPlace); // added on 2014.12.29 to resolve rounding error that emerged after the 2014R2 upgrade
+	}
+
+
+	counter = range(months);
+	NPVRevenue = oneTimeRevenue;
+	NPVCost = oneTimeCost;
+	for c in counter{
+		NPVRevenue = NPVRevenue + monthlyRevenue / pow(monthlyRate, c + 1.0);
+		NPVCost = NPVCost + monthlyCost / pow(monthlyRate, c + 1.0);
+	}
+
+	NPVPL = NPVRevenue - NPVCost;
+	NPVreturn = 0.0;
+	if(NPVCost <> 0.0){
+		NPVreturn = ((NPVRevenue / NPVCost) - 1.00) * 100.0;
+		NPVreturn = round(NPVreturn, decimalPlace); // added on 2014.12.29 to resolve rounding error that emerged after the 2014R2 upgrade
+	}
+
+	if(t == 0){
+		result = result + "1~nominalRevenue_t~" + string (nominalRevenue) + "|" ;
+		result = result + "1~nominalCost_t~" + string (nominalCost) + "|";
+		result = result + "1~nominalPL_t~" + string (nominalPL) + "|";
+		result = result + "1~nominalReturn_t~" + string (nominalReturn) + "|";
+		
+		
+		result = result + "1~nPVRevenue_t~" + string (NPVRevenue) + "|";
+		result = result + "1~nPVCost_t~" + string (NPVCost) + "|";
+		result = result + "1~nPVPL_t~" + string (NPVPL) + "|";
+		result = result + "1~nPVReturn_t~" + string (NPVreturn) + "|";
+	}
+	else{
+		result = result + "1~year" + string(t) + "NominalRevenue_t~" + string (nominalRevenue) + "|";
+		result = result + "1~year" + string(t) + "NominalCost_t~" + string (nominalCost) + "|";
+		result = result + "1~year" + string(t) + "NominalPL_t~" + string (nominalPL) + "|";
+		result = result + "1~year" + string(t) + "NominalReturn_t~" + string (nominalReturn) + "|";
+		
+		
+		result = result + "1~year" + string(t) + "NPVRevenue_t~" + string (NPVRevenue) + "|";
+		result = result + "1~year" + string(t) + "NPVCost_t~" + string (NPVCost) + "|";
+		result = result + "1~year" + string(t) + "NPVPL_t~" + string (NPVPL) + "|";
+		result = result + "1~year" + string(t) + "NPVReturn_t~" + string (NPVreturn) + "|";
+	}
+}
+
+return result;]]></script_text><java_class_name><![CDATA[com.bm.xchange.bmscript.bmllib.util.LibFunction_quoteAnalysisPL_1]]></java_class_name><child_class_names></child_class_names><date_modified>1511378885000</date_modified><guid><![CDATA[29076503-7259-4cda-844f-7064154b12f5]]></guid><_children></_children></bm_function><bm_lib_func_param><id>36803919</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[discountRate]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>1</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_discountRate_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803920</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[oneTimeRevenue]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>2</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_oneTimeRevenue_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803921</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[monthlyRevenue]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>3</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_monthlyRevenue_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803922</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[oneTimeCost]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>4</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_oneTimeCost_4]]></guid></bm_lib_func_param><bm_lib_func_param><id>36803923</id><bm_lib_func_id>36803918</bm_lib_func_id><param_name><![CDATA[monthlyCost]]></param_name><ref_id>-1</ref_id><param_location>0</param_location><param_type>-1</param_type><datatype>4</datatype><date_modified>1511378851000</date_modified><order_no>5</order_no><guid><![CDATA[bm_lib_func_util_quoteAnalysisPL.bm_lib_func_param_monthlyCost_4]]></guid></bm_lib_func_param></_children></bm_lib_func>

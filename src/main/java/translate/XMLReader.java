@@ -113,4 +113,54 @@ public class XMLReader {
 		}
 		return ruleList;
 	}
+	
+	public List<Util> readUtilXML(File file) throws ParserConfigurationException, SAXException, IOException{
+		//Get Document Builder
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList eachRecordNodeList = document.getElementsByTagName("bm_lib_func");
+		List<Util> utilList = new ArrayList<Util>();
+		Util util = null;
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			util = new Util();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("name".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
+									util.setName(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
+					if("variable_name".equals(childNode.getNodeName())){
+						//System.out.println("Variable Name : " + childNode.getTextContent());
+						util.setVariableName(childNode.getTextContent().trim());
+					}
+					if(document.getElementsByTagName("script_text").item(0).getNodeName() != null){
+						//System.out.println("Data Type : " + childNode.getTextContent());
+						//util.setScriptText(document.getElementsByTagName("script_text").item(0).getTextContent().trim()); //Text content is a lot
+						util.setScriptText(document.getElementsByTagName("script_text").item(0).getNodeName().trim());
+					}
+				}
+			}
+			utilList.add(util);
+		}
+		return utilList;
+	}
 }
