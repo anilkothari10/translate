@@ -96,62 +96,6 @@ public class DocxFileConverter {
 				}
 			}
 			
-			/*// Add Atrribute List
-			XWPFParagraph paragraph = docx.createParagraph();
-			XWPFRun run = paragraph.createRun();
-			run.setText("Atrribute Table",0);
-			
-			XWPFTable attributeTable = docx.createTable();
-            XWPFTableRow attributeRow = attributeTable.getRow(0);
-            attributeRow.getCell(0).setText("Name");
-            attributeRow.addNewTableCell().setText("Variable Name");
-            attributeRow.addNewTableCell().setText("Data Type");
-
-            for (Attribute attribute : attributeList) {
-                XWPFTableRow tempRow = attributeTable.createRow();
-                tempRow.getCell(0).setText(attribute.getName());
-                tempRow.getCell(1).setText(attribute.getVariableName());
-                tempRow.getCell(2).setText(attribute.getDataType());
-            }
-            
-            // Add Rule List
-            paragraph = docx.createParagraph();
-			run = paragraph.createRun();
-			run.setText("Rule Table",0);
-			
-            XWPFTable ruleTable = docx.createTable();
-            XWPFTableRow ruleRow = ruleTable.getRow(0);
-            ruleRow.getCell(0).setText("Name");
-            ruleRow.addNewTableCell().setText("Variable Name");
-            ruleRow.addNewTableCell().setText("Rule Type");
-
-            for (Rule rule : ruleList) {
-                XWPFTableRow tempRow = ruleTable.createRow();
-                tempRow.getCell(0).setText(rule.getName());
-                tempRow.getCell(1).setText(rule.getVariableName());
-                tempRow.getCell(2).setText(rule.getRuleType());
-            }
-            
-            // Add Data Table List
-            
-            // Add Util Libraries map
-            paragraph = docx.createParagraph();
-			run = paragraph.createRun();
-			run.setText("Util Libraries Table",0);
-			XWPFTable utilTable = docx.createTable();
-            XWPFTableRow UtilTableRow = utilTable.getRow(0);
-            UtilTableRow.getCell(0).setText("Name");
-            UtilTableRow.addNewTableCell().setText("Variable Name");
-            UtilTableRow.addNewTableCell().setText("Script Text");
-			for(String utilName : utilMap.keySet()){
-	            for (Util util : utilMap.get(utilName)) {
-	                XWPFTableRow tempRow = utilTable.createRow();
-	                tempRow.getCell(0).setText(util.getName());
-	                tempRow.getCell(1).setText(util.getVariableName());
-	                tempRow.getCell(2).setText(util.getScriptText());
-	            }
-			}*/
-            
 			saveDocxFile(docx, Constants.SOURCE_FILE.replace("input", "output"));
 		}
 	}
