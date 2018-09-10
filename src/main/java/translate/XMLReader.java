@@ -154,8 +154,8 @@ public class XMLReader {
 					}
 					if(document.getElementsByTagName("script_text").item(0).getNodeName() != null){
 						//System.out.println("Data Type : " + childNode.getTextContent());
-						//util.setScriptText(document.getElementsByTagName("script_text").item(0).getTextContent().trim()); //Text content is a lot
-						util.setScriptText(document.getElementsByTagName("script_text").item(0).getNodeName().trim());
+						util.setScriptText(document.getElementsByTagName("script_text").item(0).getTextContent().trim());
+						//util.setScriptText(document.getElementsByTagName("script_text").item(0).getNodeName().trim());
 					}
 				}
 			}
