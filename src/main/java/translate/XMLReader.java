@@ -163,4 +163,49 @@ public class XMLReader {
 		}
 		return utilList;
 	}
+
+	public List<DataTable> readDataTableXML(File file) throws SAXException, IOException, ParserConfigurationException {
+
+		//Get Document Builder
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
+		List<DataTable> dataTableList = new ArrayList<DataTable>();
+		DataTable dataTable = null;
+		StringBuilder str = null;
+		List<String> tableNameList =new ArrayList<String>();
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			dataTable = new DataTable();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			str = new StringBuilder();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("table_name".equals(childNode.getNodeName())){
+						dataTable.setTableName(childNode.getTextContent().trim());
+					}
+					else{
+						str.append(childNode.getNodeName().trim() + " , ");
+					}
+				}
+			}
+			if(tableNameList.contains(dataTable.getTableName())){
+				dataTable =null;
+				continue;
+			}
+			dataTable.setDescription(str.toString());
+			tableNameList.add(dataTable.getTableName());
+			dataTableList.add(dataTable);
+		}
+		return dataTableList;
+	
+	}
 }

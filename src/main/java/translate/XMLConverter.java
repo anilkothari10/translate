@@ -31,6 +31,13 @@ public class XMLConverter {
 			System.out.println(ruleList);
 			
 			//Read Data table XML
+			List<DataTable> dataTableList = null;
+			file = new File(Constants.SOURCE_DATA_TABLE_XML_FILE);
+			if (!file.exists()) {
+				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			}
+			dataTableList = xmlReader.readDataTableXML(file);
+			System.out.println(dataTableList);
 			
 			//Read UTIL Libraries
 			Map<String,List<Util>> utilMap = new HashMap<String,List<Util>>();
@@ -58,7 +65,7 @@ public class XMLConverter {
 				throw new Exception("Source file not present at location : " + file.getAbsolutePath());
 			}
 			DocxFileConverter converter = new DocxFileConverter();
-			converter.docxFileConverter(file,attributeList,ruleList,utilMap);
+			converter.docxFileConverter(file,attributeList,ruleList,utilMap,dataTableList);
 		} catch (Exception e) {
 			throw e;
 		}
