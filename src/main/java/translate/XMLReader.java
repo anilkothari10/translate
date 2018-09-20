@@ -179,13 +179,13 @@ public class XMLReader {
 		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
 		List<DataTable> dataTableList = new ArrayList<DataTable>();
 		DataTable dataTable = null;
-		StringBuilder str = null;
+		StringBuilder str = new StringBuilder();
 		List<String> tableNameList =new ArrayList<String>();
 		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
 			dataTable = new DataTable();
 			Node eachRecordNode = eachRecordNodeList.item(i);
 			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-			str = new StringBuilder();
+			str.setLength(0);
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
@@ -198,7 +198,8 @@ public class XMLReader {
 				}
 			}
 			if(tableNameList.contains(dataTable.getTableName())){
-				dataTable =null;
+				dataTable = null;
+				str.setLength(0);
 				continue;
 			}
 			dataTable.setDescription(str.toString());
