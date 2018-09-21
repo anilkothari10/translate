@@ -4,6 +4,7 @@ public class Util {
 	private String name;
 	private String variableName;
 	private String scriptText;
+	private String description;
 	public String getName() {
 		return name;
 	}
@@ -22,9 +23,16 @@ public class Util {
 	public void setScriptText(String scriptText) {
 		this.scriptText = scriptText;
 	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	@Override
 	public String toString() {
-		return "Util [name=" + name + ", variableName=" + variableName + ", scriptText=" + scriptText + "]" + "\n";
+		return "Util [name=" + name + ", variableName=" + variableName + ", scriptText=" + scriptText + ", description="
+				+ description + "]";
 	}
 	
 }

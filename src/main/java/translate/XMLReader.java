@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -107,6 +108,19 @@ public class XMLReader {
 						//System.out.println("Data Type : " + childNode.getTextContent());
 						rule.setRuleType(childNode.getTextContent().trim());
 					}
+					if("description".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
+									rule.setDescription(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
 				}
 			}
 			ruleList.add(rule);
@@ -156,6 +170,19 @@ public class XMLReader {
 						//System.out.println("Data Type : " + childNode.getTextContent());
 						util.setScriptText(document.getElementsByTagName("script_text").item(0).getTextContent().trim());
 						//util.setScriptText(document.getElementsByTagName("script_text").item(0).getNodeName().trim());
+					}
+					if("description".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
+									util.setDescription(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -208,5 +235,99 @@ public class XMLReader {
 		}
 		return dataTableList;
 	
+	}
+	
+	public List<Users> readUsersXML(File file) throws ParserConfigurationException, SAXException, IOException {
+		//Get Document Builder
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList nList = document.getElementsByTagName("bm_company");
+		List<Users> usersList = new ArrayList<Users>();
+		Users user = null;
+			Node nNode = nList.item(0);
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) nNode;
+				NodeList elementList = eElement.getElementsByTagName("bm_user");
+				if(elementList != null && elementList.getLength() > 0){
+					for(int temp1 = 0; temp1 < elementList.getLength(); temp1++){
+						Node elementNode = elementList.item(temp1);
+						if(elementNode != null){
+							Element childElement = (Element)elementNode;
+							if(childElement != null)
+							{
+								user = new Users();
+								user.setUserId(childElement.getElementsByTagName("id").item(0).getTextContent());
+								user.setUserLoginName(childElement.getElementsByTagName("login").item(0).getTextContent());
+								usersList.add(user);
+							}
+						}
+					}
+				}
+		}
+		return usersList;
+	}
+
+	public List<Groups> readGroupsXML(File file) throws ParserConfigurationException, SAXException, IOException {
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList nList = document.getElementsByTagName("bm_company");
+		List<Groups> groupsList = new ArrayList<Groups>();
+		Groups group = null;
+			Node nNode = nList.item(0);
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) nNode;
+				NodeList elementList = eElement.getElementsByTagName("bm_group");
+				if(elementList != null && elementList.getLength() > 0){
+					for(int temp1 = 0; temp1 < elementList.getLength(); temp1++){
+						Node elementNode = elementList.item(temp1);
+						if(elementNode != null){
+							Element childElement = (Element)elementNode;
+							if(childElement != null)
+							{
+								group = new Groups();
+								NodeList nodeList = childElement.getChildNodes();
+								if(nodeList != null){
+								for(int i = 0; i < nodeList.getLength(); i ++){
+									Node node = nodeList.item(i);
+										if("name".equalsIgnoreCase(node.getNodeName())){
+											group.setGroupName(node.getTextContent().trim());
+										}
+										if("label".equalsIgnoreCase(node.getNodeName()))
+										{
+											NodeList labelNodesList = node.getChildNodes();
+											for(int k = 0; k < labelNodesList.getLength(); k++){
+												Node nameChildNode = labelNodesList.item(k);
+												if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+													if("en".equals(nameChildNode.getNodeName())){
+														group.setGroupLabel(nameChildNode.getTextContent().trim());
+														break;
+													}
+												}
+											}
+										}
+									}
+								}
+								groupsList.add(group);
+							}
+						}
+					}
+				}
+		}
+		return groupsList;
 	}
 }

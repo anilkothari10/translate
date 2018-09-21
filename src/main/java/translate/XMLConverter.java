@@ -59,13 +59,33 @@ public class XMLConverter {
 					}
 				}
 			}
+			
+			//read user
+			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
+			if (!file.exists()) {
+				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			}
+			List<Users> usersList = null;
+			usersList = xmlReader.readUsersXML(file);
+			System.out.println(usersList);
+			
+			
+			//read Groups
+			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
+			if (!file.exists()) {
+				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			}
+			List<Groups> groupList= null;
+			groupList = xmlReader.readGroupsXML(file);
+			System.out.println(groupList);
+			
 			System.out.println(utilMap);
 			file = new File(Constants.SOURCE_FILE);
 			if (!file.exists()) {
 				throw new Exception("Source file not present at location : " + file.getAbsolutePath());
 			}
 			DocxFileConverter converter = new DocxFileConverter();
-			converter.docxFileConverter(file,attributeList,ruleList,utilMap,dataTableList);
+			converter.docxFileConverter(file,attributeList,ruleList,utilMap,dataTableList, usersList, groupList);
 		} catch (Exception e) {
 			throw e;
 		}

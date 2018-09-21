@@ -15,7 +15,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
 public class DocxFileConverter {
 
 	public void docxFileConverter(File file, List<Attribute> attributeList, List<Rule> ruleList, 
-			Map<String, List<Util>> utilMap, List<DataTable> dataTableList) throws Exception {
+			Map<String, List<Util>> utilMap, List<DataTable> dataTableList, List<Users> usersList, List<Groups> groupList) throws Exception {
 		XWPFDocument docx = openDocxFile(file);
 		if (docx != null) {
 			List<XWPFTable> tables = docx.getTables();
@@ -62,6 +62,7 @@ public class DocxFileConverter {
 						newRow.getCell(0).setText(rule.getName());
 						newRow.getCell(1).setText(rule.getVariableName());
 						newRow.getCell(2).setText(rule.getRuleType());
+						newRow.getCell(3).setText(rule.getDescription());
 						tableFound.addRow(newRow);
 					}
 					tableFound.removeRow(1);
@@ -86,12 +87,13 @@ public class DocxFileConverter {
 							newRow.getCell(0).setText(util.getName());
 							newRow.getCell(1).setText(util.getVariableName());
 							newRow.getCell(2).setText(util.getScriptText());
+							newRow.getCell(3).setText(util.getDescription());
 							tableFound.addRow(newRow);
 						}
 					}
 					tableFound.removeRow(1);
 					tableFound = null;
-					break;
+					//break;
 				}
 
 				// Add Data Table List
@@ -113,6 +115,49 @@ public class DocxFileConverter {
 					}
 					tableFound.removeRow(1);
 					tableFound = null;
+				}
+				
+	            // Add users List
+				for(XWPFTableRow row : rows){
+					if(row.getCell(0).getText().equalsIgnoreCase("User ID")
+							&& row.getCell(1).getText().equalsIgnoreCase("User Login Name")){
+						tableFound = table;
+						break;
+					}
+				}
+				if(tableFound != null){
+					XWPFTableRow oldRow = tableFound.getRow(1);
+			            for (Users users : usersList) {
+			            	CTRow ctrow = CTRow.Factory.parse(oldRow.getCtRow().newInputStream());
+							XWPFTableRow newRow = new XWPFTableRow(ctrow, tableFound);
+							newRow.getCell(0).setText(users.getUserId());
+							newRow.getCell(1).setText(users.getUserLoginName());
+							tableFound.addRow(newRow);
+			            }
+					tableFound.removeRow(1);
+					tableFound = null;
+				}
+				
+				//add group List
+				for(XWPFTableRow row : rows){
+					if(row.getCell(0).getText().equalsIgnoreCase("Group Label")
+							&& row.getCell(1).getText().equalsIgnoreCase("Group Name")){
+						tableFound = table;
+						break;
+					}
+				}
+				if(tableFound != null){
+					XWPFTableRow oldRow = tableFound.getRow(1);
+			            for (Groups group : groupList) {
+			            	CTRow ctrow = CTRow.Factory.parse(oldRow.getCtRow().newInputStream());
+							XWPFTableRow newRow = new XWPFTableRow(ctrow, tableFound);
+							newRow.getCell(0).setText(group.getGroupLabel());
+							newRow.getCell(1).setText(group.getGroupName());
+							tableFound.addRow(newRow);
+			            }
+					tableFound.removeRow(1);
+					tableFound = null;
+					break;
 				}
 			}
 
