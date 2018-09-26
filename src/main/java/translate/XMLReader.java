@@ -245,7 +245,7 @@ public class XMLReader {
 				str.setLength(0);
 				continue;
 			}
-			dataTable.setDescription(str.toString());
+			dataTable.setDescription(str.substring(0, str.length()-2));
 			tableNameList.add(dataTable.getTableName());
 			dataTableList.add(dataTable);
 		}

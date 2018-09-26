@@ -1,24 +1,14 @@
 package translate;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFHeader;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import org.apache.xmlbeans.XmlCursor;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 
 public class DocxFileConverter {
 
@@ -34,28 +24,24 @@ public class DocxFileConverter {
 					storyNumRun.setText(stories.getUserStoryNum());
 					List<Attribute> attributeList= stories.getAttributeList();
 					if(attributeList != null && attributeList.size() > 0){
+						XWPFRun run = docx.createParagraph().createRun();
+						run.setBold(true);
+						run.setColor("800000");
+						run.setUnderline(UnderlinePatterns.SINGLE);
+						run.setText("Configuration Attributes");
+						XWPFTable utilTable = docx.createTable(attributeList.size()+1,3);
+						
+						XWPFTableRow headerRow = utilTable.getRow(0);
+						headerRow.getCell(0).setColor("4bacc6");
+						headerRow.getCell(1).setColor("4bacc6");
+						headerRow.getCell(2).setColor("4bacc6");
+						headerRow.getCell(0).setText("Attribute Name");
+						headerRow.getCell(1).setText("Variable Name");
+						headerRow.getCell(2).setText("Description");
+						int count = 1;
 						for(Attribute attribute : attributeList){
 							if(attribute != null){
-
-								XWPFRun run = docx.createParagraph().createRun();
-								run.setBold(true);
-								run.setColor("800000");
-								run.setUnderline(UnderlinePatterns.SINGLE);
-								run.setText("Configuration Attributes");
-								
-								//docx.createParagraph().createRun().setText(attribute.getDescription());
-								XWPFTable utilTable = docx.createTable(2,3);
-								XWPFTableRow headerRow = utilTable.getRow(0);
-								
-								headerRow.getCell(0).setColor("4bacc6");
-								headerRow.getCell(1).setColor("4bacc6");
-								headerRow.getCell(2).setColor("4bacc6");
-								
-								headerRow.getCell(0).setText("Attribute Name");
-								headerRow.getCell(1).setText("Variable Name");
-								headerRow.getCell(2).setText("Description");
-								
-								XWPFTableRow newRow = utilTable.getRow(1);
+								XWPFTableRow newRow = utilTable.getRow(count++);
 								newRow.getCell(0).setText(attribute.getName());
 								newRow.getCell(1).setText(attribute.getVariableName());
 								newRow.getCell(2).setText(attribute.getDescription());
@@ -128,13 +114,19 @@ public class DocxFileConverter {
 								newRow.getCell(1).setText(util.getVariableName());
 								newRow.getCell(2).setText(util.getDescription());
 								
-								XWPFRun scriptRun = docx.createParagraph().createRun();
-								scriptRun.setBold(true);
-								scriptRun.setColor("800000");
-								scriptRun.setUnderline(UnderlinePatterns.SINGLE);
-								scriptRun.setText("Script Text");
+								XWPFRun scriptRunHeader = docx.createParagraph().createRun();
+								scriptRunHeader.addBreak();
+								scriptRunHeader.setBold(true);
+								scriptRunHeader.setColor("800000");
+								scriptRunHeader.setUnderline(UnderlinePatterns.SINGLE);
+								scriptRunHeader.setText("Script Text");
 								
-								docx.createParagraph().createRun().setText(util.getScriptText());
+								XWPFRun scriptRun  = docx.createParagraph().createRun();
+								for(String scriptText : util.getScriptText().split(";")){
+									scriptRun.setText(scriptText + ";");
+									scriptRun.addBreak();
+								}
+							
 								
 							}
 						}
