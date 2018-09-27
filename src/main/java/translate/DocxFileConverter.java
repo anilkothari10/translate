@@ -2,6 +2,7 @@ package translate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
@@ -16,12 +17,14 @@ public class DocxFileConverter {
 		FileOutputStream fos = new FileOutputStream("files/output/Sample TDD_temp.docx");
 		XWPFDocument docx = new XWPFDocument();
 		if (docx != null) {
+			int storyNum = 1;
 				for(UserStories stories : userStories){
 					XWPFRun storyNumRun = docx.createParagraph().createRun();
 					storyNumRun.setBold(true);
 					storyNumRun.setColor("800000");
 					storyNumRun.setUnderline(UnderlinePatterns.SINGLE);
-					storyNumRun.setText(stories.getUserStoryNum());
+					storyNumRun.setText("1." + storyNum++ + "  " + stories.getUserStoryNum());
+					
 					List<Attribute> attributeList= stories.getAttributeList();
 					if(attributeList != null && attributeList.size() > 0){
 						XWPFRun run = docx.createParagraph().createRun();
@@ -53,38 +56,24 @@ public class DocxFileConverter {
 					
 					List<Rule> ruleList = stories.getRuleList();
 					if(ruleList != null && ruleList.size() > 0){
+						
+						List<Rule> recommendationRuleList = new ArrayList<Rule>();
+						List<Rule> constraintRuleList = new ArrayList<Rule>();
+						List<Rule> hidingRuleList = new ArrayList<Rule>();
 						for(Rule rule : ruleList){
-							if(rule != null){
-								XWPFRun run = docx.createParagraph().createRun();
-								run.setBold(true);
-								run.setColor("800000");
-								run.setUnderline(UnderlinePatterns.SINGLE);
-								if(rule.getRuleType().equalsIgnoreCase("1")){
-									run.setText("Recommendation rule");
-								}else if(rule.getRuleType().equalsIgnoreCase("2")){
-									run.setText("Constraint rule");
-								}else if(rule.getRuleType().equalsIgnoreCase("11")){
-									run.setText("Hiding rule");
-								}else{
-									run.setText(rule.getDescription());
-								}
-
-								XWPFTable ruleTable = docx.createTable(2, 3);
-								XWPFTableRow headerRow = ruleTable.getRow(0);
-								headerRow.getCell(0).setColor("4bacc6");
-								headerRow.getCell(1).setColor("4bacc6");
-								headerRow.getCell(2).setColor("4bacc6");
-
-								headerRow.getCell(0).setText("Rule Name");
-								headerRow.getCell(1).setText("Variable Name");
-								headerRow.getCell(2).setText("Description");
-
-								XWPFTableRow newRow = ruleTable.getRow(1);
-								newRow.getCell(0).setText(rule.getName());
-								newRow.getCell(1).setText(rule.getVariableName());
-								newRow.getCell(2).setText(rule.getDescription());
+							if(rule.getRuleType().equalsIgnoreCase("1")){
+								recommendationRuleList.add(rule);
+							}else if(rule.getRuleType().equalsIgnoreCase("2")){
+								constraintRuleList.add(rule);
+							}else if(rule.getRuleType().equalsIgnoreCase("11")){
+								hidingRuleList.add(rule);
 							}
 						}
+
+						createRuleTable(docx, recommendationRuleList, "Recommendation Rule");
+						createRuleTable(docx, constraintRuleList, "Constraint Rule");
+						createRuleTable(docx, hidingRuleList, "Hiding Rule");
+
 					}
 
 					docx.createParagraph();
@@ -148,7 +137,7 @@ public class DocxFileConverter {
 				tableHeaderRow.getCell(1).setColor("4bacc6");
 
 				tableHeaderRow.getCell(0).setText("Data Table Name");
-				tableHeaderRow.getCell(1).setText("Columns");
+				tableHeaderRow.getCell(1).setText("Data Table Columns");
 				
 				if(dataTable != null){
 					int i = 1;
@@ -226,6 +215,38 @@ public class DocxFileConverter {
 			fos.close();
 			docx.close();
 		}
+	}
+
+	private void createRuleTable(XWPFDocument docx, List<Rule> ruleList, String string) {
+		if(ruleList.size() > 0){
+			XWPFRun run = docx.createParagraph().createRun();
+			run.setBold(true);
+			run.setColor("800000");
+			run.setUnderline(UnderlinePatterns.SINGLE);
+			run.setText(string);
+			
+			XWPFTable ruleTable = docx.createTable(ruleList.size() + 1, 3);
+			XWPFTableRow headerRow = ruleTable.getRow(0);
+			headerRow.getCell(0).setColor("4bacc6");
+			headerRow.getCell(1).setColor("4bacc6");
+			headerRow.getCell(2).setColor("4bacc6");
+
+			headerRow.getCell(0).setText("Rule Name");
+			headerRow.getCell(1).setText("Variable Name");
+			headerRow.getCell(2).setText("Description");
+
+			int i = 1;
+			for(Rule rule : ruleList){
+				if(rule != null){
+					XWPFTableRow newRow = ruleTable.getRow(i);
+					newRow.getCell(0).setText(rule.getName());
+					newRow.getCell(1).setText(rule.getVariableName());
+					newRow.getCell(2).setText(rule.getDescription());
+					i++;
+				}
+			}
+		}
+		
 	}
 
 
