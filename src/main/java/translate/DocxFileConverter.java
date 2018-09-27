@@ -131,7 +131,7 @@ public class DocxFileConverter {
 							}
 						}
 					}
-					docx.createParagraph();
+					docx.createParagraph().setPageBreak(true);
 				}
 				
 				
@@ -162,7 +162,7 @@ public class DocxFileConverter {
 					}
 				}
 				
-				docx.createParagraph();
+				docx.createParagraph().setPageBreak(true);
 				
 	            // Add users Lis
 				
@@ -192,7 +192,7 @@ public class DocxFileConverter {
 					}
 				}
 				
-				docx.createParagraph();
+				docx.createParagraph().setPageBreak(true);
 				
 				//add group List
 				XWPFRun groupRun = docx.createParagraph().createRun();
