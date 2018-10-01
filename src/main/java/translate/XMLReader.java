@@ -17,54 +17,54 @@ import org.xml.sax.SAXException;
 
 public class XMLReader {
 
-	public List<Attribute> readAttrXML(File file) throws ParserConfigurationException, SAXException, IOException{
-		//Get Document Builder
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-
-		//Build Document
-		Document document = builder.parse(file);
-
-		//Normalize the XML Structure;
-		document.getDocumentElement().normalize();
-
-		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
-		List<Attribute> attributeList = new ArrayList<Attribute>();
-		Attribute attribute = null;
-		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-			attribute = new Attribute();
-			Node eachRecordNode = eachRecordNodeList.item(i);
-			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-				Node childNode = eachRecordChildNodeList.item(j);
-				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
-						NodeList nameChildNodesList = childNode.getChildNodes();
-						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-							Node nameChildNode = nameChildNodesList.item(k);
-							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
-									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
-									attribute.setName(nameChildNode.getTextContent().trim());
-									break;
-								}
-							}
-						}
-					}
-					if("variable_name".equals(childNode.getNodeName())){
-						//System.out.println("Variable Name : " + childNode.getTextContent());
-						attribute.setVariableName(childNode.getTextContent().trim());
-					}
-					if("data_type".equals(childNode.getNodeName())){
-						//System.out.println("Data Type : " + childNode.getTextContent());
-						attribute.setDataType(childNode.getTextContent().trim());
-					}
-				}
-			}
-			attributeList.add(attribute);
-		}
-		return attributeList;
-	}
+//	public List<Attribute> readAttrXML(File file) throws ParserConfigurationException, SAXException, IOException{
+//		//Get Document Builder
+//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder builder = factory.newDocumentBuilder();
+//
+//		//Build Document
+//		Document document = builder.parse(file);
+//
+//		//Normalize the XML Structure;
+//		document.getDocumentElement().normalize();
+//
+//		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
+//		List<Attribute> attributeList = new ArrayList<Attribute>();
+//		Attribute attribute = null;
+//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+//			attribute = new Attribute();
+//			Node eachRecordNode = eachRecordNodeList.item(i);
+//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+//				Node childNode = eachRecordChildNodeList.item(j);
+//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+//					if("name".equals(childNode.getNodeName())){
+//						NodeList nameChildNodesList = childNode.getChildNodes();
+//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+//							Node nameChildNode = nameChildNodesList.item(k);
+//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+//								if("en".equals(nameChildNode.getNodeName())){
+//									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
+//									attribute.setName(nameChildNode.getTextContent().trim());
+//									break;
+//								}
+//							}
+//						}
+//					}
+//					if("variable_name".equals(childNode.getNodeName())){
+//						//System.out.println("Variable Name : " + childNode.getTextContent());
+//						attribute.setVariableName(childNode.getTextContent().trim());
+//					}
+//					if("data_type".equals(childNode.getNodeName())){
+//						//System.out.println("Data Type : " + childNode.getTextContent());
+//						attribute.setDataType(childNode.getTextContent().trim());
+//					}
+//				}
+//			}
+//			attributeList.add(attribute);
+//		}
+//		return attributeList;
+//	}
 	
 //	public List<Rule> readRuleXML(File file, List<UserStories> userStories) throws ParserConfigurationException, SAXException, IOException{
 //		//Get Document Builder
@@ -282,6 +282,7 @@ public class XMLReader {
 								user.setUserId(childElement.getElementsByTagName("id").item(0).getTextContent());
 								user.setUserLoginName(childElement.getElementsByTagName("login").item(0).getTextContent());
 								usersList.add(user);
+								Printer.print("User id : "+user.getUserId() +  "\tLogin Name: " + user.getUserLoginName()+"\n");
 							}
 						}
 					}
@@ -339,6 +340,7 @@ public class XMLReader {
 									}
 								}
 								groupsList.add(group);
+								Printer.print("Group Label : "+group.getGroupLabel() +  "\tGroup Name: " + group.getGroupName()+"\n");
 							}
 						}
 					}
@@ -347,92 +349,92 @@ public class XMLReader {
 		return groupsList;
 	}
 
-	public List<UserStories> readUserStoriesFromRulesXML(File file, String tagName) throws ParserConfigurationException, SAXException, IOException {
-		//Get Document Builder
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-
-		//Build Document
-		Document document = builder.parse(file);
-
-		//Normalize the XML Structure;
-		document.getDocumentElement().normalize();
-
-		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
-		List<UserStories> userStories = new ArrayList<UserStories>();
-		UserStories stories= null;
-		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-			stories = new UserStories();
-			Node eachRecordNode = eachRecordNodeList.item(i);
-			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-				Node childNode = eachRecordChildNodeList.item(j);
-				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("description".equals(childNode.getNodeName())){
-						NodeList nameChildNodesList = childNode.getChildNodes();
-						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-							Node nameChildNode = nameChildNodesList.item(k);
-							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
-									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
-										stories.setUserStoryNum(nameChildNode.getTextContent().trim());
-										
-										userStories.add(stories);
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return userStories;
-	}
+//	public List<UserStories> readUserStoriesFromRulesXML(File file, String tagName) throws ParserConfigurationException, SAXException, IOException {
+//		//Get Document Builder
+//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder builder = factory.newDocumentBuilder();
+//
+//		//Build Document
+//		Document document = builder.parse(file);
+//
+//		//Normalize the XML Structure;
+//		document.getDocumentElement().normalize();
+//
+//		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
+//		List<UserStories> userStories = new ArrayList<UserStories>();
+//		UserStories stories= null;
+//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+//			stories = new UserStories();
+//			Node eachRecordNode = eachRecordNodeList.item(i);
+//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+//				Node childNode = eachRecordChildNodeList.item(j);
+//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+//					if("description".equals(childNode.getNodeName())){
+//						NodeList nameChildNodesList = childNode.getChildNodes();
+//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+//							Node nameChildNode = nameChildNodesList.item(k);
+//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+//								if("en".equals(nameChildNode.getNodeName())){
+//									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
+//										stories.setUserStoryNum(nameChildNode.getTextContent().trim());
+//										
+//										userStories.add(stories);
+//										break;
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return userStories;
+//	}
 	
 
-	public List<UserStories> readUserStoriesFromConfigXML(File file, String tagName) throws ParserConfigurationException, SAXException, IOException {
-		//Get Document Builder
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-
-		//Build Document
-		Document document = builder.parse(file);
-
-		//Normalize the XML Structure;
-		document.getDocumentElement().normalize();
-
-		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
-		List<UserStories> userStories = new ArrayList<UserStories>();
-		UserStories stories= null;
-		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-			stories = new UserStories();
-			Node eachRecordNode = eachRecordNodeList.item(i);
-			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-				Node childNode = eachRecordChildNodeList.item(j);
-				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("description".equals(childNode.getNodeName())){
-						NodeList nameChildNodesList = childNode.getChildNodes();
-						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-							Node nameChildNode = nameChildNodesList.item(k);
-							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
-									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
-										stories.setUserStoryNum(nameChildNode.getTextContent().trim());
-										
-										userStories.add(stories);
-										break;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return userStories;
-	}
+//	public List<UserStories> readUserStoriesFromConfigXML(File file, String tagName) throws ParserConfigurationException, SAXException, IOException {
+//		//Get Document Builder
+//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder builder = factory.newDocumentBuilder();
+//
+//		//Build Document
+//		Document document = builder.parse(file);
+//
+//		//Normalize the XML Structure;
+//		document.getDocumentElement().normalize();
+//
+//		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
+//		List<UserStories> userStories = new ArrayList<UserStories>();
+//		UserStories stories= null;
+//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+//			stories = new UserStories();
+//			Node eachRecordNode = eachRecordNodeList.item(i);
+//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+//				Node childNode = eachRecordChildNodeList.item(j);
+//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+//					if("description".equals(childNode.getNodeName())){
+//						NodeList nameChildNodesList = childNode.getChildNodes();
+//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+//							Node nameChildNode = nameChildNodesList.item(k);
+//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+//								if("en".equals(nameChildNode.getNodeName())){
+//									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
+//										stories.setUserStoryNum(nameChildNode.getTextContent().trim());
+//										
+//										userStories.add(stories);
+//										break;
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return userStories;
+//	}
 	
 	public List<Rule> readConfigRuleXML(File file, String tagName, List<UserStories> userStoriesRules) throws ParserConfigurationException, SAXException, IOException{
 		//Get Document Builder
@@ -470,6 +472,9 @@ public class XMLReader {
 					if("variable_name".equals(childNode.getNodeName())){
 						rule.setVariableName(childNode.getTextContent().trim());
 
+					}
+					if("script_text".equals(childNode.getNodeName())){
+						rule.setScriptText(childNode.getTextContent().trim());
 					}
 					if("rule_type".equals(childNode.getNodeName())){
 						rule.setRuleType(childNode.getTextContent().trim());

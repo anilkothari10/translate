@@ -8,49 +8,48 @@ public class XMLConverter {
 
 	public static void main(String[] args) throws Exception {
 
+		Printer.DEBUG = false;
+		Printer.INFO = true;
 		File file = null;
-		Printer printer = new Printer(true);
+		
 		List<UserStories> userStoriesRules = new ArrayList<UserStories>();
 		try {
-			printer.setDebug(false);
-			file = new File(Constants.SOURCE_CONFIG_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
-			}
-			List<Rule> configRules = null;
 			XMLReader xmlReader = new XMLReader();
-			printer.setDebug(true);
-			configRules = xmlReader.readConfigRuleXML(file, "bm_config_rule", userStoriesRules);
-			printer.setDebug(false);
-			for(Rule rule : configRules){
-				Printer.print(rule.getName()+"\t\t");
-				Printer.print(rule.getVariableName()+"\t\t");
-				Printer.print(rule.getRuleType()+"\t\t");
-				Printer.print(rule.getDescription() + "\n\n");
+
+			file = new File(Constants.SOURCE_RULE_ATTRIBUTE_DIR);
+			File[] ruleAttributeFileList = file.listFiles();
+			if(ruleAttributeFileList != null && ruleAttributeFileList.length > 0){
+				Printer.println("#### Number of files in Rules_Attributes folder = " + ruleAttributeFileList.length);
+				for(File ruleAttributeFile : ruleAttributeFileList){
+					if (!ruleAttributeFile.exists()) {
+						throw new Exception("Input file not present at location : " + ruleAttributeFile.getAbsolutePath());
+					}
+					
+					Printer.println("#### Reading Rules from : "+ ruleAttributeFile.getName());
+					
+					xmlReader.readConfigRuleXML(ruleAttributeFile, "bm_config_rule", userStoriesRules);
+					
+					Printer.println("#### Reading Attributes from : "+ ruleAttributeFile.getName());
+					
+					xmlReader.readConfigAttributeXML(ruleAttributeFile, "bm_config_attr", userStoriesRules);
+				}
 			}
-			
-			file = new File(Constants.SOURCE_CONFIG_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
-			}
-			List<Attribute> configAttribute = null;
-			xmlReader = new XMLReader();
-			printer.setDebug(true);
-			configAttribute = xmlReader.readConfigAttributeXML(file, "bm_config_attr", userStoriesRules);
-			printer.setDebug(false);
 
 			//Read UserStories from UTIL Libraries
 			file = new File(Constants.SOURCE_UTIL_LIBRARIES_DIR);
 			File[] fileList = file.listFiles();
 			if(fileList != null && fileList.length > 0){
-				List<Util> utilList = new ArrayList<Util>();
+				
+				Printer.println("#### Reading UTIL Libraries");
+				
 				for(File utilFolder : fileList){
 					if(utilFolder.exists() && utilFolder.isDirectory()){
 						File[] utilFiles = utilFolder.listFiles();
-						for(File utilFile : utilFiles){
-							if(utilFile.exists() && utilFile.getName().contains("libfunc.xml")){
-								//userStoriesUtils = xmlReader.readUserStoriesFromRulesXML(utilFile, "bm_lib_func");
-								utilList.addAll(xmlReader.readUtilsXML(utilFile, "bm_lib_func", userStoriesRules));
+						if(utilFiles != null && utilFiles.length > 0){
+							for(File utilFile : utilFiles){
+								if(utilFile.exists() && utilFile.getName().contains("libfunc.xml")){
+									xmlReader.readUtilsXML(utilFile, "bm_lib_func", userStoriesRules);
+								}
 							}
 						}
 					}
@@ -59,19 +58,32 @@ public class XMLConverter {
 			
 			
 			//Read Data table XML
-			List<DataTable> dataTableList = null;
-			file = new File(Constants.SOURCE_DATA_TABLE_XML_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			List<DataTable> dataTableList = new ArrayList<DataTable>();
+			file = new File(Constants.SOURCE_DATA_TABLE_DIR);
+			File[] dataTableFileList = file.listFiles();
+			if(dataTableFileList != null && dataTableFileList.length > 0){
+				
+				Printer.println("#### Reading Data table XMLs. Number of files in Data_Tables folder: " + dataTableFileList.length);
+				
+				for(File dataTableFile : dataTableFileList){
+					if (!dataTableFile.exists()) {
+						throw new Exception("Input file not present at location : " + dataTableFile.getAbsolutePath());
+					}
+					
+					Printer.println("#### Reading Data table from : "+ dataTableFile.getName());
+					
+					dataTableList.addAll(xmlReader.readDataTableXML(dataTableFile));
+				}
 			}
-			dataTableList = xmlReader.readDataTableXML(file);
-			
-			
+
 			//read user
 			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
 			if (!file.exists()) {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
+			
+			Printer.println("#### Reading Users");
+			
 			List<Users> usersList = null;
 			usersList = xmlReader.readUsersXML(file);
 			
@@ -81,23 +93,12 @@ public class XMLConverter {
 			if (!file.exists()) {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
+			
+			Printer.println("#### Reading Groups");
+			
 			List<Groups> groupList= null;
 			groupList = xmlReader.readGroupsXML(file);
-			
-			Printer.print("###############Attribute###############");
 
-			for(Attribute attribute: configAttribute){
-				Printer.print(attribute.getName()+"\t\t");
-				Printer.print(attribute.getVariableName()+"\t\t");
-				Printer.print(attribute.getDataType()+"\t\t");
-				Printer.print(attribute.getDescription() + "\n\n");
-			}
-
-			printer.setDebug(true);
-			Printer.print("###############Stories###############");
-
-			Printer.print("\n"+userStoriesRules.size()+"\n");
-			
 //			for(UserStories userStories : userStoriesRules){
 //				Printer.print(userStories.getUserStoryNum() + "\t");
 //				if(userStories.getAttribute != null){
@@ -258,6 +259,12 @@ public class XMLConverter {
 //			}
 //			DocxFileConverter converter = new DocxFileConverter();
 //			converter.docxFileConverter(file,attributeList,ruleList,utilMap,dataTableList, usersList, groupList, userStories);
+
+			Printer.println("#### Number of User Stories        : " + userStoriesRules.size());
+			Printer.println("#### Number of Data Tables Entries : " + dataTableList.size());
+			Printer.println("#### Number of Users               : " + usersList.size());
+			Printer.println("#### Number of Groups              : " + groupList.size());
+
 			DocxFileConverter converter = new DocxFileConverter();
 			converter.docxFileConverter(file, userStoriesRules, dataTableList, usersList, groupList);
 		} catch (Exception e) {

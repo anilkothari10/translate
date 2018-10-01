@@ -5,6 +5,13 @@ public class Rule {
 	private String name;
 	private String variableName;
 	private String description;
+	private String scriptText;
+	public String getScriptText() {
+		return scriptText;
+	}
+	public void setScriptText(String scriptText) {
+		this.scriptText = scriptText;
+	}
 	public String getRuleType() {
 		return ruleType;
 	}
@@ -32,7 +39,7 @@ public class Rule {
 	@Override
 	public String toString() {
 		return "Rule [ruleType=" + ruleType + ", name=" + name + ", variableName=" + variableName + ", description="
-				+ description + "]";
+				+ description + ", scriptText=" + scriptText + "]";
 	}
 	
 }

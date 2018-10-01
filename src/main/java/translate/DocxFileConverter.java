@@ -2,14 +2,19 @@ package translate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
 
 public class DocxFileConverter {
 
@@ -19,21 +24,25 @@ public class DocxFileConverter {
 		if (docx != null) {
 			int storyNum = 1;
 				for(UserStories stories : userStories){
+					int storySubNum = 1;
 					XWPFRun storyNumRun = docx.createParagraph().createRun();
 					storyNumRun.setBold(true);
 					storyNumRun.setColor("800000");
 					storyNumRun.setUnderline(UnderlinePatterns.SINGLE);
-					storyNumRun.setText("1." + storyNum++ + "  " + stories.getUserStoryNum());
+					storyNumRun.setText(storyNum + "  " + stories.getUserStoryNum());
 					
 					List<Attribute> attributeList= stories.getAttributeList();
 					if(attributeList != null && attributeList.size() > 0){
-						XWPFRun run = docx.createParagraph().createRun();
+						XWPFParagraph paragraph = docx.createParagraph();
+						XWPFRun run = paragraph.createRun();
 						run.setBold(true);
 						run.setColor("800000");
 						run.setUnderline(UnderlinePatterns.SINGLE);
-						run.setText("Configuration Attributes");
+						run.setText(storyNum + "." + storySubNum++ + "  " + "Configuration Attributes");
+						//run.setText("Configuration Attributes");
+
 						XWPFTable utilTable = docx.createTable(attributeList.size()+1,3);
-						
+
 						XWPFTableRow headerRow = utilTable.getRow(0);
 						headerRow.getCell(0).setColor("4bacc6");
 						headerRow.getCell(1).setColor("4bacc6");
@@ -41,6 +50,8 @@ public class DocxFileConverter {
 						headerRow.getCell(0).setText("Attribute Name");
 						headerRow.getCell(1).setText("Variable Name");
 						headerRow.getCell(2).setText("Description");
+						setTableSize(utilTable, 2600, 3000, 3600);
+
 						int count = 1;
 						for(Attribute attribute : attributeList){
 							if(attribute != null){
@@ -70,9 +81,9 @@ public class DocxFileConverter {
 							}
 						}
 
-						createRuleTable(docx, recommendationRuleList, "Recommendation Rule");
-						createRuleTable(docx, constraintRuleList, "Constraint Rule");
-						createRuleTable(docx, hidingRuleList, "Hiding Rule");
+						createRuleTable(docx, recommendationRuleList, "Recommendation Rule", storyNum, storySubNum++);
+						createRuleTable(docx, constraintRuleList, "Constraint Rule", storyNum, storySubNum++);
+						createRuleTable(docx, hidingRuleList, "Hiding Rule", storyNum, storySubNum++);
 
 					}
 
@@ -86,10 +97,11 @@ public class DocxFileConverter {
 								run.setBold(true);
 								run.setColor("800000");
 								run.setUnderline(UnderlinePatterns.SINGLE);
-								run.setText("BML Util Libraries");
+								run.setText(storyNum + "." + storySubNum++ + "  " + "BML Util Libraries");
+								//run.setText("BML Util Libraries");
 
-								XWPFTable ruleTable = docx.createTable(2, 3);
-								XWPFTableRow headerRow = ruleTable.getRow(0);
+								XWPFTable utilTable = docx.createTable(2, 3);
+								XWPFTableRow headerRow = utilTable.getRow(0);
 								headerRow.getCell(0).setColor("4bacc6");
 								headerRow.getCell(1).setColor("4bacc6");
 								headerRow.getCell(2).setColor("4bacc6");
@@ -98,10 +110,12 @@ public class DocxFileConverter {
 								headerRow.getCell(1).setText("Variable Name");
 								headerRow.getCell(2).setText("Description");
 
-								XWPFTableRow newRow = ruleTable.getRow(1);
+								XWPFTableRow newRow = utilTable.getRow(1);
 								newRow.getCell(0).setText(util.getName());
 								newRow.getCell(1).setText(util.getVariableName());
 								newRow.getCell(2).setText(util.getDescription());
+								
+								setTableSize(utilTable, 2600, 3000, 3600);
 								
 								XWPFRun scriptRunHeader = docx.createParagraph().createRun();
 								scriptRunHeader.addBreak();
@@ -121,6 +135,7 @@ public class DocxFileConverter {
 						}
 					}
 					docx.createParagraph().setPageBreak(true);
+					storyNum++;
 				}
 				
 				
@@ -138,6 +153,8 @@ public class DocxFileConverter {
 
 				tableHeaderRow.getCell(0).setText("Data Table Name");
 				tableHeaderRow.getCell(1).setText("Data Table Columns");
+				
+				setTableSize(dataTable, 3000, 6200, 0);
 				
 				if(dataTable != null){
 					int i = 1;
@@ -169,6 +186,8 @@ public class DocxFileConverter {
 				userHeaderRow.getCell(0).setText("User ID");
 				userHeaderRow.getCell(1).setText("User Login Name");
 				
+				setTableSize(userTable, 4600, 4600, 0);
+				
 				if(userTable != null){
 					int i = 1;
 					for (Users usersTemp : usersList) {
@@ -198,6 +217,8 @@ public class DocxFileConverter {
 				groupHeaderRow .getCell(0).setText("Group Label");
 				groupHeaderRow .getCell(1).setText("Group Name");
 				
+				setTableSize(groupTable, 4600, 4600, 0);
+				
 				if(groupTable != null){
 					int i = 1;
 					for (Groups groupTemp : groupList) {
@@ -217,14 +238,18 @@ public class DocxFileConverter {
 		}
 	}
 
-	private void createRuleTable(XWPFDocument docx, List<Rule> ruleList, String string) {
+
+	private void createRuleTable(XWPFDocument docx, List<Rule> ruleList, String string, int storyNum, int storySubNum) {
 		if(ruleList.size() > 0){
-			XWPFRun run = docx.createParagraph().createRun();
+			
+			XWPFParagraph paragraph = docx.createParagraph();
+			XWPFRun run = paragraph.createRun();
 			run.setBold(true);
 			run.setColor("800000");
 			run.setUnderline(UnderlinePatterns.SINGLE);
-			run.setText(string);
-			
+			run.setText(storyNum + "." + storySubNum + "  " + string);
+			//run.setText(string);
+
 			XWPFTable ruleTable = docx.createTable(ruleList.size() + 1, 3);
 			XWPFTableRow headerRow = ruleTable.getRow(0);
 			headerRow.getCell(0).setColor("4bacc6");
@@ -234,6 +259,8 @@ public class DocxFileConverter {
 			headerRow.getCell(0).setText("Rule Name");
 			headerRow.getCell(1).setText("Variable Name");
 			headerRow.getCell(2).setText("Description");
+			
+			setTableSize(ruleTable, 2600, 3000, 3600);
 
 			int i = 1;
 			for(Rule rule : ruleList){
@@ -242,6 +269,8 @@ public class DocxFileConverter {
 					newRow.getCell(0).setText(rule.getName());
 					newRow.getCell(1).setText(rule.getVariableName());
 					newRow.getCell(2).setText(rule.getDescription());
+//					XWPFRun scriptTextRun = docx.createParagraph().createRun();
+//					scriptTextRun.setText("Script Text : "+rule.getScriptText());
 					i++;
 				}
 			}
@@ -249,5 +278,26 @@ public class DocxFileConverter {
 		
 	}
 
+	
+	private void setTableSize(XWPFTable table, long row0, long row1, long row2){
+		for (int i = 0; i < table.getNumberOfRows(); i++) {
+	        XWPFTableRow row = table.getRow(i);
+	        int numCells = row.getTableCells().size();
+	        for (int j = 0; j < numCells; j++) {
+	            XWPFTableCell cell = row.getCell(j);
+	            CTTblWidth cellWidth = cell.getCTTc().addNewTcPr().addNewTcW();
+	            CTTcPr pr = cell.getCTTc().addNewTcPr();
+	            pr.addNewNoWrap();
+	            if(j == 0){
+		            cellWidth.setW(BigInteger.valueOf(row0));
+	            }else if(j==1){
+		            cellWidth.setW(BigInteger.valueOf(row1));
+	            }else if(j==2){
+		            cellWidth.setW(BigInteger.valueOf(row2));
+	            }
+
+	        }
+	    }
+	}
 
 }
