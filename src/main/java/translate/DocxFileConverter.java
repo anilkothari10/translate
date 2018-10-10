@@ -41,16 +41,18 @@ public class DocxFileConverter {
 						run.setText(storyNum + "." + storySubNum++ + "  " + "Configuration Attributes");
 						//run.setText("Configuration Attributes");
 
-						XWPFTable utilTable = docx.createTable(attributeList.size()+1,3);
+						XWPFTable utilTable = docx.createTable(attributeList.size()+1,4);
 
 						XWPFTableRow headerRow = utilTable.getRow(0);
 						headerRow.getCell(0).setColor("4bacc6");
 						headerRow.getCell(1).setColor("4bacc6");
 						headerRow.getCell(2).setColor("4bacc6");
+						headerRow.getCell(3).setColor("4bacc6");
 						headerRow.getCell(0).setText("Attribute Name");
 						headerRow.getCell(1).setText("Variable Name");
 						headerRow.getCell(2).setText("Description");
-						setTableSize(utilTable, 2600, 3000, 3600);
+						headerRow.getCell(3).setText("Data Type");
+						setTableSize(utilTable, 1600, 2500, 4100, 1000);
 
 						int count = 1;
 						for(Attribute attribute : attributeList){
@@ -59,6 +61,7 @@ public class DocxFileConverter {
 								newRow.getCell(0).setText(attribute.getName());
 								newRow.getCell(1).setText(attribute.getVariableName());
 								newRow.getCell(2).setText(attribute.getDescription());
+								newRow.getCell(3).setText(Constants.getDataTypes().get(attribute.getDataType()));
 							}
 						}
 					}
@@ -71,6 +74,9 @@ public class DocxFileConverter {
 						List<Rule> recommendationRuleList = new ArrayList<Rule>();
 						List<Rule> constraintRuleList = new ArrayList<Rule>();
 						List<Rule> hidingRuleList = new ArrayList<Rule>();
+						List<Rule> recommendationItemRuleList = new ArrayList<Rule>();
+						List<Rule> configurationRuleList = new ArrayList<Rule>();
+						List<Rule> pricingRuleList = new ArrayList<Rule>();
 						for(Rule rule : ruleList){
 							if(rule.getRuleType().equalsIgnoreCase("1")){
 								recommendationRuleList.add(rule);
@@ -78,13 +84,33 @@ public class DocxFileConverter {
 								constraintRuleList.add(rule);
 							}else if(rule.getRuleType().equalsIgnoreCase("11")){
 								hidingRuleList.add(rule);
+							}else if(rule.getRuleType().equalsIgnoreCase("9")){
+								recommendationItemRuleList.add(rule);
+							}else if(rule.getRuleType().equalsIgnoreCase("6")){
+								configurationRuleList.add(rule);
+							}else if(rule.getRuleType().equalsIgnoreCase("4")){
+								pricingRuleList.add(rule);
 							}
 						}
 
-						createRuleTable(docx, recommendationRuleList, "Recommendation Rule", storyNum, storySubNum++);
-						createRuleTable(docx, constraintRuleList, "Constraint Rule", storyNum, storySubNum++);
-						createRuleTable(docx, hidingRuleList, "Hiding Rule", storyNum, storySubNum++);
-
+						if(recommendationRuleList != null && recommendationRuleList.size() > 0){
+							createRuleTable(docx, recommendationRuleList, "Recommendation Rule", storyNum, storySubNum++);
+						}
+						if(constraintRuleList != null && constraintRuleList.size() > 0){
+							createRuleTable(docx, constraintRuleList, "Constraint Rule", storyNum, storySubNum++);
+						}
+						if(hidingRuleList != null && hidingRuleList.size() > 0){
+							createRuleTable(docx, hidingRuleList, "Hiding Rule", storyNum, storySubNum++);
+						}
+						if(recommendationItemRuleList != null && recommendationItemRuleList.size() > 0){
+							createRuleTable(docx, recommendationItemRuleList, "Recommended Items rule", storyNum, storySubNum++);
+						}
+						if(configurationRuleList != null && configurationRuleList.size() > 0){
+							createRuleTable(docx, configurationRuleList, "Configuration Flow rule", storyNum, storySubNum++);
+						}
+						if(pricingRuleList != null && pricingRuleList.size() > 0){
+							createRuleTable(docx, pricingRuleList, "Pricing rule", storyNum, storySubNum++);
+						}
 					}
 
 					docx.createParagraph();
@@ -115,7 +141,7 @@ public class DocxFileConverter {
 								newRow.getCell(1).setText(util.getVariableName());
 								newRow.getCell(2).setText(util.getDescription());
 								
-								setTableSize(utilTable, 2600, 3000, 3600);
+								setTableSize(utilTable, 2600, 3000, 3600, 0);
 								
 								XWPFRun scriptRunHeader = docx.createParagraph().createRun();
 								scriptRunHeader.addBreak();
@@ -154,7 +180,7 @@ public class DocxFileConverter {
 				tableHeaderRow.getCell(0).setText("Data Table Name");
 				tableHeaderRow.getCell(1).setText("Data Table Columns");
 				
-				setTableSize(dataTable, 3000, 6200, 0);
+				setTableSize(dataTable, 3000, 6200, 0, 0);
 				
 				if(dataTable != null){
 					int i = 1;
@@ -186,7 +212,7 @@ public class DocxFileConverter {
 				userHeaderRow.getCell(0).setText("User ID");
 				userHeaderRow.getCell(1).setText("User Login Name");
 				
-				setTableSize(userTable, 4600, 4600, 0);
+				setTableSize(userTable, 4600, 4600, 0, 0);
 				
 				if(userTable != null){
 					int i = 1;
@@ -217,7 +243,7 @@ public class DocxFileConverter {
 				groupHeaderRow .getCell(0).setText("Group Label");
 				groupHeaderRow .getCell(1).setText("Group Name");
 				
-				setTableSize(groupTable, 4600, 4600, 0);
+				setTableSize(groupTable, 4600, 4600, 0, 0);
 				
 				if(groupTable != null){
 					int i = 1;
@@ -260,7 +286,7 @@ public class DocxFileConverter {
 			headerRow.getCell(1).setText("Variable Name");
 			headerRow.getCell(2).setText("Description");
 			
-			setTableSize(ruleTable, 2600, 3000, 3600);
+			setTableSize(ruleTable, 2600, 3000, 3600, 0);
 
 			int i = 1;
 			for(Rule rule : ruleList){
@@ -278,8 +304,8 @@ public class DocxFileConverter {
 		
 	}
 
-	
-	private void setTableSize(XWPFTable table, long row0, long row1, long row2){
+	//table size = 9200 divided into number of columns
+	private void setTableSize(XWPFTable table, long row0, long row1, long row2, long row3){
 		for (int i = 0; i < table.getNumberOfRows(); i++) {
 	        XWPFTableRow row = table.getRow(i);
 	        int numCells = row.getTableCells().size();
@@ -288,12 +314,14 @@ public class DocxFileConverter {
 	            CTTblWidth cellWidth = cell.getCTTc().addNewTcPr().addNewTcW();
 	            CTTcPr pr = cell.getCTTc().addNewTcPr();
 	            pr.addNewNoWrap();
-	            if(j == 0){
+	            if(j == 0 && row0 > 0){
 		            cellWidth.setW(BigInteger.valueOf(row0));
-	            }else if(j==1){
+	            }else if(j==1 && row1 > 0){
 		            cellWidth.setW(BigInteger.valueOf(row1));
-	            }else if(j==2){
+	            }else if(j==2 && row2 > 0){
 		            cellWidth.setW(BigInteger.valueOf(row2));
+	            }else if(j==3 && row3 > 0){
+	            	cellWidth.setW(BigInteger.valueOf(row3));
 	            }
 
 	        }

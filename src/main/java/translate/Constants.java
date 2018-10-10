@@ -1,5 +1,8 @@
 package translate;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
 
 	public static final String DOC_EXT = "doc";
@@ -14,4 +17,22 @@ public class Constants {
 	public static final String SOURCE_DATA_TABLE_DIR = "files/input/Data_Tables/";
 	public static final String SOURCE_USERS_GROUPS_XML_FILE = "files/input/user_group.xml";
 	public static final String XML = "xml";
+	
+	private static Map<String, String> dataTypesMap = null;
+	
+	public static Map<String, String> getDataTypes(){
+		if(dataTypesMap == null){
+			Printer.println("Initializing Data Types Map");
+			dataTypesMap = new HashMap<>();
+			dataTypesMap.put("1", "Text");
+			dataTypesMap.put("2", "Float");
+			dataTypesMap.put("3", "Integer");
+			dataTypesMap.put("4", "Boolean");
+			dataTypesMap.put("5", "Date");
+			dataTypesMap.put("6", "HTML");
+			dataTypesMap.put("7", "Currency");
+		}
+		return dataTypesMap;
+	}
+
 }
