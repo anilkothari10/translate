@@ -66,14 +66,13 @@ public class XMLConverter {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
 			xmlReader.readCommerceProcessXML(file, "bm_cm_action", "bm_cm_reason", commerceComponents);
-			System.out.println(commerceComponents);
 			
 			file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
 			if (!file.exists()) {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
 			xmlReader.readCommerceDocEdDocumentXML(file, "bm_doc_ed_document", commerceComponents);
-			
+			System.out.println(commerceComponents);
 			//Read Data table XML
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
 			file = new File(Constants.SOURCE_DATA_TABLE_DIR);

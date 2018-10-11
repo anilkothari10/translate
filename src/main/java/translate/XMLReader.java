@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 import translate.commerce.ApprovalSequence;
 import translate.commerce.CommerceAction;
 import translate.commerce.CommerceComponents;
+import translate.commerce.PrinterDocument;
 
 public class XMLReader {
 
@@ -64,9 +65,9 @@ public class XMLReader {
 			dataTableList.add(dataTable);
 		}
 		return dataTableList;
-	
+
 	}
-	
+
 	public List<Users> readUsersXML(File file) throws ParserConfigurationException, SAXException, IOException {
 		//Get Document Builder
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -81,26 +82,26 @@ public class XMLReader {
 		NodeList nList = document.getElementsByTagName("bm_company");
 		List<Users> usersList = new ArrayList<Users>();
 		Users user = null;
-			Node nNode = nList.item(0);
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element eElement = (Element) nNode;
-				NodeList elementList = eElement.getElementsByTagName("bm_user");
-				if(elementList != null && elementList.getLength() > 0){
-					for(int temp1 = 0; temp1 < elementList.getLength(); temp1++){
-						Node elementNode = elementList.item(temp1);
-						if(elementNode != null){
-							Element childElement = (Element)elementNode;
-							if(childElement != null)
-							{
-								user = new Users();
-								user.setUserId(childElement.getElementsByTagName("id").item(0).getTextContent());
-								user.setUserLoginName(childElement.getElementsByTagName("login").item(0).getTextContent());
-								usersList.add(user);
-								Printer.print("User id : "+user.getUserId() +  "\tLogin Name: " + user.getUserLoginName()+"\n");
-							}
+		Node nNode = nList.item(0);
+		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+			Element eElement = (Element) nNode;
+			NodeList elementList = eElement.getElementsByTagName("bm_user");
+			if(elementList != null && elementList.getLength() > 0){
+				for(int temp1 = 0; temp1 < elementList.getLength(); temp1++){
+					Node elementNode = elementList.item(temp1);
+					if(elementNode != null){
+						Element childElement = (Element)elementNode;
+						if(childElement != null)
+						{
+							user = new Users();
+							user.setUserId(childElement.getElementsByTagName("id").item(0).getTextContent());
+							user.setUserLoginName(childElement.getElementsByTagName("login").item(0).getTextContent());
+							usersList.add(user);
+							Printer.print("User id : "+user.getUserId() +  "\tLogin Name: " + user.getUserLoginName()+"\n");
 						}
 					}
 				}
+			}
 		}
 		return usersList;
 	}
@@ -119,46 +120,46 @@ public class XMLReader {
 		NodeList nList = document.getElementsByTagName("bm_company");
 		List<Groups> groupsList = new ArrayList<Groups>();
 		Groups group = null;
-			Node nNode = nList.item(0);
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element eElement = (Element) nNode;
-				NodeList elementList = eElement.getElementsByTagName("bm_group");
-				if(elementList != null && elementList.getLength() > 0){
-					for(int temp1 = 0; temp1 < elementList.getLength(); temp1++){
-						Node elementNode = elementList.item(temp1);
-						if(elementNode != null){
-							Element childElement = (Element)elementNode;
-							if(childElement != null)
-							{
-								group = new Groups();
-								NodeList nodeList = childElement.getChildNodes();
-								if(nodeList != null){
+		Node nNode = nList.item(0);
+		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+			Element eElement = (Element) nNode;
+			NodeList elementList = eElement.getElementsByTagName("bm_group");
+			if(elementList != null && elementList.getLength() > 0){
+				for(int temp1 = 0; temp1 < elementList.getLength(); temp1++){
+					Node elementNode = elementList.item(temp1);
+					if(elementNode != null){
+						Element childElement = (Element)elementNode;
+						if(childElement != null)
+						{
+							group = new Groups();
+							NodeList nodeList = childElement.getChildNodes();
+							if(nodeList != null){
 								for(int i = 0; i < nodeList.getLength(); i ++){
 									Node node = nodeList.item(i);
-										if("name".equalsIgnoreCase(node.getNodeName())){
-											group.setGroupName(node.getTextContent().trim());
-										}
-										if("label".equalsIgnoreCase(node.getNodeName()))
-										{
-											NodeList labelNodesList = node.getChildNodes();
-											for(int k = 0; k < labelNodesList.getLength(); k++){
-												Node nameChildNode = labelNodesList.item(k);
-												if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-													if("en".equals(nameChildNode.getNodeName())){
-														group.setGroupLabel(nameChildNode.getTextContent().trim());
-														break;
-													}
+									if("name".equalsIgnoreCase(node.getNodeName())){
+										group.setGroupName(node.getTextContent().trim());
+									}
+									if("label".equalsIgnoreCase(node.getNodeName()))
+									{
+										NodeList labelNodesList = node.getChildNodes();
+										for(int k = 0; k < labelNodesList.getLength(); k++){
+											Node nameChildNode = labelNodesList.item(k);
+											if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+												if("en".equals(nameChildNode.getNodeName())){
+													group.setGroupLabel(nameChildNode.getTextContent().trim());
+													break;
 												}
 											}
 										}
 									}
 								}
-								groupsList.add(group);
-								Printer.print("Group Label : "+group.getGroupLabel() +  "\tGroup Name: " + group.getGroupName()+"\n");
 							}
+							groupsList.add(group);
+							Printer.print("Group Label : "+group.getGroupLabel() +  "\tGroup Name: " + group.getGroupName()+"\n");
 						}
 					}
 				}
+			}
 		}
 		return groupsList;
 	}
@@ -232,12 +233,12 @@ public class XMLReader {
 													}
 												}
 												if(!storyAdded){
-														Printer.print("1 creating new Rule to : " + storyNum + "\n");
-														UserStories storyTemp = new UserStories();
-														storyTemp.setUserStoryNum(storyNum);
-														storyTemp.setRuleList(new ArrayList<Rule>());
-														storyTemp.getRuleList().add(rule);
-														userStoriesRules.add(storyTemp);
+													Printer.print("1 creating new Rule to : " + storyNum + "\n");
+													UserStories storyTemp = new UserStories();
+													storyTemp.setUserStoryNum(storyNum);
+													storyTemp.setRuleList(new ArrayList<Rule>());
+													storyTemp.getRuleList().add(rule);
+													userStoriesRules.add(storyTemp);
 												}
 											}else{
 												Printer.print("2 creating new Rule to : " + storyNum + "\n");
@@ -260,8 +261,8 @@ public class XMLReader {
 		}
 		return ruleList;
 	}
-	
-	
+
+
 	public List<Attribute> readConfigAttributeXML(File file, String tagName, List<UserStories> userStoriesRules) throws ParserConfigurationException, SAXException, IOException{
 		//Get Document Builder
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -357,7 +358,7 @@ public class XMLReader {
 		return attributeList;
 	}
 
-	
+
 	public List<Util> readUtilsXML(File file, String string, List<UserStories> userStoriesRules) throws ParserConfigurationException, SAXException, IOException {
 		//Get Document Builder
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -403,7 +404,7 @@ public class XMLReader {
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
 								if("en".equals(nameChildNode.getNodeName())){
-									
+
 									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
 										String[] temp = nameChildNode.getTextContent().trim().split(":");
 										if(temp.length > 1 && temp[0].startsWith("US#")){
@@ -441,7 +442,7 @@ public class XMLReader {
 										}
 										break;
 									}
-								
+
 								}
 							}
 						}
@@ -453,10 +454,10 @@ public class XMLReader {
 		return utilList;
 	}
 
-	public List<CommerceComponents> readCommerceProcessXML(File file, String actionTag, 
+	public void readCommerceProcessXML(File file, String actionTag, 
 			String approvalTag, List<CommerceComponents> commerceComponentsList) 
 					throws ParserConfigurationException, SAXException, IOException {
-		
+
 		if(commerceComponentsList.isEmpty()){
 			commerceComponentsList.add(new CommerceComponents());
 		}
@@ -471,6 +472,7 @@ public class XMLReader {
 		document.getDocumentElement().normalize();
 
 		NodeList eachRecordNodeList = document.getElementsByTagName(actionTag);
+		List<CommerceAction> commActList = new ArrayList<CommerceAction>();
 		CommerceAction commerceAction = null;
 		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
 			commerceAction = new CommerceAction();
@@ -508,15 +510,17 @@ public class XMLReader {
 					}
 				}
 			}
-			if(commerceComponentsList.get(0).getCommerceActionList() == null){
-				commerceComponentsList.get(0).setCommerceActionList(new ArrayList<CommerceAction>());
-			}else{
-				commerceComponentsList.get(0).getCommerceActionList().add(commerceAction);
-			}
+			commActList.add(commerceAction);
+		}
+		if(commerceComponentsList.get(0).getCommerceActionList() == null){
+			commerceComponentsList.get(0).setCommerceActionList(commActList);
+		}else{
+			commerceComponentsList.get(0).getCommerceActionList().addAll(commActList);
 		}
 
 		NodeList approvalTagNodeList = document.getElementsByTagName(approvalTag);
 		ApprovalSequence approvalSequence = null;
+		List<ApprovalSequence> apprSeqList = new ArrayList<ApprovalSequence>();
 		for (int i = 0; i < approvalTagNodeList.getLength(); i++){
 			approvalSequence = new ApprovalSequence();
 			Node eachRecordNode = approvalTagNodeList.item(i);
@@ -536,7 +540,7 @@ public class XMLReader {
 							}
 						}
 					}
-					if("variable_name".equals(childNode.getNodeName())){
+					if("var_name".equals(childNode.getNodeName())){
 						approvalSequence.setVariableName(childNode.getTextContent().trim());
 					}
 					if("description".equals(childNode.getNodeName())){
@@ -551,19 +555,124 @@ public class XMLReader {
 							}
 						}
 					}
+					if("_children".equals(childNode.getNodeName())){
+						Element nameChildNode = (Element)childNode;
+						NodeList approvers = nameChildNode.getElementsByTagName("bm_cm_approver");
+						for(int k = 0; k < approvers.getLength(); k++){
+							Node approver = approvers.item(k);
+							if(Node.ELEMENT_NODE == approver.getNodeType()){
+								Element approverElement = (Element)childNode;
+								NodeList approverDetails = approverElement.getElementsByTagName("bm_cm_approver_detail");
+								for(int l = 0; l < approverDetails.getLength(); l++){
+									Node approverDetail = approverDetails.item(k);
+									ApproverLoop:
+										if(Node.ELEMENT_NODE == approverDetail.getNodeType()){
+											Element approverDetailElement = (Element)approverDetail;
+											NodeList labels = approverDetailElement.getElementsByTagName("label");
+											for(int m = 0; m < labels.getLength(); m++){
+												Node label = labels.item(k);
+												if(label != null && Node.ELEMENT_NODE == label.getNodeType()){
+													Element labelElement = (Element)label;
+													NodeList enlabel = labelElement.getElementsByTagName("en");
+													approvalSequence.setApprover(enlabel.item(0).getTextContent().trim());
+													break ApproverLoop;
+												}
+											}
+										}
+								}
+
+								NodeList approvalTemplateDetails = approverElement.getElementsByTagName("bm_cm_approval_notification");
+								for(int l = 0; l < approvalTemplateDetails.getLength(); l++){
+									Node approvalTemplateDetail = approvalTemplateDetails.item(k);
+									if(approvalTemplateDetail != null && Node.ELEMENT_NODE == approvalTemplateDetail.getNodeType()){
+										Element approvalTemplateDetailElement = (Element)approvalTemplateDetail;
+										NodeList temlateVarnames = approvalTemplateDetailElement.getElementsByTagName("template_varname");
+										approvalSequence.setApprovalTemplate(temlateVarnames.item(0).getTextContent().trim());
+									}
+								}
+							}
+						}
+
+						NodeList metaRules = nameChildNode.getElementsByTagName("bm_cm_rule_meta");
+						for(int k = 0; k < metaRules.getLength(); k++){
+							Node metaRule = metaRules.item(k);
+							if(Node.ELEMENT_NODE == metaRule.getNodeType()){
+								Element metaRuleElement = (Element)metaRule;
+								NodeList bmFunctionDetails = metaRuleElement.getElementsByTagName("bm_function");
+								for(int l = 0; l < bmFunctionDetails.getLength(); l++){
+									Node bmFunction = bmFunctionDetails.item(k);
+									if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
+										Element bmFunctionElement = (Element)bmFunction;
+										NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+										approvalSequence.setScriptText(scriptTexts.item(0).getTextContent().trim());
+									}
+								}
+							}
+						}
+					}
 				}
 			}
-			if(commerceComponentsList.get(0).getApprovalSequenceList() == null){
-				commerceComponentsList.get(0).setApprovalSequenceList(new ArrayList<ApprovalSequence>());
-			}else{
-				commerceComponentsList.get(0).getApprovalSequenceList().add(approvalSequence);
-			}
+			apprSeqList.add(approvalSequence);
 		}
-		return commerceComponentsList;
+		if(commerceComponentsList.get(0).getApprovalSequenceList() == null){
+			commerceComponentsList.get(0).setApprovalSequenceList(apprSeqList);
+		}else{
+			commerceComponentsList.get(0).getApprovalSequenceList().addAll(apprSeqList);
+		}
 	}
 
-	public void readCommerceDocEdDocumentXML(File file, String string, List<CommerceComponents> commerceComponents) {
+	public void readCommerceDocEdDocumentXML(File file, String tagName, List<CommerceComponents> commerceComponents) throws ParserConfigurationException, SAXException, IOException {
+
+		if(commerceComponents.isEmpty()){
+			commerceComponents.add(new CommerceComponents());
+		}
+		//Get Document Builder
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		List<PrinterDocument> printDocList = new ArrayList<PrinterDocument>();
+		PrinterDocument printerDoc = null;
+		String commerceProcessLinked = null;
+		Node bmDocEdRecord = document.getElementsByTagName("bm_doc_ed").item(0);
+		if(Node.ELEMENT_NODE == bmDocEdRecord.getNodeType()){
+			Element bmDocEdRecordElement = (Element) bmDocEdRecord;
+			Node varName = bmDocEdRecordElement.getElementsByTagName("varname").item(0);
+			commerceProcessLinked = varName.getTextContent().trim();
+		}
 		
+		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
+		
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			printerDoc = new PrinterDocument();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("name".equals(childNode.getNodeName())){
+						printerDoc.setDocName(childNode.getTextContent().trim());
+					}
+					if("varname".equals(childNode.getNodeName())){
+						printerDoc.setVariableName(childNode.getTextContent().trim());
+					}
+					if("description".equals(childNode.getNodeName())){
+						printerDoc.setDescription(childNode.getTextContent().trim());
+					}
+				}
+			}
+			printerDoc.setCommerceProcessLinked(commerceProcessLinked);
+			printDocList.add(printerDoc);
+		}
+		if(commerceComponents.get(0).getPrinterDocumentList() == null){
+			commerceComponents.get(0).setPrinterDocumentList(printDocList);
+		}else{
+			commerceComponents.get(0).getPrinterDocumentList().addAll(printDocList);
+		}
 	}
-	
 }
