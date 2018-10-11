@@ -17,6 +17,7 @@ public class Constants {
 	public static final String SOURCE_DATA_TABLE_DIR = "files/input/Data_Tables/";
 	public static final String SOURCE_USERS_GROUPS_XML_FILE = "files/input/user_group.xml";
 	public static final String XML = "xml";
+	public static final String SECTIONTITLECOLOR = "800000";
 	
 	private static Map<String, String> dataTypesMap = null;
 	
@@ -31,6 +32,7 @@ public class Constants {
 			dataTypesMap.put("5", "Date");
 			dataTypesMap.put("6", "HTML");
 			dataTypesMap.put("7", "Currency");
+			Printer.println("Data Types Map Initialized");
 		}
 		return dataTypesMap;
 	}
