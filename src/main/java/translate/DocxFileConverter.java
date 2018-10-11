@@ -13,8 +13,11 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSimpleField;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
 public class DocxFileConverter {
 
@@ -306,8 +309,12 @@ public class DocxFileConverter {
 						}
 					}
 				}
-				
-				
+			// Table of contents:
+			/*XWPFParagraph p = docx.createParagraph();
+			CTP ctP = p.getCTP();
+			CTSimpleField toc = ctP.addNewFldSimple();
+			toc.setInstr("TOC \\h");
+			toc.setDirty(STOnOff.TRUE);*/
 			docx.write(fos);
 			Printer.println("Output File Path: " + outputFile.getAbsolutePath());
 			fos.close();
