@@ -8,20 +8,22 @@ import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+//import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSimpleField;
+//import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+//import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSimpleField;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
+//import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
+
+import translate.commerce.CommerceComponents;
 
 public class DocxFileConverter {
 
-	public void docxFileConverter(File file, List<UserStories> userStories, List<DataTable> dataTableList , List<Users> usersList , List<Groups> groupList) throws Exception {
+	public void docxFileConverter(File file, List<UserStories> userStories, List<CommerceComponents> commerceComponents, List<DataTable> dataTableList , List<Users> usersList , List<Groups> groupList) throws Exception {
 		File outputFile = new File("files/output/Sample TDD_temp.docx");
 		FileOutputStream fos = new FileOutputStream(outputFile);
 		XWPFDocument docx = new XWPFDocument();

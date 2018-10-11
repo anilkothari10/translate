@@ -18,6 +18,8 @@ public class Constants {
 	public static final String SOURCE_USERS_GROUPS_XML_FILE = "files/input/user_group.xml";
 	public static final String XML = "xml";
 	public static final String SECTIONTITLECOLOR = "800000";
+	public static final String SOURCE_COMMERCE_PROCESS_FILE = "files/input/Commerce/process.xml";
+	public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument new.xml";
 	
 	private static Map<String, String> dataTypesMap = null;
 	

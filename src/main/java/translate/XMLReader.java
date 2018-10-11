@@ -15,197 +15,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class XMLReader {
+import translate.commerce.ApprovalSequence;
+import translate.commerce.CommerceAction;
+import translate.commerce.CommerceComponents;
 
-//	public List<Attribute> readAttrXML(File file) throws ParserConfigurationException, SAXException, IOException{
-//		//Get Document Builder
-//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//		//Build Document
-//		Document document = builder.parse(file);
-//
-//		//Normalize the XML Structure;
-//		document.getDocumentElement().normalize();
-//
-//		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
-//		List<Attribute> attributeList = new ArrayList<Attribute>();
-//		Attribute attribute = null;
-//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-//			attribute = new Attribute();
-//			Node eachRecordNode = eachRecordNodeList.item(i);
-//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-//				Node childNode = eachRecordChildNodeList.item(j);
-//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-//					if("name".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
-//									attribute.setName(nameChildNode.getTextContent().trim());
-//									break;
-//								}
-//							}
-//						}
-//					}
-//					if("variable_name".equals(childNode.getNodeName())){
-//						//System.out.println("Variable Name : " + childNode.getTextContent());
-//						attribute.setVariableName(childNode.getTextContent().trim());
-//					}
-//					if("data_type".equals(childNode.getNodeName())){
-//						//System.out.println("Data Type : " + childNode.getTextContent());
-//						attribute.setDataType(childNode.getTextContent().trim());
-//					}
-//				}
-//			}
-//			attributeList.add(attribute);
-//		}
-//		return attributeList;
-//	}
-	
-//	public List<Rule> readRuleXML(File file, List<UserStories> userStories) throws ParserConfigurationException, SAXException, IOException{
-//		//Get Document Builder
-//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//		//Build Document
-//		Document document = builder.parse(file);
-//
-//		//Normalize the XML Structure;
-//		document.getDocumentElement().normalize();
-//
-//		NodeList eachRecordNodeList = document.getElementsByTagName("each_record");
-//		List<Rule> ruleList = new ArrayList<Rule>();
-//		Rule rule = null;
-//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-//			rule = new Rule();
-//			Node eachRecordNode = eachRecordNodeList.item(i);
-//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-//				Node childNode = eachRecordChildNodeList.item(j);
-//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-//					if("name".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
-//									rule.setName(nameChildNode.getTextContent().trim());
-////									System.out.print(rule.getName() + "\t\t");
-//									break;
-//								}
-//							}
-//						}
-//					}
-//					if("variable_name".equals(childNode.getNodeName())){
-//						//System.out.println("Variable Name : " + childNode.getTextContent());
-//						rule.setVariableName(childNode.getTextContent().trim());
-////						System.out.print(rule.getVariableName() + "\t\t");
-//					}
-//					if("rule_type".equals(childNode.getNodeName())){
-//						//System.out.println("Data Type : " + childNode.getTextContent());
-//						rule.setRuleType(childNode.getTextContent().trim());
-////						System.out.print(rule.getRuleType() +"\n");
-//					}
-//					if("description".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
-//									//rule.setDescription(nameChildNode.getTextContent().trim());
-//									for(UserStories story :userStories){
-//										
-//										if(story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(nameChildNode.getTextContent().trim())){
-//											//System.out.print("start\t\t");
-//											story.setRule(rule);
-//											//System.out.print(story.getUserStoryNum()+"\t\t");
-//											//System.out.print(nameChildNode.getTextContent().trim()+"\n");
-////											System.out.println(story.getRule());
-//										}
-//									}
-//									break;
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//			ruleList.add(rule);
-//		}
-//		return ruleList;
-//	}
-	
-//	public List<Util> readUtilXML(File file, List<UserStories> userStories) throws ParserConfigurationException, SAXException, IOException{
-//		//Get Document Builder
-//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//		//Build Document
-//		Document document = builder.parse(file);
-//
-//		//Normalize the XML Structure;
-//		document.getDocumentElement().normalize();
-//
-//		NodeList eachRecordNodeList = document.getElementsByTagName("bm_lib_func");
-//		List<Util> utilList = new ArrayList<Util>();
-//		Util util = null;
-//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-//			util = new Util();
-//			Node eachRecordNode = eachRecordNodeList.item(i);
-//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-//				Node childNode = eachRecordChildNodeList.item(j);
-//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-//					if("name".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									//System.out.println("Attribute Name : " + nameChildNode.getTextContent());
-//									util.setName(nameChildNode.getTextContent().trim());
-//									break;
-//								}
-//							}
-//						}
-//					}
-//					if("variable_name".equals(childNode.getNodeName())){
-//						//System.out.println("Variable Name : " + childNode.getTextContent());
-//						util.setVariableName(childNode.getTextContent().trim());
-//					}
-//					if(document.getElementsByTagName("script_text").item(0).getNodeName() != null){
-//						//System.out.println("Data Type : " + childNode.getTextContent());
-//						util.setScriptText(document.getElementsByTagName("script_text").item(0).getTextContent().trim());
-//						//util.setScriptText(document.getElementsByTagName("script_text").item(0).getNodeName().trim());
-//					}
-//					if("description".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									for(UserStories story :userStories){
-//										if(story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(nameChildNode.getTextContent().trim())){
-//											story.setUtil(util);
-//										}
-//									}
-//									break;
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//			utilList.add(util);
-//		}
-//		return utilList;
-//	}
+public class XMLReader {
 
 	public List<DataTable> readDataTableXML(File file) throws SAXException, IOException, ParserConfigurationException {
 
@@ -349,93 +163,6 @@ public class XMLReader {
 		return groupsList;
 	}
 
-//	public List<UserStories> readUserStoriesFromRulesXML(File file, String tagName) throws ParserConfigurationException, SAXException, IOException {
-//		//Get Document Builder
-//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//		//Build Document
-//		Document document = builder.parse(file);
-//
-//		//Normalize the XML Structure;
-//		document.getDocumentElement().normalize();
-//
-//		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
-//		List<UserStories> userStories = new ArrayList<UserStories>();
-//		UserStories stories= null;
-//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-//			stories = new UserStories();
-//			Node eachRecordNode = eachRecordNodeList.item(i);
-//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-//				Node childNode = eachRecordChildNodeList.item(j);
-//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-//					if("description".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
-//										stories.setUserStoryNum(nameChildNode.getTextContent().trim());
-//										
-//										userStories.add(stories);
-//										break;
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return userStories;
-//	}
-	
-
-//	public List<UserStories> readUserStoriesFromConfigXML(File file, String tagName) throws ParserConfigurationException, SAXException, IOException {
-//		//Get Document Builder
-//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder builder = factory.newDocumentBuilder();
-//
-//		//Build Document
-//		Document document = builder.parse(file);
-//
-//		//Normalize the XML Structure;
-//		document.getDocumentElement().normalize();
-//
-//		NodeList eachRecordNodeList = document.getElementsByTagName(tagName);
-//		List<UserStories> userStories = new ArrayList<UserStories>();
-//		UserStories stories= null;
-//		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-//			stories = new UserStories();
-//			Node eachRecordNode = eachRecordNodeList.item(i);
-//			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
-//			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
-//				Node childNode = eachRecordChildNodeList.item(j);
-//				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-//					if("description".equals(childNode.getNodeName())){
-//						NodeList nameChildNodesList = childNode.getChildNodes();
-//						for(int k = 0; k < nameChildNodesList.getLength(); k++){
-//							Node nameChildNode = nameChildNodesList.item(k);
-//							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-//								if("en".equals(nameChildNode.getNodeName())){
-//									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
-//										stories.setUserStoryNum(nameChildNode.getTextContent().trim());
-//										
-//										userStories.add(stories);
-//										break;
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		return userStories;
-//	}
-	
 	public List<Rule> readConfigRuleXML(File file, String tagName, List<UserStories> userStoriesRules) throws ParserConfigurationException, SAXException, IOException{
 		//Get Document Builder
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -724,6 +451,119 @@ public class XMLReader {
 			utilList.add(util);
 		}
 		return utilList;
+	}
+
+	public List<CommerceComponents> readCommerceProcessXML(File file, String actionTag, 
+			String approvalTag, List<CommerceComponents> commerceComponentsList) 
+					throws ParserConfigurationException, SAXException, IOException {
+		
+		if(commerceComponentsList.isEmpty()){
+			commerceComponentsList.add(new CommerceComponents());
+		}
+		//Get Document Builder
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(file);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList eachRecordNodeList = document.getElementsByTagName(actionTag);
+		CommerceAction commerceAction = null;
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			commerceAction = new CommerceAction();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("label".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									commerceAction.setLabel(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
+					if("variable_name".equals(childNode.getNodeName())){
+						commerceAction.setVariableName(childNode.getTextContent().trim());
+					}
+					if("description".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									commerceAction.setDescription(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(commerceComponentsList.get(0).getCommerceActionList() == null){
+				commerceComponentsList.get(0).setCommerceActionList(new ArrayList<CommerceAction>());
+			}else{
+				commerceComponentsList.get(0).getCommerceActionList().add(commerceAction);
+			}
+		}
+
+		NodeList approvalTagNodeList = document.getElementsByTagName(approvalTag);
+		ApprovalSequence approvalSequence = null;
+		for (int i = 0; i < approvalTagNodeList.getLength(); i++){
+			approvalSequence = new ApprovalSequence();
+			Node eachRecordNode = approvalTagNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("label".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									approvalSequence.setLabel(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
+					if("variable_name".equals(childNode.getNodeName())){
+						approvalSequence.setVariableName(childNode.getTextContent().trim());
+					}
+					if("description".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									approvalSequence.setDescription(nameChildNode.getTextContent().trim());
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(commerceComponentsList.get(0).getApprovalSequenceList() == null){
+				commerceComponentsList.get(0).setApprovalSequenceList(new ArrayList<ApprovalSequence>());
+			}else{
+				commerceComponentsList.get(0).getApprovalSequenceList().add(approvalSequence);
+			}
+		}
+		return commerceComponentsList;
+	}
+
+	public void readCommerceDocEdDocumentXML(File file, String string, List<CommerceComponents> commerceComponents) {
+		
 	}
 	
 }

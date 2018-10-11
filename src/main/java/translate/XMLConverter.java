@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import translate.commerce.CommerceComponents;
+
 public class XMLConverter {
 
 	public static void main(String[] args) throws Exception {
@@ -56,6 +58,21 @@ public class XMLConverter {
 				}
 			}
 			
+			// Read Commerce xml files
+			List<CommerceComponents> commerceComponents = new ArrayList<CommerceComponents>();
+			//Process.xml
+			file = new File(Constants.SOURCE_COMMERCE_PROCESS_FILE);
+			if (!file.exists()) {
+				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			}
+			xmlReader.readCommerceProcessXML(file, "bm_cm_action", "bm_cm_reason", commerceComponents);
+			System.out.println(commerceComponents);
+			
+			file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
+			if (!file.exists()) {
+				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			}
+			xmlReader.readCommerceDocEdDocumentXML(file, "bm_doc_ed_document", commerceComponents);
 			
 			//Read Data table XML
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
@@ -105,7 +122,7 @@ public class XMLConverter {
 			Printer.println("#### Number of Groups              : " + groupList.size());
 
 			DocxFileConverter converter = new DocxFileConverter();
-			converter.docxFileConverter(file, userStoriesRules, dataTableList, usersList, groupList);
+			converter.docxFileConverter(file, userStoriesRules, commerceComponents, dataTableList, usersList, groupList);
 		} catch (Exception e) {
 			throw e;
 		}
