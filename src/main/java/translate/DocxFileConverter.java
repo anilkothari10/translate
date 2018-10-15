@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 //import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -19,13 +20,40 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
 //import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
+import translate.commerce.ApprovalSequence;
+import translate.commerce.CommerceAction;
 import translate.commerce.CommerceComponents;
+import translate.commerce.PrinterDocument;
 
 public class DocxFileConverter {
+	XWPFRun heading1Run = null;
+	XWPFRun heading2Run = null;
+	XWPFRun heading3Run = null;
 
 	public void docxFileConverter(File file, List<UserStories> userStories, List<CommerceComponents> commerceComponents, List<DataTable> dataTableList , List<Users> usersList , List<Groups> groupList) throws Exception {
 		File outputFile = new File("files/output/Sample TDD_temp.docx");
 		FileOutputStream fos = new FileOutputStream(outputFile);
+		/*XWPFDocument docx = new XWPFDocument(new FileInputStream("files/input/template.docx"));
+		for (XWPFParagraph p : docx.getParagraphs()) {
+		    List<XWPFRun> runs = p.getRuns();
+		    if (runs != null) {
+		        for (XWPFRun r : runs) {
+		            String text = r.getText(0);
+		            if (text != null && text.contains("Heading1")) {
+		            	heading1Run = r;
+		            	p.removeRun(r.getTextPosition());
+		            }
+		            if (text != null && text.contains("Heading2")) {
+		            	heading2Run = r;
+		            	p.removeRun(r.getTextPosition());
+		            }
+		            if (text != null && text.contains("Heading3")) {
+		            	heading3Run = r;
+		            	p.removeRun(r.getTextPosition());
+		            }
+		        }
+		    }
+		}*/
 		XWPFDocument docx = new XWPFDocument();
 		if (docx != null) {
 			int storyNum = 1;
@@ -33,12 +61,6 @@ public class DocxFileConverter {
 					int storySubNum = 1;
 					
 					addSectionTitle(docx, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "  " + stories.getUserStoryNum());
-					
-//					XWPFRun storyNumRun = docx.createParagraph().createRun();
-//					storyNumRun.setBold(true);
-//					storyNumRun.setColor("800000");
-//					storyNumRun.setUnderline(UnderlinePatterns.SINGLE);
-//					storyNumRun.setText(storyNum + "  " + stories.getUserStoryNum());
 					
 					List<Attribute> attributeList= stories.getAttributeList();
 					if(attributeList != null && attributeList.size() > 0){
@@ -189,6 +211,89 @@ public class DocxFileConverter {
 							}
 						}
 					}
+					
+					// Writing Commerce Actions
+					List<CommerceAction> commerceActionList = stories.getCommerceActionList();
+					if(commerceActionList != null && commerceActionList.size() > 0){
+						docx.createParagraph();
+						addSectionTitle(docx, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + "  " + "Commerce Actions");
+						int numOfColumns = 3;
+						XWPFTable utilTable = docx.createTable(commerceActionList.size()+1, numOfColumns);
+						XWPFTableRow headerRow = utilTable.getRow(0);
+						String[] headerNames = {"Action", "Action Variable Name", "Description"};
+						addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+						int count = 1;
+						for(CommerceAction commerceAction : commerceActionList){
+							if(commerceAction != null){
+								XWPFTableRow newRow = utilTable.getRow(count++);
+								newRow.getCell(0).setText(commerceAction.getLabel());
+								newRow.getCell(1).setText(commerceAction.getVariableName());
+								newRow.getCell(2).setText(commerceAction.getDescription());
+								setTableSize(utilTable, 2600, 3000, 3600, 0);
+								
+							}
+						}
+					}
+					
+					// Writing Approval Sequence 
+					List<ApprovalSequence> approvalSequenceList = stories.getApprovalSequenceList();
+					if(approvalSequenceList != null && approvalSequenceList.size() > 0){
+						docx.createParagraph();
+						addSectionTitle(docx, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + "  " + "Approval Sequence");
+
+						for(ApprovalSequence approvalSequence : approvalSequenceList){
+							if(approvalSequence != null){
+								int numOfColumns = 5;
+								XWPFTable utilTable = docx.createTable(2, numOfColumns);
+								XWPFTableRow headerRow = utilTable.getRow(0);
+								String[] headerNames = {"Approval Reason Name", "Approval Reason Variable Name", "Approval Reason Description",
+										"Approver", "Approval Template"};
+								addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+
+								XWPFTableRow newRow = utilTable.getRow(1);
+								newRow.getCell(0).setText(approvalSequence.getLabel());
+								newRow.getCell(1).setText(approvalSequence.getVariableName());
+								newRow.getCell(2).setText(approvalSequence.getDescription());
+								newRow.getCell(3).setText(approvalSequence.getApprover());
+								newRow.getCell(4).setText(approvalSequence.getApprovalTemplate());
+
+								setTableSize(utilTable, 2600, 3000, 3600, 0);
+								
+								if(StringUtils.isNotBlank(approvalSequence.getScriptText())){
+									addSectionTitle(docx, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Script Text");
+									XWPFRun scriptRun  = docx.createParagraph().createRun();
+									for(String scriptText : approvalSequence.getScriptText().split(";")){
+										scriptRun.setText(scriptText + ";");
+										scriptRun.addBreak();
+									}
+								}
+							}
+						}
+					}
+					
+					// Writing Printer Friendly Documents
+					List<PrinterDocument> printerDocList = stories.getPrinterDocList();
+					if(printerDocList != null && printerDocList.size() > 0){
+						docx.createParagraph();
+						addSectionTitle(docx, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + "  " + "Printer Friendly Documents");
+						int numOfColumns = 4;
+						XWPFTable utilTable = docx.createTable(printerDocList.size()+1, numOfColumns);
+						XWPFTableRow headerRow = utilTable.getRow(0);
+						String[] headerNames = {"Document Name", "Variable Name", "Description", "Commerce Process Linked"};
+						addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+						int count = 1;
+						for(PrinterDocument printerDoc : printerDocList){
+							if(printerDoc != null){
+								XWPFTableRow newRow = utilTable.getRow(count++);
+								newRow.getCell(0).setText(printerDoc.getDocName());
+								newRow.getCell(1).setText(printerDoc.getVariableName());
+								newRow.getCell(2).setText(printerDoc.getDescription());
+								newRow.getCell(2).setText(printerDoc.getCommerceProcessLinked());
+								setTableSize(utilTable, 2600, 3000, 3600, 0);
+							}
+						}
+					}
+					
 					docx.createParagraph().setPageBreak(true);
 					storyNum++;
 				}

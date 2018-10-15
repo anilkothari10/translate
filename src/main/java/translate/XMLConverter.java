@@ -65,14 +65,15 @@ public class XMLConverter {
 			if (!file.exists()) {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
-			xmlReader.readCommerceProcessXML(file, "bm_cm_action", "bm_cm_reason", commerceComponents);
+			xmlReader.readCommerceProcessXML(file, "bm_cm_action", "bm_cm_reason", commerceComponents, userStoriesRules);
 			
 			file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
 			if (!file.exists()) {
 				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
 			}
-			xmlReader.readCommerceDocEdDocumentXML(file, "bm_doc_ed_document", commerceComponents);
-			System.out.println(commerceComponents);
+			xmlReader.readCommerceDocEdDocumentXML(file, "bm_doc_ed_document", commerceComponents, userStoriesRules);
+			//System.out.println(commerceComponents);
+			
 			//Read Data table XML
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
 			file = new File(Constants.SOURCE_DATA_TABLE_DIR);
@@ -103,7 +104,6 @@ public class XMLConverter {
 			List<Users> usersList = null;
 			usersList = xmlReader.readUsersXML(file);
 			
-			
 			//read Groups
 			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
 			if (!file.exists()) {
@@ -114,6 +114,8 @@ public class XMLConverter {
 			
 			List<Groups> groupList= null;
 			groupList = xmlReader.readGroupsXML(file);
+			
+			Printer.println(userStoriesRules.toString());
 
 			Printer.println("#### Number of User Stories        : " + userStoriesRules.size());
 			Printer.println("#### Number of Data Tables Entries : " + dataTableList.size());
