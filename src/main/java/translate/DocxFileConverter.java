@@ -630,9 +630,9 @@ public class DocxFileConverter {
 						newRow.getCell(3).setText(approvalSequence.getApprover());
 						newRow.getCell(4).setText(approvalSequence.getApprovalTemplate());
 
-						XWPFRun scriptRun  = docx.createParagraph().createRun();
-						if(approvalSequence.getScriptText() != null){
+						if(approvalSequence.getScriptText() != null && !approvalSequence.getScriptText().isEmpty()){
 							addSectionTitle(docx, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Script Text");
+							XWPFRun scriptRun  = docx.createParagraph().createRun();
 							for(String scriptText : approvalSequence.getScriptText().split(";")){
 								scriptRun.setText(scriptText + ";");
 								scriptRun.addBreak();
