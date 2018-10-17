@@ -4,6 +4,9 @@ import java.util.List;
 
 import translate.commerce.ApprovalSequence;
 import translate.commerce.CommerceAction;
+import translate.commerce.CommerceAttribute;
+import translate.commerce.CommerceLibraries;
+import translate.commerce.CommerceRules;
 import translate.commerce.PrinterDocument;
 
 public class UserStories {
@@ -11,9 +14,13 @@ public class UserStories {
 	private List<Attribute> attributeList;
 	private List<Rule> ruleList;
 	private List<Util> utilList;
-	private List<CommerceAction> commerceActionList;
-	private List<PrinterDocument> printerDocList;
-	private List<ApprovalSequence> approvalSequenceList;
+
+	private List<CommerceAttribute> commerceAttributeList;
+	private List<CommerceRules> commerceRuleList;
+	private List<CommerceLibraries> commerceLibrariesList;
+	private List<CommerceAction> commerceActionsList;
+	private List<ApprovalSequence> commerceApprovalSequencesList;
+	private List<PrinterDocument> commercePrinterDocumentList;
 	public String getUserStoryNum() {
 		return userStoryNum;
 	}
@@ -38,28 +45,40 @@ public class UserStories {
 	public void setUtilList(List<Util> utilList) {
 		this.utilList = utilList;
 	}
-	public List<CommerceAction> getCommerceActionList() {
-		return commerceActionList;
+	public List<CommerceAttribute> getCommerceAttributeList() {
+		return commerceAttributeList;
 	}
-	public void setCommerceActionList(List<CommerceAction> commerceActionList) {
-		this.commerceActionList = commerceActionList;
+	public void setCommerceAttributeList(List<CommerceAttribute> commerceAttributeList) {
+		this.commerceAttributeList = commerceAttributeList;
 	}
-	public List<PrinterDocument> getPrinterDocList() {
-		return printerDocList;
+	public List<CommerceRules> getCommerceRuleList() {
+		return commerceRuleList;
 	}
-	public void setPrinterDocList(List<PrinterDocument> printerDocList) {
-		this.printerDocList = printerDocList;
+	public void setCommerceRuleList(List<CommerceRules> commerceRuleList) {
+		this.commerceRuleList = commerceRuleList;
 	}
-	public List<ApprovalSequence> getApprovalSequenceList() {
-		return approvalSequenceList;
+	public List<CommerceLibraries> getCommerceLibrariesList() {
+		return commerceLibrariesList;
 	}
-	public void setApprovalSequenceList(List<ApprovalSequence> approvalSequenceList) {
-		this.approvalSequenceList = approvalSequenceList;
+	public void setCommerceLibrariesList(List<CommerceLibraries> commerceLibrariesList) {
+		this.commerceLibrariesList = commerceLibrariesList;
 	}
-	@Override
-	public String toString() {
-		return "UserStories [userStoryNum=" + userStoryNum + ", attributeList=" + attributeList + ", ruleList="
-				+ ruleList + ", utilList=" + utilList + ", commerceActionList=" + commerceActionList
-				+ ", printerDocList=" + printerDocList + ", approvalSequenceList=" + approvalSequenceList + "]";
+	public List<CommerceAction> getCommerceActionsList() {
+		return commerceActionsList;
+	}
+	public void setCommerceActionsList(List<CommerceAction> commerceActionsList) {
+		this.commerceActionsList = commerceActionsList;
+	}
+	public List<ApprovalSequence> getCommerceApprovalSequencesList() {
+		return commerceApprovalSequencesList;
+	}
+	public void setCommerceApprovalSequencesList(List<ApprovalSequence> commerceApprovalSequencesList) {
+		this.commerceApprovalSequencesList = commerceApprovalSequencesList;
+	}
+	public List<PrinterDocument> getCommercePrinterDocumentList() {
+		return commercePrinterDocumentList;
+	}
+	public void setCommercePrinterDocumentList(List<PrinterDocument> commercePrinterDocumentList) {
+		this.commercePrinterDocumentList = commercePrinterDocumentList;
 	}
 }

@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import translate.commerce.CommerceComponents;
-
 public class XMLConverter {
 
 	public static void main(String[] args) throws Exception {
@@ -35,6 +33,8 @@ public class XMLConverter {
 					
 					xmlReader.readConfigAttributeXML(ruleAttributeFile, "bm_config_attr", userStoriesRules);
 				}
+			}else{
+				Printer.println("Input files not present at location : "+ file.getAbsolutePath());
 			}
 
 			//Read UserStories from UTIL Libraries
@@ -58,21 +58,8 @@ public class XMLConverter {
 				}
 			}
 			
-			// Read Commerce xml files
-			List<CommerceComponents> commerceComponents = new ArrayList<CommerceComponents>();
-			//Process.xml
-			file = new File(Constants.SOURCE_COMMERCE_PROCESS_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
-			}
-			xmlReader.readCommerceProcessXML(file, "bm_cm_action", "bm_cm_reason", commerceComponents, userStoriesRules);
-			
-			file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
-			}
-			xmlReader.readCommerceDocEdDocumentXML(file, "bm_doc_ed_document", commerceComponents, userStoriesRules);
-			//System.out.println(commerceComponents);
+			//Read commerce files
+			List<UserStories> userStoriesCommerce = readCommerceXMLs(file, xmlReader);
 			
 			//Read Data table XML
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
@@ -104,6 +91,7 @@ public class XMLConverter {
 			List<Users> usersList = null;
 			usersList = xmlReader.readUsersXML(file);
 			
+			
 			//read Groups
 			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
 			if (!file.exists()) {
@@ -114,18 +102,65 @@ public class XMLConverter {
 			
 			List<Groups> groupList= null;
 			groupList = xmlReader.readGroupsXML(file);
-			
-			Printer.println(userStoriesRules.toString());
 
-			Printer.println("#### Number of User Stories        : " + userStoriesRules.size());
-			Printer.println("#### Number of Data Tables Entries : " + dataTableList.size());
-			Printer.println("#### Number of Users               : " + usersList.size());
-			Printer.println("#### Number of Groups              : " + groupList.size());
+			Printer.println("#### Number of Config User Stories   : " + userStoriesRules.size());
+			Printer.println("#### Number of Data Tables Entries   : " + dataTableList.size());
+			Printer.println("#### Number of Users                 : " + usersList.size());
+			Printer.println("#### Number of Groups                : " + groupList.size());
+			Printer.println("#### Number of Commerce User Stories : " + userStoriesCommerce.size());
 
 			DocxFileConverter converter = new DocxFileConverter();
-			converter.docxFileConverter(file, userStoriesRules, commerceComponents, dataTableList, usersList, groupList);
+			converter.docxFileConverter(file, userStoriesRules, userStoriesCommerce, dataTableList, usersList, groupList);
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	private static List<UserStories> readCommerceXMLs(File file, XMLReader xmlReader) throws Exception{
+		//Read Commerce attribute, Libraries, Rules
+		List<UserStories> userStoriesCommerce = new ArrayList<UserStories>();
+
+		//Read Commerce attribute
+		Printer.println("#### Reading Commerce attribute");
+		file = new File(Constants.SOURCE_COMMERCE_PROCESS_FILE);
+		if (!file.exists()) {
+			throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+		}
+		xmlReader.readCommerceAttributeXML(file, "bm_cm_attribute", userStoriesCommerce);
+		
+		//Read Commerce Libraries
+		Printer.println("#### Reading Commerce Libraries");
+		xmlReader.readCommerceLibrariesXML(file, "bm_lib_func", userStoriesCommerce);
+		
+		//Read Commerce Rules
+		Printer.println("#### Reading Commerce Rules");
+		xmlReader.readCommerceRulesXML(file, "bm_cm_rule", userStoriesCommerce);
+		
+		//Read Commerce Actions
+		Printer.println("#### Reading Commerce Actions");
+		xmlReader.readCommerceActionXML(file, "bm_cm_action", userStoriesCommerce);
+		
+		//Read Commerce Approval Sequence
+		Printer.println("#### Reading Commerce Approval Sequence");
+		xmlReader.readCommerceSequenceXML(file, "bm_cm_reason", userStoriesCommerce);
+
+		//Read Commerce Printer Friendly Documents 
+		file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
+		File[] commerceDocEdDocumentList = file.listFiles();
+		if(commerceDocEdDocumentList != null && commerceDocEdDocumentList.length > 0){
+			Printer.println("#### Reading Printer Friendly Documents");
+			Printer.println("#### Number of files in Commerce/DocEdDocuments folder = " + commerceDocEdDocumentList.length);
+			for(File commerceDocEdDocumentFile : commerceDocEdDocumentList){
+				if (!commerceDocEdDocumentFile.exists()) {
+					throw new Exception("Input file not present at location : " + commerceDocEdDocumentFile.getAbsolutePath());
+				}
+				Printer.println("#### Reading Printer Friendly Document from : "+ commerceDocEdDocumentFile.getName());
+				
+				xmlReader.readCommerceDocEdDocumentXML(commerceDocEdDocumentFile, "bm_doc_ed_document", userStoriesCommerce);
+			}
+		}else{
+			Printer.println("Input files not present at location : "+ file.getAbsolutePath());
+		}
+		return userStoriesCommerce;
 	}
 }

@@ -1,6 +1,9 @@
 package translate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Constants {
@@ -19,7 +22,13 @@ public class Constants {
 	public static final String XML = "xml";
 	public static final String SECTIONTITLECOLOR = "800000";
 	public static final String SOURCE_COMMERCE_PROCESS_FILE = "files/input/Commerce/process.xml";
-	public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument new.xml";
+	//public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument new.xml";
+	public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument/";
+	public static final String CONFIGURATION_SECTION = "Configuration Section";
+	public static final String COMMERCE_SECTION = "Commerce Section";
+	public static final List<String> SECTION_TITILES = new ArrayList<String>(Arrays.asList(CONFIGURATION_SECTION, COMMERCE_SECTION));
+	public static final int SECTION_FONT_SIZE = 15;
+	public static final String DELOITTE_LOGO = "files/input/Deloitte_logo.png";
 	
 	private static Map<String, String> dataTypesMap = null;
 	
