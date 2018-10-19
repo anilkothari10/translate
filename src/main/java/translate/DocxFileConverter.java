@@ -568,6 +568,35 @@ public class DocxFileConverter {
 			}
 
 			docx.createParagraph();
+			
+			List<CommerceRules> ruleList = stories.getCommerceRuleList();
+			if(ruleList != null && ruleList.size() > 0){
+
+				List<CommerceRules> constraintRuleList = new ArrayList<CommerceRules>();
+				List<CommerceRules> hidingRuleList = new ArrayList<CommerceRules>();
+				List<CommerceRules> validationRule = new ArrayList<CommerceRules>();
+				for(CommerceRules rule : ruleList){
+					if(rule.getRuleType().equalsIgnoreCase("1")){
+						constraintRuleList.add(rule);
+					}else if(rule.getRuleType().equalsIgnoreCase("2")){
+						hidingRuleList.add(rule);
+					}else if(rule.getRuleType().equalsIgnoreCase("3")){
+						validationRule.add(rule);
+					}
+				}
+
+				if(constraintRuleList != null && constraintRuleList.size() > 0){
+					createCommerceRuleTable(docx, constraintRuleList, "Constraint Rule", storyNum, storySubNum++);
+				}
+				if(hidingRuleList != null && hidingRuleList.size() > 0){
+					createCommerceRuleTable(docx, hidingRuleList, "Hiding Rule", storyNum, storySubNum++);
+				}
+				if(validationRule != null && validationRule.size() > 0){
+					createCommerceRuleTable(docx, validationRule, "Validation rule", storyNum, storySubNum++);
+				}
+			}
+
+			docx.createParagraph();
 
 			List<CommerceLibraries> commerceLibraries= stories.getCommerceLibrariesList();
 			if(commerceLibraries != null && commerceLibraries.size() > 0){
@@ -599,35 +628,6 @@ public class DocxFileConverter {
 							scriptRun.addBreak();
 						}
 					}
-				}
-			}
-
-			docx.createParagraph();
-
-			List<CommerceRules> ruleList = stories.getCommerceRuleList();
-			if(ruleList != null && ruleList.size() > 0){
-
-				List<CommerceRules> constraintRuleList = new ArrayList<CommerceRules>();
-				List<CommerceRules> hidingRuleList = new ArrayList<CommerceRules>();
-				List<CommerceRules> validationRule = new ArrayList<CommerceRules>();
-				for(CommerceRules rule : ruleList){
-					if(rule.getRuleType().equalsIgnoreCase("1")){
-						constraintRuleList.add(rule);
-					}else if(rule.getRuleType().equalsIgnoreCase("2")){
-						hidingRuleList.add(rule);
-					}else if(rule.getRuleType().equalsIgnoreCase("3")){
-						validationRule.add(rule);
-					}
-				}
-
-				if(constraintRuleList != null && constraintRuleList.size() > 0){
-					createCommerceRuleTable(docx, constraintRuleList, "Constraint Rule", storyNum, storySubNum++);
-				}
-				if(hidingRuleList != null && hidingRuleList.size() > 0){
-					createCommerceRuleTable(docx, hidingRuleList, "Hiding Rule", storyNum, storySubNum++);
-				}
-				if(validationRule != null && validationRule.size() > 0){
-					createCommerceRuleTable(docx, validationRule, "Validation rule", storyNum, storySubNum++);
 				}
 			}
 
@@ -686,9 +686,9 @@ public class DocxFileConverter {
 						newRow.getCell(3).setText(approvalSequence.getApprover());
 						newRow.getCell(4).setText(approvalSequence.getApprovalTemplate());
 
-						XWPFRun scriptRun = docx.createParagraph().createRun();
 						if(approvalSequence.getScriptText() != null){
-							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Script Text");
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Condition");
+							XWPFRun scriptRun = docx.createParagraph().createRun();
 							for(String scriptText : approvalSequence.getScriptText().split(";")){
 								scriptRun.setText(scriptText + ";");
 								scriptRun.addBreak();

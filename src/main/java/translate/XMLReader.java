@@ -487,7 +487,13 @@ public class XMLReader {
 					}
 
 					if("type_".equals(childNode.getNodeName())){
-						attribute.setDataType(TagReader.readDataType(childNode));
+						String type = TagReader.readDataType(childNode);
+						if(type != null && !type.isEmpty() && type.length() > 2 && type.startsWith("Cm")){
+							type = type.substring(2, type.length());
+							attribute.setDataType(type);
+						}else{
+							attribute.setDataType(TagReader.readDataType(childNode));
+						}
 					}
 
 					if("description".equals(childNode.getNodeName())){
