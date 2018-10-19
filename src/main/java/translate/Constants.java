@@ -18,10 +18,10 @@ public class Constants {
 	public static final String SOURCE_UTIL_LIBRARIES_DIR = "files/input/UTIL Libraries/";
 	public static final String SOURCE_RULE_ATTRIBUTE_DIR = "files/input/Rules_Attributes/";
 	public static final String SOURCE_DATA_TABLE_DIR = "files/input/Data_Tables/";
-	public static final String SOURCE_USERS_GROUPS_XML_FILE = "files/input/user_group.xml";
+	public static final String SOURCE_USERS_GROUPS_XML_FILE = "files/input/UserGroups/";
 	public static final String XML = "xml";
 	public static final String SECTIONTITLECOLOR = "800000";
-	public static final String SOURCE_COMMERCE_PROCESS_FILE = "files/input/Commerce/process.xml";
+	public static final String SOURCE_COMMERCE_PROCESS_FILE = "files/input/Commerce/Process/";
 	//public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument new.xml";
 	public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument/";
 	public static final String CONFIGURATION_SECTION = "Configuration Section";

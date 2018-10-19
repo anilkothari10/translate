@@ -59,7 +59,7 @@ public class DocxFileConverter {
 	private XWPFParagraph heading2Para = null;
 	private XWPFParagraph heading3Para = null;
 
-	public void docxFileConverter(File file, List<UserStories> userStories, List<UserStories> commerceUserStories, List<DataTable> dataTableList , List<Users> usersList , List<Groups> groupList) throws Exception {
+	public void docxFileConverter(List<UserStories> userStories, List<UserStories> commerceUserStories, List<DataTable> dataTableList , List<Users> usersList , List<Groups> groupList) throws Exception {
 		File outputFile = new File("files/output/Sample TDD_temp.docx");
 		FileOutputStream fos = new FileOutputStream(outputFile);
 
@@ -110,83 +110,88 @@ public class DocxFileConverter {
 			//createUserStoryTables for commerce
 			createUserStoriesTablesForCommerce(commerceUserStories, docx);
 
+			int numOfColumns;
 			// Add Data Table List
+			if(dataTableList.size() > 0){
+				addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Data Table List");
 
-			addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Data Table List");
+				numOfColumns = 2;
 
-			int numOfColumns = 2;
+				XWPFTable dataTable = docx.createTable(dataTableList.size() + 1,numOfColumns );
+				XWPFTableRow tableHeaderRow = dataTable.getRow(0);
 
-			XWPFTable dataTable = docx.createTable(dataTableList.size() + 1,numOfColumns );
-			XWPFTableRow tableHeaderRow = dataTable.getRow(0);
+				String[] headerNames = {"Data Table Name", "Data Table Columns"};
 
-			String[] headerNames = {"Data Table Name", "Data Table Columns"};
+				addHeaderNameColorBold(tableHeaderRow, headerNames ,numOfColumns);
 
-			addHeaderNameColorBold(tableHeaderRow, headerNames ,numOfColumns);
+				setTableSize(dataTable, 3000, 6200, 0, 0, 0);
 
-			setTableSize(dataTable, 3000, 6200, 0, 0, 0);
-
-			if(dataTable != null){
-				int i = 1;
-				for (DataTable dataTableTemp : dataTableList) {
-					if(dataTableTemp != null){
-						XWPFTableRow newRow = dataTable.getRow(i);
-						newRow.getCell(0).setText(dataTableTemp.getTableName());
-						newRow.getCell(1).setText(dataTableTemp.getDescription());
-						i++;
+				if(dataTable != null){
+					int i = 1;
+					for (DataTable dataTableTemp : dataTableList) {
+						if(dataTableTemp != null){
+							XWPFTableRow newRow = dataTable.getRow(i);
+							newRow.getCell(0).setText(dataTableTemp.getTableName());
+							newRow.getCell(1).setText(dataTableTemp.getDescription());
+							i++;
+						}
 					}
 				}
-			}
 
-			docx.createParagraph().setPageBreak(true);
+				docx.createParagraph().setPageBreak(true);
+			}
 
 			// Add users Lis
+			if(usersList.size() > 0){
+				addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Users List");
 
-			addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Users List");
+				numOfColumns = 2;
+				XWPFTable userTable = docx.createTable(usersList.size() + 1, numOfColumns );
+				XWPFTableRow userHeaderRow = userTable.getRow(0);
 
-			numOfColumns = 2;
-			XWPFTable userTable = docx.createTable(usersList.size() + 1, numOfColumns );
-			XWPFTableRow userHeaderRow = userTable.getRow(0);
+				String[] userTableHeaderNames = {"User ID", "User Login Name"};
 
-			String[] userTableHeaderNames = {"User ID", "User Login Name"};
+				addHeaderNameColorBold(userHeaderRow, userTableHeaderNames ,numOfColumns);
 
-			addHeaderNameColorBold(userHeaderRow, userTableHeaderNames ,numOfColumns);
+				setTableSize(userTable, 4600, 4600, 0, 0, 0);
 
-			setTableSize(userTable, 4600, 4600, 0, 0, 0);
-
-			if(userTable != null){
-				int i = 1;
-				for (Users usersTemp : usersList) {
-					if(usersTemp != null){
-						XWPFTableRow newRow = userTable.getRow(i);
-						newRow.getCell(0).setText(usersTemp.getUserId());
-						newRow.getCell(1).setText(usersTemp.getUserLoginName());
-						i++;
+				if(userTable != null){
+					int i = 1;
+					for (Users usersTemp : usersList) {
+						if(usersTemp != null){
+							XWPFTableRow newRow = userTable.getRow(i);
+							newRow.getCell(0).setText(usersTemp.getUserId());
+							newRow.getCell(1).setText(usersTemp.getUserLoginName());
+							i++;
+						}
 					}
 				}
+
+				docx.createParagraph().setPageBreak(true);
 			}
 
-			docx.createParagraph().setPageBreak(true);
+			if(groupList.size() > 0){
+				addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Groups List");
 
-			addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Groups List");
+				numOfColumns = 2;
+				XWPFTable groupTable = docx.createTable(groupList.size() + 1, numOfColumns );
+				XWPFTableRow groupHeaderRow = groupTable.getRow(0);
 
-			numOfColumns = 2;
-			XWPFTable groupTable = docx.createTable(groupList.size() + 1, numOfColumns );
-			XWPFTableRow groupHeaderRow = groupTable.getRow(0);
+				String[] groupTableHeaderNames = {"Group Label", "Group Name"};
 
-			String[] groupTableHeaderNames = {"Group Label", "Group Name"};
+				addHeaderNameColorBold(groupHeaderRow, groupTableHeaderNames ,numOfColumns);
 
-			addHeaderNameColorBold(groupHeaderRow, groupTableHeaderNames ,numOfColumns);
+				setTableSize(groupTable, 4600, 4600, 0, 0, 0);
 
-			setTableSize(groupTable, 4600, 4600, 0, 0, 0);
-
-			if(groupTable != null){
-				int i = 1;
-				for (Groups groupTemp : groupList) {
-					if(groupTemp != null){
-						XWPFTableRow newRow = groupTable.getRow(i);
-						newRow.getCell(0).setText(groupTemp.getGroupLabel());
-						newRow.getCell(1).setText(groupTemp.getGroupName());
-						i++;
+				if(groupTable != null){
+					int i = 1;
+					for (Groups groupTemp : groupList) {
+						if(groupTemp != null){
+							XWPFTableRow newRow = groupTable.getRow(i);
+							newRow.getCell(0).setText(groupTemp.getGroupLabel());
+							newRow.getCell(1).setText(groupTemp.getGroupName());
+							i++;
+						}
 					}
 				}
 			}

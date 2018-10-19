@@ -56,6 +56,8 @@ public class XMLConverter {
 						}
 					}
 				}
+			}else{
+				Printer.println("Input files not present at location : "+ file.getAbsolutePath());
 			}
 			
 			//Read commerce files
@@ -78,30 +80,31 @@ public class XMLConverter {
 					
 					dataTableList.addAll(xmlReader.readDataTableXML(dataTableFile));
 				}
+			}else{
+				Printer.println("Input files not present at location : "+ file.getAbsolutePath());
 			}
 
-			//read user
+			//read user and Groups
+			List<Groups> groupList= new ArrayList<Groups>();
+			List<Users> usersList = new ArrayList<Users>();
 			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+			File[] userGroupFileList = file.listFiles();
+			if(userGroupFileList != null && userGroupFileList.length > 0){
+				for(File userGroupFile : userGroupFileList){
+					if (!userGroupFile.exists()) {
+						throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+					}
+					//read user
+					Printer.println("#### Reading Users");
+					usersList = xmlReader.readUsersXML(userGroupFile);
+					
+					//read Groups
+					Printer.println("#### Reading Groups");
+					groupList = xmlReader.readGroupsXML(userGroupFile);
+				}
+			}else{
+				Printer.println("Input files not present at location : "+ file.getAbsolutePath());
 			}
-			
-			Printer.println("#### Reading Users");
-			
-			List<Users> usersList = null;
-			usersList = xmlReader.readUsersXML(file);
-			
-			
-			//read Groups
-			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
-			if (!file.exists()) {
-				throw new Exception("Input file not present at location : " + file.getAbsolutePath());
-			}
-			
-			Printer.println("#### Reading Groups");
-			
-			List<Groups> groupList= null;
-			groupList = xmlReader.readGroupsXML(file);
 
 			Printer.println("#### Number of Config User Stories   : " + userStoriesRules.size());
 			Printer.println("#### Number of Data Tables Entries   : " + dataTableList.size());
@@ -110,7 +113,7 @@ public class XMLConverter {
 			Printer.println("#### Number of Commerce User Stories : " + userStoriesCommerce.size());
 
 			DocxFileConverter converter = new DocxFileConverter();
-			converter.docxFileConverter(file, userStoriesRules, userStoriesCommerce, dataTableList, usersList, groupList);
+			converter.docxFileConverter(userStoriesRules, userStoriesCommerce, dataTableList, usersList, groupList);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -119,30 +122,34 @@ public class XMLConverter {
 	private static List<UserStories> readCommerceXMLs(File file, XMLReader xmlReader) throws Exception{
 		//Read Commerce attribute, Libraries, Rules
 		List<UserStories> userStoriesCommerce = new ArrayList<UserStories>();
-
-		//Read Commerce attribute
-		Printer.println("#### Reading Commerce attribute");
+	
 		file = new File(Constants.SOURCE_COMMERCE_PROCESS_FILE);
-		if (!file.exists()) {
-			throw new Exception("Input file not present at location : " + file.getAbsolutePath());
+		File[] commerceProcessList = file.listFiles();
+		if(commerceProcessList != null && commerceProcessList.length > 0){
+			for(File commerceProcessFile : commerceProcessList){
+				//Read Commerce attribute
+				Printer.println("#### Reading Commerce attribute");
+				xmlReader.readCommerceAttributeXML(commerceProcessFile, "bm_cm_attribute", userStoriesCommerce);
+				
+				//Read Commerce Libraries
+				Printer.println("#### Reading Commerce Libraries");
+				xmlReader.readCommerceLibrariesXML(commerceProcessFile, "bm_lib_func", userStoriesCommerce);
+				
+				//Read Commerce Rules
+				Printer.println("#### Reading Commerce Rules");
+				xmlReader.readCommerceRulesXML(commerceProcessFile, "bm_cm_rule", userStoriesCommerce);
+				
+				//Read Commerce Actions
+				Printer.println("#### Reading Commerce Actions");
+				xmlReader.readCommerceActionXML(commerceProcessFile, "bm_cm_action", userStoriesCommerce);
+				
+				//Read Commerce Approval Sequence
+				Printer.println("#### Reading Commerce Approval Sequence");
+				xmlReader.readCommerceSequenceXML(commerceProcessFile, "bm_cm_reason", userStoriesCommerce);
+			}
+		}else{
+			Printer.println("Input files not present at location : "+ file.getAbsolutePath());
 		}
-		xmlReader.readCommerceAttributeXML(file, "bm_cm_attribute", userStoriesCommerce);
-		
-		//Read Commerce Libraries
-		Printer.println("#### Reading Commerce Libraries");
-		xmlReader.readCommerceLibrariesXML(file, "bm_lib_func", userStoriesCommerce);
-		
-		//Read Commerce Rules
-		Printer.println("#### Reading Commerce Rules");
-		xmlReader.readCommerceRulesXML(file, "bm_cm_rule", userStoriesCommerce);
-		
-		//Read Commerce Actions
-		Printer.println("#### Reading Commerce Actions");
-		xmlReader.readCommerceActionXML(file, "bm_cm_action", userStoriesCommerce);
-		
-		//Read Commerce Approval Sequence
-		Printer.println("#### Reading Commerce Approval Sequence");
-		xmlReader.readCommerceSequenceXML(file, "bm_cm_reason", userStoriesCommerce);
 
 		//Read Commerce Printer Friendly Documents 
 		file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
