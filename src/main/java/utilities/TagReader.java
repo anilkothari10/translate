@@ -1,11 +1,6 @@
 package utilities;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
