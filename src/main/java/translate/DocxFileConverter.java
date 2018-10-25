@@ -505,11 +505,16 @@ public class DocxFileConverter {
 
 			List<Util> utilList = stories.getUtilList();
 			if(utilList != null && utilList.size() > 0){
+				boolean headerAdded = false;
 				for(Util util : utilList){
 					if(util != null){
-
-						addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "BML Util Libraries");
-
+						if(!headerAdded){
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "BML Util Libraries");
+							headerAdded = true;
+						}
+						else{
+							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "BML Util Libraries");
+						}
 						int numOfColumns = 3;
 						XWPFTable utilTable = docx.createTable(2, numOfColumns);
 						XWPFTableRow headerRow = utilTable.getRow(0);
@@ -603,7 +608,7 @@ public class DocxFileConverter {
 					createCommerceRuleTable(docx, hidingRuleList, "Hiding Rule", storyNum, storySubNum++);
 				}
 				if(validationRule != null && validationRule.size() > 0){
-					createCommerceRuleTable(docx, validationRule, "Validation rule", storyNum, storySubNum++);
+					createCommerceRuleTable(docx, validationRule, "Validation Rule", storyNum, storySubNum++);
 				}
 			}
 
@@ -611,11 +616,15 @@ public class DocxFileConverter {
 
 			List<CommerceLibraries> commerceLibraries= stories.getCommerceLibrariesList();
 			if(commerceLibraries != null && commerceLibraries.size() > 0){
+				boolean headerAdded = false;
 				for(CommerceLibraries libraries: commerceLibraries){
 					if(libraries != null){
-
-						addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Libraries");
-
+						if(!headerAdded){
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Libraries");
+							headerAdded = true;
+						}else{
+							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Commerce Libraries");
+						}
 						int numOfColumns = 3;
 						XWPFTable commerceLibTable = docx.createTable(2, numOfColumns);
 						XWPFTableRow headerRow = commerceLibTable.getRow(0);
@@ -675,10 +684,15 @@ public class DocxFileConverter {
 
 			List<ApprovalSequence> commerceApprovalSequenceList= stories.getCommerceApprovalSequencesList();
 			if(commerceApprovalSequenceList != null && commerceApprovalSequenceList.size() > 0){
+				boolean headerAdded = false;
 				for(ApprovalSequence approvalSequence : commerceApprovalSequenceList){
 					if(approvalSequence != null){
-						addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Approval Sequence");
-
+						if(!headerAdded){
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Approval Sequence");
+							headerAdded = true;
+						}else{
+							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Approval Sequence");
+						}
 						int numOfColumns = 5;
 						XWPFTable commerceApprovalSequenceTable = docx.createTable(2,numOfColumns);
 
@@ -713,10 +727,15 @@ public class DocxFileConverter {
 			
 			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
 			if(commerecStepList != null && commerecStepList.size() > 0){
+				boolean headerAdded = false;
 				for(CommerceStep commerceStep : commerecStepList){
 					if(commerceStep != null){
-						addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
-
+						if(!headerAdded){
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
+							headerAdded =true;
+						}else{
+							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Commerce Steps");
+						}
 						int numOfColumns = 6;
 						XWPFTable commerceStepTable = docx.createTable(2,numOfColumns);
 
@@ -737,7 +756,7 @@ public class DocxFileConverter {
 						newRow.getCell(5).setText(commerceStep.getTransitionRule());
 
 						if(commerceStep.getAdvancedForwardingRule() != null){
-							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Forwarding Rule");
+							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Forwarding Rule");
 							XWPFRun scriptRun = docx.createParagraph().createRun();
 							for(String scriptText : commerceStep.getAdvancedForwardingRule().split(";")){
 								scriptRun.setText(scriptText + ";");
@@ -746,7 +765,7 @@ public class DocxFileConverter {
 						}
 						
 						if(commerceStep.getAdvancedConditionofTransitionRule() != null){
-							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Condition of Transition Rule");
+							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Condition of Transition Rule");
 							XWPFRun scriptRun = docx.createParagraph().createRun();
 							for(String scriptText : commerceStep.getAdvancedConditionofTransitionRule().split(";")){
 								scriptRun.setText(scriptText + ";");
