@@ -7,6 +7,8 @@ import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
+import translate.commerce.CommerceStep;
+import translate.commerce.Integration;
 import translate.commerce.PrinterDocument;
 
 public class UserStories {
@@ -21,6 +23,8 @@ public class UserStories {
 	private List<CommerceAction> commerceActionsList;
 	private List<ApprovalSequence> commerceApprovalSequencesList;
 	private List<PrinterDocument> commercePrinterDocumentList;
+	private List<CommerceStep> commerceStepsList;
+	private List<Integration> integrationsList;
 	public String getUserStoryNum() {
 		return userStoryNum;
 	}
@@ -81,4 +85,17 @@ public class UserStories {
 	public void setCommercePrinterDocumentList(List<PrinterDocument> commercePrinterDocumentList) {
 		this.commercePrinterDocumentList = commercePrinterDocumentList;
 	}
+	public List<CommerceStep> getCommerceStepsList() {
+		return commerceStepsList;
+	}
+	public void setCommerceStepsList(List<CommerceStep> commerceStepsList) {
+		this.commerceStepsList = commerceStepsList;
+	}
+	public List<Integration> getIntegrationsList() {
+		return integrationsList;
+	}
+	public void setIntegrationsList(List<Integration> integrationsList) {
+		this.integrationsList = integrationsList;
+	}
+	
 }

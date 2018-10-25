@@ -146,6 +146,14 @@ public class XMLConverter {
 				//Read Commerce Approval Sequence
 				Printer.println("#### Reading Commerce Approval Sequence");
 				xmlReader.readCommerceSequenceXML(commerceProcessFile, "bm_cm_reason", userStoriesCommerce);
+				
+				//Read Commerce Steps
+				Printer.println("#### Reading Commerce steps");
+				xmlReader.readCommerceStepsXML(commerceProcessFile, "bm_cm_step", userStoriesCommerce);
+				
+				//Read Integration
+				Printer.println("#### Reading Commerce Integration");
+				xmlReader.readCommerceIntegration(commerceProcessFile, "bm_cm_integration", userStoriesCommerce);
 			}
 		}else{
 			Printer.println("Input files not present at location : "+ file.getAbsolutePath());

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- US#8341 : Updates an existing Transaction based on Transaction ID -->
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Header>
+    <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+      <wsse:UsernameToken wsu:Id="UsernameToken-2">
+        <wsse:Username>traininguser</wsse:Username>
+        <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">kIN2_sEE7_</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soapenv:Header>
+  <soapenv:Body>
+    <bm:updateTransaction xmlns:bm="urn:soap.bigmachines.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <bm:transaction>
+        <bm:id>{{transactionID_t}}</bm:id>
+        <bm:process_var_name>redStackDigitalMix</bm:process_var_name>
+        <bm:buyer_company_name>cpq-p10-002</bm:buyer_company_name>
+        <bm:supplier_company_name>cpq-p10-002</bm:supplier_company_name>
+        <bm:data_xml>
+          <bm:transaction bm:bs_id="{{transactionID_t}}" bm:buyer_company_name="cpq-p10-002" bm:buyer_user_name="traininguser" bm:currency_pref="USD" bm:data_type="0" bm:document_name="Transaction" bm:document_number="1" bm:document_var_name="transaction" bm:process_var_name="redStackDigitalMix" bm:supplier_company_name="cpq-p10-002">
+            <bm:_document_number>1</bm:_document_number>
+            <bm:_price_book_var_name>_default_price_book</bm:_price_book_var_name>
+      </bm:transaction>
+    </bm:data_xml>
+ <bm:action_data>
+          <bm:action_var_name>save</bm:action_var_name>
+          <bm:_bm_cm_new_transaction_currency/>
+          <bm:performer_comment/>
+          <bm:reason_var_name/>
+          <bm:performer_name/>
+          <bm:performer_type/>
+          <bm:performer_company_name/>
+        </bm:action_data>
+</bm:transaction>
+    </bm:updateTransaction>
+  </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- US#7661 : Adds new items to the existing transaction  -->
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<soapenv:Header>
+		<bm:userInfo xmlns:bm="urn:soap.bigmachines.com">
+			<bm:sessionId>SESSION_ID</bm:sessionId>
+		</bm:userInfo>
+		<bm:category xmlns:bm="urn:soap.bigmachines.com">Commerce</bm:category>
+		<bm:xsdInfo xmlns:bm="urn:soap.bigmachines.com">
+			<bm:schemaLocation>https://SITE_NAME.bigmachines.com/bmfsweb/SITE_NAME/schema/v1_0/commerce/PROCESS_VAR_NAME.xsd</bm:schemaLocation>
+		</bm:xsdInfo>
+	</soapenv:Header>
+	<soapenv:Body>
+		<bm:addToTransaction xmlns:bm="urn:soap.bigmachines.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<bm:items>
+				ITEMS_TO_ADD
+			</bm:items>
+			<bm:transaction>
+				<bm:process_var_name>PROCESS_VAR_NAME</bm:process_var_name>
+				<bm:id>TRANSACTION_ID</bm:id>
+				<bm:action_data>
+					<bm:document_var_name>DOCUMENT_VAR_NAME_MAIN</bm:document_var_name>
+				</bm:action_data>
+			</bm:transaction>
+			<bm:include_transaction>true</bm:include_transaction>
+		</bm:addToTransaction>
+	</soapenv:Body>
+</soapenv:Envelope>

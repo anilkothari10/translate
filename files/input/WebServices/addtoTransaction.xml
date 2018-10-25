@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- US#1234 : Adds new items to the transaction from partner site-->
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Header>
+    <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+      <wsse:UsernameToken wsu:Id="UsernameToken-2">
+        <wsse:Username>traininguser</wsse:Username>
+        <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">kIN2_sEE7_</wsse:Password>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soapenv:Header>
+  <soapenv:Body>
+    <bm:addToTransaction xmlns:bm="http://xmlns.oracle.com/cpqcloud/commerce/redStackDigitalMix" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <bm:items>
+        <bm:catalogItem>
+          <bm:segment/>
+          <bm:product_line/>
+          <bm:model/>
+        </bm:catalogItem>
+        <bm:partItem>
+          <bm:part>{{_part_number}}</bm:part>
+          <bm:quantity>1</bm:quantity>
+          <bm:price_book_var_name>_default_price_book</bm:price_book_var_name>
+        </bm:partItem>
+      </bm:items>
+      <bm:transaction>
+        <bm:process_var_name>redStackDigitalMix</bm:process_var_name>
+        <bm:id>{{transactionID_t}}</bm:id>
+        <bm:action_data>
+          <bm:document_var_name>transaction</bm:document_var_name>
+        </bm:action_data>
+        <bm:return_specific_attributes>
+          <bm:documents>
+            <bm:document>
+              <bm:var_name>transaction</bm:var_name>
+              <bm:attributes>
+                <bm:attribute>_document_number</bm:attribute>
+              </bm:attributes>
+            </bm:document>
+          </bm:documents>
+        </bm:return_specific_attributes>
+      </bm:transaction>
+      <bm:include_transaction>true</bm:include_transaction>
+    </bm:addToTransaction>
+  </soapenv:Body>
+</soapenv:Envelope>

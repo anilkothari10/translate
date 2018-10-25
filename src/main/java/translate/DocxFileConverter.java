@@ -45,6 +45,7 @@ import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
+import translate.commerce.CommerceStep;
 import translate.commerce.PrinterDocument;
 //import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
@@ -125,7 +126,7 @@ public class DocxFileConverter {
 
 				addHeaderNameColorBold(tableHeaderRow, headerNames ,numOfColumns);
 
-				setTableSize(dataTable, 3000, 6200, 0, 0, 0);
+				setTableSize(dataTable, 3000, 6200, 0, 0, 0, 0);
 
 				if(dataTable != null){
 					int i = 1;
@@ -154,7 +155,7 @@ public class DocxFileConverter {
 
 				addHeaderNameColorBold(userHeaderRow, userTableHeaderNames ,numOfColumns);
 
-				setTableSize(userTable, 4600, 4600, 0, 0, 0);
+				setTableSize(userTable, 4600, 4600, 0, 0, 0, 0);
 
 				if(userTable != null){
 					int i = 1;
@@ -182,7 +183,7 @@ public class DocxFileConverter {
 
 				addHeaderNameColorBold(groupHeaderRow, groupTableHeaderNames ,numOfColumns);
 
-				setTableSize(groupTable, 4600, 4600, 0, 0, 0);
+				setTableSize(groupTable, 4600, 4600, 0, 0, 0, 0);
 
 				if(groupTable != null){
 					int i = 1;
@@ -315,7 +316,7 @@ public class DocxFileConverter {
 
 			addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 
-			setTableSize(ruleTable, 2600, 3000, 3600, 0, 0);
+			setTableSize(ruleTable, 2600, 3000, 3600, 0, 0, 0);
 
 			int i = 1;
 			for(Rule rule : ruleList){
@@ -346,7 +347,7 @@ public class DocxFileConverter {
 
 			addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 
-			setTableSize(ruleTable, 2600, 3000, 3600, 0, 0);
+			setTableSize(ruleTable, 2600, 3000, 3600, 0, 0, 0);
 
 			int i = 1;
 			for(CommerceRules rule : ruleList){
@@ -384,8 +385,8 @@ public class DocxFileConverter {
 	 * @param row2
 	 * @param row3
 	 */
-	private void setTableSize(XWPFTable table, long row0, long row1, long row2, long row3, long row4){
-		if(row0 + row1 + row2 + row3 + row4 != 9200){
+	private void setTableSize(XWPFTable table, long row0, long row1, long row2, long row3, long row4, long row5){
+		if(row0 + row1 + row2 + row3 + row4 + row5 != 9200){
 			Printer.println("Table size not equal to standard table size(9200)");
 		}
 		for (int i = 0; i < table.getNumberOfRows(); i++) {
@@ -406,6 +407,8 @@ public class DocxFileConverter {
 					cellWidth.setW(BigInteger.valueOf(row3));
 				}else if(j==4 && row4 > 0){
 					cellWidth.setW(BigInteger.valueOf(row4));
+				}else if(j==5 && row5 > 0){
+					cellWidth.setW(BigInteger.valueOf(row5));
 				}
 
 			}
@@ -437,7 +440,7 @@ public class DocxFileConverter {
 
 				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 
-				setTableSize(utilTable, 1600, 2500, 4100, 1000, 0);
+				setTableSize(utilTable, 1600, 2500, 4100, 1000, 0, 0);
 
 				int count = 1;
 				for(Attribute attribute : attributeList){
@@ -520,7 +523,7 @@ public class DocxFileConverter {
 						newRow.getCell(1).setText(util.getVariableName());
 						newRow.getCell(2).setText(util.getDescription());
 
-						setTableSize(utilTable, 2600, 3000, 3600, 0, 0);
+						setTableSize(utilTable, 2600, 3000, 3600, 0, 0, 0);
 
 						addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Script Text");
 
@@ -561,7 +564,7 @@ public class DocxFileConverter {
 
 				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 
-				setTableSize(commerceAttributesTable, 1600, 2500, 4100, 1000, 0);
+				setTableSize(commerceAttributesTable, 1600, 2500, 4100, 1000, 0, 0);
 
 				int count = 1;
 				for(CommerceAttribute attribute : commerceAttributeList){
@@ -626,7 +629,7 @@ public class DocxFileConverter {
 						newRow.getCell(1).setText(libraries.getVariableName());
 						newRow.getCell(2).setText(libraries.getDescription());
 
-						setTableSize(commerceLibTable, 2600, 3000, 3600, 0, 0);
+						setTableSize(commerceLibTable, 2600, 3000, 3600, 0, 0, 0);
 
 						addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Script Text");
 
@@ -655,7 +658,7 @@ public class DocxFileConverter {
 
 				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 
-				setTableSize(commerceActionTable, 2600, 3000, 3600, 0, 0);
+				setTableSize(commerceActionTable, 2600, 3000, 3600, 0, 0, 0);
 
 				int count = 1;
 				for(CommerceAction action : commerceActionsList){
@@ -685,7 +688,7 @@ public class DocxFileConverter {
 
 						addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 
-						setTableSize(commerceApprovalSequenceTable, 1500, 1500, 3000, 1500, 1700);
+						setTableSize(commerceApprovalSequenceTable, 1500, 1500, 3000, 1500, 1700, 0);
 
 						XWPFTableRow newRow = commerceApprovalSequenceTable.getRow(1);
 						newRow.getCell(0).setText(approvalSequence.getLabel());
@@ -707,6 +710,54 @@ public class DocxFileConverter {
 			}
 
 			docx.createParagraph();
+			
+			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
+			if(commerecStepList != null && commerecStepList.size() > 0){
+				for(CommerceStep commerceStep : commerecStepList){
+					if(commerceStep != null){
+						addSectionTitle(docx,heading2Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
+
+						int numOfColumns = 6;
+						XWPFTable commerceStepTable = docx.createTable(2,numOfColumns);
+
+						XWPFTableRow headerRow = commerceStepTable.getRow(0);
+
+						String[] headerNames = {"Step Name", "Description", "Variable Name", "Participant Profile Name", "Profile Description", "Transition Rule"};
+
+						addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+
+						setTableSize(commerceStepTable, 1200, 3000, 1500, 1200, 1400, 900);
+
+						XWPFTableRow newRow = commerceStepTable.getRow(1);
+						newRow.getCell(0).setText(commerceStep.getStepName());
+						newRow.getCell(1).setText(commerceStep.getDescription());
+						newRow.getCell(2).setText(commerceStep.getVariableName());
+						newRow.getCell(3).setText(commerceStep.getParticipantProfileName());
+						newRow.getCell(4).setText(commerceStep.getProfileDescription());
+						newRow.getCell(5).setText(commerceStep.getTransitionRule());
+
+						if(commerceStep.getAdvancedForwardingRule() != null){
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Forwarding Rule");
+							XWPFRun scriptRun = docx.createParagraph().createRun();
+							for(String scriptText : commerceStep.getAdvancedForwardingRule().split(";")){
+								scriptRun.setText(scriptText + ";");
+								scriptRun.addBreak();
+							}
+						}
+						
+						if(commerceStep.getAdvancedConditionofTransitionRule() != null){
+							addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Condition of Transition Rule");
+							XWPFRun scriptRun = docx.createParagraph().createRun();
+							for(String scriptText : commerceStep.getAdvancedConditionofTransitionRule().split(";")){
+								scriptRun.setText(scriptText + ";");
+								scriptRun.addBreak();
+							}
+						}
+					}
+				}
+			}
+			
+			docx.createParagraph();
 
 			List<PrinterDocument> commercePrinterDocuments= stories.getCommercePrinterDocumentList();
 			if(commercePrinterDocuments != null && commercePrinterDocuments.size() > 0){
@@ -719,7 +770,7 @@ public class DocxFileConverter {
 
 				String[] headerNames = {"Document Name", VARIABLE_NAME, DESCRIPTION, "Commerce Process Linked"};
 
-				setTableSize(commercePrinterDocumentTable, 1600, 2500, 4100, 1000, 0);
+				setTableSize(commercePrinterDocumentTable, 1600, 2500, 4100, 1000, 0, 0);
 
 				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
 

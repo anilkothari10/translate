@@ -20,6 +20,8 @@ import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
+import translate.commerce.CommerceStep;
+import translate.commerce.Integration;
 import translate.commerce.PrinterDocument;
 import utilities.TagReader;
 
@@ -905,6 +907,348 @@ public class XMLReader {
 							userStoriesCommerce.add(storyTemp);
 						}
 					}
+				}
+			}
+		}
+	}
+
+	public void readCommerceStepsXML(File commerceProcessFile, String string, List<UserStories> userStoriesCommerce) throws SAXException, IOException, ParserConfigurationException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(commerceProcessFile);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList eachRecordNodeList = document.getElementsByTagName(string);
+		CommerceStep commerceStep = null;
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			commerceStep = new CommerceStep();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("name".equals(childNode.getNodeName())){
+						commerceStep.setStepName(TagReader.readName(childNode));
+						Printer.print("Step Name : " + commerceStep.getStepName()+"\n");
+					}
+					if("variable_name".equals(childNode.getNodeName())){
+						commerceStep.setVariableName(childNode.getTextContent().trim());
+						Printer.print("Variable Name : " + commerceStep.getVariableName()+"\n");
+					}
+					if("_children".equals(childNode.getNodeName())){
+						Element nameChildNode = (Element)childNode;
+						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
+						bm_cm_pp_loop:
+						for(int k = 0; k < participants.getLength(); k++){
+							Node participant = participants.item(k);
+							if(Node.ELEMENT_NODE == participant.getNodeType()){
+								Element participantElement = (Element)participant;
+								NodeList names = participantElement.getElementsByTagName("name");
+								for(int m = 0; m < names.getLength(); m++){
+									Node name = names.item(m);
+									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+										Element labelElement = (Element)name;
+										NodeList enlabel = labelElement.getElementsByTagName("en");
+										commerceStep.setParticipantProfileName(enlabel.item(0).getTextContent().trim());
+										Printer.print("participant profile Name : " + commerceStep.getParticipantProfileName()+"\n");
+										break bm_cm_pp_loop;
+									}
+								}
+							}
+						}
+					}
+
+					if("_children".equals(childNode.getNodeName())){
+						Element nameChildNode = (Element)childNode;
+						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
+						bm_cm_pp_loop:
+						for(int k = 0; k < participants.getLength(); k++){
+							Node participant = participants.item(k);
+							if(Node.ELEMENT_NODE == participant.getNodeType()){
+								Element participantElement = (Element)participant;
+								NodeList description = participantElement.getElementsByTagName("description");
+								for(int m = 0; m < description.getLength(); m++){
+									Node name = description.item(m);
+									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+										Element labelElement = (Element)name;
+										NodeList enlabel = labelElement.getElementsByTagName("en");
+										String descriptionText =  enlabel.item(0).getTextContent().trim();
+										if(descriptionText.startsWith("US#")){
+											String[] temp = descriptionText.split(":");
+											if(temp.length > 1){
+												descriptionText = temp[1];
+											}
+										}
+										commerceStep.setProfileDescription(descriptionText);
+										Printer.print("Profile description: " + commerceStep.getProfileDescription()+"\n");
+										break bm_cm_pp_loop;
+									}
+								}
+							}
+						}
+					}
+
+					if("_children".equals(childNode.getNodeName())){
+						Element nameChildNode = (Element)childNode;
+						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
+						bm_cm_pp_Loop:
+						for(int k = 0; k < participants.getLength(); k++){
+							Node participant = participants.item(k);
+							if(Node.ELEMENT_NODE == participant.getNodeType()){
+								Element participantElement = (Element)participant;
+								NodeList children = participantElement.getElementsByTagName("_children");
+								for(int m = 0; m < children.getLength(); m++){
+									Node name = children.item(m);
+									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+										Element nameInnerChildNode = (Element)childNode;
+										NodeList nodeList = nameInnerChildNode.getElementsByTagName("bm_cm_trans_rule");
+										for(int l = 0; l < nodeList.getLength(); l++){
+											Node bm_cm_trans_rule = nodeList.item(k);
+											if(Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
+												Element trans_rule = (Element)bm_cm_trans_rule;
+												NodeList names = trans_rule.getElementsByTagName("name");
+												for(int n = 0; n < names.getLength(); n++){
+													Node trans_rule_name = names.item(m);
+													if(trans_rule_name != null && Node.ELEMENT_NODE == trans_rule_name.getNodeType()){
+														Element labelElement = (Element)trans_rule_name;
+														NodeList enlabel = labelElement.getElementsByTagName("en");
+														commerceStep.setTransitionRule(enlabel.item(0).getTextContent().trim());
+														Printer.print("Transition Rule Name : " + commerceStep.getTransitionRule()+"\n");
+														break bm_cm_pp_Loop;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					if("_children".equals(childNode.getNodeName())){
+						Element nameChildNode = (Element)childNode;
+						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_rule_meta");
+						bm_cm_pp_Loop:
+						for(int k = 0; k < participants.getLength(); k++){
+							Node participant = participants.item(k);
+							if(Node.ELEMENT_NODE == participant.getNodeType()){
+								Element participantElement = (Element)participant;
+								NodeList children = participantElement.getElementsByTagName("_children");
+								for(int m = 0; m < children.getLength(); m++){
+									Node name = children.item(m);
+									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+										Element nameInnerChildNode = (Element)childNode;
+										NodeList nodeList = nameInnerChildNode.getElementsByTagName("bm_function");
+										for(int l = 0; l < nodeList.getLength(); l++){
+											Node bmFunction = nodeList.item(k);
+											if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
+												Element bmFunctionElement = (Element)bmFunction;
+												NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+												commerceStep.setAdvancedForwardingRule(scriptTexts.item(0).getTextContent().trim());
+												Printer.print("Advanced Forwarding Rule : " + commerceStep.getAdvancedForwardingRule()+"\n");
+												break bm_cm_pp_Loop;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					if("_children".equals(childNode.getNodeName())){
+						Element nameChildNode = (Element)childNode;
+						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
+						bm_cm_pp_Loop:
+						for(int k = 0; k < participants.getLength(); k++){
+							Node participant = participants.item(k);
+							if(Node.ELEMENT_NODE == participant.getNodeType()){
+								Element participantElement = (Element)participant;
+								NodeList children = participantElement.getElementsByTagName("_children");
+								for(int m = 0; m < children.getLength(); m++){
+									Node name = children.item(m);
+									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+										Element nameInnerChildNode = (Element)childNode;
+										NodeList nodeList = nameInnerChildNode.getElementsByTagName("bm_cm_trans_rule");
+										for(int n = 0; n < nodeList.getLength(); n++){
+											Node bm_cm_trans_rule = nodeList.item(n);
+											if(Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
+												Element trans_rule = (Element)bm_cm_trans_rule;
+												NodeList _children = trans_rule.getElementsByTagName("_children");
+												for(int o = 0; o < _children.getLength(); o++){
+													Node _child = _children.item(o);
+													if(_child != null && Node.ELEMENT_NODE == _child.getNodeType()){
+														Element _innerchild = (Element)_child;
+														NodeList bm_function = _innerchild.getElementsByTagName("bm_function");
+														for(int l = 0; l < bm_function.getLength(); l++){
+															Node bmFunction = bm_function.item(k);
+															if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
+																Element bmFunctionElement = (Element)bmFunction;
+																NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+																commerceStep.setAdvancedConditionofTransitionRule(scriptTexts.item(0).getTextContent().trim());
+																Printer.print("Advanced Condition of Transition Rule : " + commerceStep.getAdvancedConditionofTransitionRule()+"\n");
+																break bm_cm_pp_Loop;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					if("description".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+
+									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
+										String[] temp = nameChildNode.getTextContent().trim().split(":");
+										if(temp.length > 1 && temp[0].startsWith("US#")){
+											String storyNum = temp[0];
+											commerceStep.setDescription(temp[1]);
+											if(userStoriesCommerce.size() > 0){
+												boolean storyAdded = false;
+												for(UserStories story :userStoriesCommerce){
+													if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(storyNum)){
+														if(story.getCommerceStepsList() == null){
+															story.setCommerceStepsList(new ArrayList<CommerceStep>());
+														}
+														Printer.print("adding Commerce Step : "+commerceStep.getStepName()+"  to : " + story.getUserStoryNum() + " : " + commerceStep.getDescription() + "\n");
+														story.getCommerceStepsList().add(commerceStep);
+														storyAdded = true;
+														break;
+													}
+												}
+												if(!storyAdded){
+													Printer.print("1 creating new Commerce Step : "+commerceStep.getStepName()+"  to : " + storyNum + " : " + commerceStep.getDescription() + "\n");
+													UserStories storyTemp = new UserStories();
+													storyTemp.setUserStoryNum(storyNum);
+													storyTemp.setCommerceStepsList(new ArrayList<CommerceStep>());
+													storyTemp.getCommerceStepsList().add(commerceStep);
+													userStoriesCommerce.add(storyTemp);
+												}
+											}else{
+												Printer.print("2 creating new Commerce Step : "+commerceStep.getStepName()+" to : " + storyNum + " : " + commerceStep.getDescription() + "\n");
+												UserStories storyTemp = new UserStories();
+												storyTemp.setUserStoryNum(storyNum);
+												storyTemp.setCommerceStepsList(new ArrayList<CommerceStep>());
+												storyTemp.getCommerceStepsList().add(commerceStep);
+												userStoriesCommerce.add(storyTemp);
+											}
+										}
+										break;
+									}
+
+								}
+							}
+						}
+					}
+
+				}
+			}
+		}
+	}
+
+	public void readCommerceIntegration(File commerceProcessFile, String string,
+			List<UserStories> userStoriesCommerce) throws SAXException, IOException, ParserConfigurationException{
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+
+		//Build Document
+		Document document = builder.parse(commerceProcessFile);
+
+		//Normalize the XML Structure;
+		document.getDocumentElement().normalize();
+
+		NodeList eachRecordNodeList = document.getElementsByTagName(string);
+		
+		Integration integration = null;
+		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
+			integration = new Integration();
+			Node eachRecordNode = eachRecordNodeList.item(i);
+			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
+			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
+				Node childNode = eachRecordChildNodeList.item(j);
+				if(Node.ELEMENT_NODE == childNode.getNodeType()){
+					if("name".equals(childNode.getNodeName())){
+						integration.setIntegrationName(TagReader.readName(childNode));
+						Printer.print("Integration Name : " + integration.getIntegrationName()+"\n");
+					}
+					
+					if("variable_name".equals(childNode.getNodeName())){
+						integration.setVariableName(childNode.getTextContent().trim());
+						Printer.print("Variable Name : " + integration.getVariableName()+"\n");
+					}
+					
+					if("id_field".equals(childNode.getNodeName())){
+						integration.setIdField(childNode.getTextContent().trim());
+						Printer.print("id field : " + integration.getIdField()+"\n");
+					}
+					
+					if("endpoint".equals(childNode.getNodeName())){
+						integration.setEndpointURL(childNode.getTextContent().trim());
+						Printer.print("Endpoint URL : " + integration.getEndpointURL()+"\n");
+					}
+					
+					if("description".equals(childNode.getNodeName())){
+						NodeList nameChildNodesList = childNode.getChildNodes();
+						for(int k = 0; k < nameChildNodesList.getLength(); k++){
+							Node nameChildNode = nameChildNodesList.item(k);
+							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
+								if("en".equals(nameChildNode.getNodeName())){
+									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
+										String[] temp = nameChildNode.getTextContent().trim().split(":");
+										if(temp.length > 1 && temp[0].startsWith("US#")){
+											String storyNum = temp[0];
+											integration.setDescription(temp[1]);
+											if(userStoriesCommerce.size() > 0){
+												boolean storyAdded = false;
+												for(UserStories story :userStoriesCommerce){
+													if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(storyNum)){
+														if(story.getIntegrationsList() == null){
+															story.setIntegrationsList(new ArrayList<Integration>());
+														}
+														Printer.print("adding Integration Step : "+integration.getIntegrationName()+"  to : " + story.getUserStoryNum() + " : " + integration.getDescription() + "\n");
+														story.getIntegrationsList().add(integration);
+														storyAdded = true;
+														break;
+													}
+												}
+												if(!storyAdded){
+													Printer.print("1 creating new Integration Step : "+integration.getIntegrationName()+"  to : " + storyNum + " : " + integration.getDescription() + "\n");
+													UserStories storyTemp = new UserStories();
+													storyTemp.setUserStoryNum(storyNum);
+													storyTemp.setIntegrationsList(new ArrayList<Integration>());
+													storyTemp.getIntegrationsList().add(integration);
+													userStoriesCommerce.add(storyTemp);
+												}
+											}else{
+												Printer.print("2 creating new Integration Step : "+integration.getIntegrationName()+" to : " + storyNum + " : " + integration.getDescription() + "\n");
+												UserStories storyTemp = new UserStories();
+												storyTemp.setUserStoryNum(storyNum);
+												storyTemp.setIntegrationsList(new ArrayList<Integration>());
+												storyTemp.getIntegrationsList().add(integration);
+												userStoriesCommerce.add(storyTemp);
+											}
+										}
+										break;
+									}
+
+								}
+							}
+						}
+					}
+					
+					
 				}
 			}
 		}
