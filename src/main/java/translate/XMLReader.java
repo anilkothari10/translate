@@ -21,11 +21,24 @@ import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
 import translate.commerce.CommerceStep;
-import translate.commerce.Integration;
+import translate.commerce.CommerceIntegration;
 import translate.commerce.PrinterDocument;
 import utilities.TagReader;
 
 public class XMLReader {
+
+	private static final String CREATE_ACTION = "CREATE";
+	private static final String ADD_ACTION = "ADD";
+	private static final String _CHILDREN = "_children";
+	private static final String DATA_TYPE = "data_type";
+	private static final String USSTORY = "US#";
+	private static final String EN = "en";
+	private static final String LABEL = "label";
+	private static final String RULE_TYPE = "rule_type";
+	private static final String NAME = "name";
+	private static final String VARIABLE_NAME = "variable_name";
+	private static final String SCRIPT_TEXT = "script_text";
+	private static final String DESCRIPTION = "description";
 
 	public List<DataTable> readDataTableXML(File file) throws SAXException, IOException, ParserConfigurationException {
 		//Get Document Builder
@@ -140,16 +153,16 @@ public class XMLReader {
 							if(nodeList != null){
 								for(int i = 0; i < nodeList.getLength(); i ++){
 									Node node = nodeList.item(i);
-									if("name".equalsIgnoreCase(node.getNodeName())){
+									if(NAME.equalsIgnoreCase(node.getNodeName())){
 										group.setGroupName(node.getTextContent().trim());
 									}
-									if("label".equalsIgnoreCase(node.getNodeName()))
+									if(LABEL.equalsIgnoreCase(node.getNodeName()))
 									{
 										NodeList labelNodesList = node.getChildNodes();
 										for(int k = 0; k < labelNodesList.getLength(); k++){
 											Node nameChildNode = labelNodesList.item(k);
 											if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-												if("en".equals(nameChildNode.getNodeName())){
+												if(EN.equals(nameChildNode.getNodeName())){
 													group.setGroupLabel(nameChildNode.getTextContent().trim());
 													break;
 												}
@@ -189,38 +202,38 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 									rule.setName(nameChildNode.getTextContent().trim());
 									break;
 								}
 							}
 						}
 					}
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						rule.setVariableName(childNode.getTextContent().trim());
 
 					}
-					if("script_text".equals(childNode.getNodeName())){
+					if(SCRIPT_TEXT.equals(childNode.getNodeName())){
 						rule.setScriptText(childNode.getTextContent().trim());
 					}
-					if("rule_type".equals(childNode.getNodeName())){
+					if(RULE_TYPE.equals(childNode.getNodeName())){
 						rule.setRuleType(childNode.getTextContent().trim());
 
 					}
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
 										String[] temp = nameChildNode.getTextContent().trim().split(":");
-										if(temp.length > 1 && temp[0].startsWith("US#")){
+										if(temp.length > 1 && temp[0].startsWith(USSTORY)){
 											String storyNum = temp[0];
 											rule.setDescription(temp[1]);
 											if(userStoriesRules.size() > 0){
@@ -288,35 +301,35 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 									attribute.setName(nameChildNode.getTextContent().trim());
 									break;
 								}
 							}
 						}
 					}
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						attribute.setVariableName(childNode.getTextContent().trim());
 
 					}
-					if("data_type".equals(childNode.getNodeName())){
+					if(DATA_TYPE.equals(childNode.getNodeName())){
 						attribute.setDataType(childNode.getTextContent().trim());
 
 					}
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
 										String[] temp = nameChildNode.getTextContent().trim().split(":");
-										if(temp.length > 1 && temp[0].startsWith("US#")){
+										if(temp.length > 1 && temp[0].startsWith(USSTORY)){
 											String storyNum = temp[0];
 											attribute.setDescription(temp[1]);
 											if(userStoriesRules.size() > 0){
@@ -384,34 +397,34 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 									util.setName(nameChildNode.getTextContent().trim());
 									break;
 								}
 							}
 						}
 					}
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						util.setVariableName(childNode.getTextContent().trim());
 					}
-					if(document.getElementsByTagName("script_text").item(0).getNodeName() != null){
-						util.setScriptText(document.getElementsByTagName("script_text").item(0).getTextContent().trim());
+					if(document.getElementsByTagName(SCRIPT_TEXT).item(0).getNodeName() != null){
+						util.setScriptText(document.getElementsByTagName(SCRIPT_TEXT).item(0).getTextContent().trim());
 					}
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 
 									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
 										String[] temp = nameChildNode.getTextContent().trim().split(":");
-										if(temp.length > 1 && temp[0].startsWith("US#")){
+										if(temp.length > 1 && temp[0].startsWith(USSTORY)){
 											String storyNum = temp[0];
 											util.setDescription(temp[1]);
 											if(userStoriesRules.size() > 0){
@@ -479,11 +492,11 @@ public class XMLReader {
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
 
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						attribute.setVariableName(TagReader.readVariableName(childNode));
 					}
 
-					if("label".equals(childNode.getNodeName())){
+					if(LABEL.equals(childNode.getNodeName())){
 						attribute.setLabel(TagReader.readLabel(childNode));
 					}
 
@@ -497,13 +510,13 @@ public class XMLReader {
 						}
 					}
 
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 
 						String[] returnText = TagReader.readDescription(childNode, userStoriesCommerce);
 
 						attribute.setDescription(returnText[1]);
 
-						if("ADD".equalsIgnoreCase(returnText[2])){
+						if(ADD_ACTION.equalsIgnoreCase(returnText[2])){
 							for(UserStories story :userStoriesCommerce){
 								if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(returnText[0])){
 									if(story.getCommerceAttributeList() == null){
@@ -514,7 +527,7 @@ public class XMLReader {
 									break;
 								}
 							}
-						}else if("CREATE".equalsIgnoreCase(returnText[2])){
+						}else if(CREATE_ACTION.equalsIgnoreCase(returnText[2])){
 							Printer.print("Creating new Commerce Attribute: "+attribute.getLabel()+" to : " + returnText[0] + " : " + attribute.getDescription() + "\n");
 							UserStories storyTemp = new UserStories();
 							storyTemp.setUserStoryNum(returnText[0]);
@@ -550,15 +563,15 @@ public class XMLReader {
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
 
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						libraries.setName(TagReader.readName(childNode));
 					}
 
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						libraries.setVariableName(TagReader.readVariableName(childNode));
 					}
 
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						NodeList childNodesList = childNode.getChildNodes();
 						for(int k = 0; k < childNodesList.getLength(); k++){
 							Node childrenNode = childNodesList.item(k);
@@ -568,7 +581,7 @@ public class XMLReader {
 									for(int m = 0; m < nameChildNodesList.getLength(); m++){
 										Node nameChildNode = nameChildNodesList.item(m);
 										if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-											if("script_text".equals(nameChildNode.getNodeName())){
+											if(SCRIPT_TEXT.equals(nameChildNode.getNodeName())){
 												libraries.setScriptText(nameChildNode.getTextContent().trim());
 												break;
 											}
@@ -580,13 +593,13 @@ public class XMLReader {
 						}						
 					}
 
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 
 						String[] returnText = TagReader.readDescription(childNode, userStoriesCommerce);
 
 						libraries.setDescription(returnText[1]);
 
-						if("ADD".equalsIgnoreCase(returnText[2])){
+						if(ADD_ACTION.equalsIgnoreCase(returnText[2])){
 							for(UserStories story :userStoriesCommerce){
 								if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(returnText[0])){
 									if(story.getCommerceLibrariesList() == null){
@@ -597,7 +610,7 @@ public class XMLReader {
 									break;
 								}
 							}
-						}else if("CREATE".equalsIgnoreCase(returnText[2])){
+						}else if(CREATE_ACTION.equalsIgnoreCase(returnText[2])){
 							Printer.print("Creating new Commerce Libraries: "+libraries.getName() +" to : " + returnText[0] + " : " + libraries.getDescription() + "\n");
 							UserStories storyTemp = new UserStories();
 							storyTemp.setUserStoryNum(returnText[0]);
@@ -633,25 +646,25 @@ public class XMLReader {
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
 
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						rules.setName(TagReader.readName(childNode));
 					}
 					
-					if("rule_type".equals(childNode.getNodeName())){
+					if(RULE_TYPE.equals(childNode.getNodeName())){
 						rules.setRuleType(childNode.getTextContent().trim());
 					}
 
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						rules.setVariableName(TagReader.readVariableName(childNode));
 					}
 
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 
 						String[] returnText = TagReader.readDescription(childNode, userStoriesCommerce);
 
 						rules.setDescription(returnText[1]);
 
-						if("ADD".equalsIgnoreCase(returnText[2])){
+						if(ADD_ACTION.equalsIgnoreCase(returnText[2])){
 							for(UserStories story :userStoriesCommerce){
 									if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(returnText[0])){
 									if(story.getCommerceRuleList() == null){
@@ -662,7 +675,7 @@ public class XMLReader {
 									break;
 								}
 							}
-						}else if("CREATE".equalsIgnoreCase(returnText[2])){
+						}else if(CREATE_ACTION.equalsIgnoreCase(returnText[2])){
 							Printer.print("Creating new Commerce Rule: "+rules.getName() +" to : " + returnText[0] + " : " + rules.getDescription() + "\n");
 							UserStories storyTemp = new UserStories();
 							storyTemp.setUserStoryNum(returnText[0]);
@@ -696,20 +709,20 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						action.setVariableName(TagReader.readVariableName(childNode));
 					}
-					if("label".equals(childNode.getNodeName())){
+					if(LABEL.equals(childNode.getNodeName())){
 						action.setLabel(TagReader.readLabel(childNode));
 					}
 					
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 
 						String[] returnText = TagReader.readDescription(childNode, userStoriesCommerce);
 
 						action.setDescription(returnText[1]);
 
-						if("ADD".equalsIgnoreCase(returnText[2])){
+						if(ADD_ACTION.equalsIgnoreCase(returnText[2])){
 							for(UserStories story :userStoriesCommerce){
 									if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(returnText[0])){
 									if(story.getCommerceActionsList() == null){
@@ -720,7 +733,7 @@ public class XMLReader {
 									break;
 								}
 							}
-						}else if("CREATE".equalsIgnoreCase(returnText[2])){
+						}else if(CREATE_ACTION.equalsIgnoreCase(returnText[2])){
 							Printer.print("Creating new Commerce Action: "+action.getLabel() +" to : " + returnText[0] + " : " + action.getDescription() + "\n");
 							UserStories storyTemp = new UserStories();
 							storyTemp.setUserStoryNum(returnText[0]);
@@ -754,13 +767,13 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("label".equals(childNode.getNodeName())){
+					if(LABEL.equals(childNode.getNodeName())){
 						approvalSequence.setLabel(TagReader.readLabel(childNode));
 					}
 					if("var_name".equals(childNode.getNodeName())){
 						approvalSequence.setVariableName(childNode.getTextContent().trim());
 					}
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
 						NodeList approvers = nameChildNode.getElementsByTagName("bm_cm_approver");
 						for(int k = 0; k < approvers.getLength(); k++){
@@ -773,12 +786,12 @@ public class XMLReader {
 									ApproverLoop:
 										if(Node.ELEMENT_NODE == approverDetail.getNodeType()){
 											Element approverDetailElement = (Element)approverDetail;
-											NodeList labels = approverDetailElement.getElementsByTagName("label");
+											NodeList labels = approverDetailElement.getElementsByTagName(LABEL);
 											for(int m = 0; m < labels.getLength(); m++){
 												Node label = labels.item(k);
 												if(label != null && Node.ELEMENT_NODE == label.getNodeType()){
 													Element labelElement = (Element)label;
-													NodeList enlabel = labelElement.getElementsByTagName("en");
+													NodeList enlabel = labelElement.getElementsByTagName(EN);
 													approvalSequence.setApprover(enlabel.item(0).getTextContent().trim());
 													break ApproverLoop;
 												}
@@ -808,7 +821,7 @@ public class XMLReader {
 									Node bmFunction = bmFunctionDetails.item(k);
 									if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
 										Element bmFunctionElement = (Element)bmFunction;
-										NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+										NodeList scriptTexts = bmFunctionElement.getElementsByTagName(SCRIPT_TEXT);
 										approvalSequence.setScriptText(scriptTexts.item(0).getTextContent().trim());
 									}
 								}
@@ -816,13 +829,13 @@ public class XMLReader {
 						}
 					}
 
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 
 						String[] returnText = TagReader.readDescription(childNode, userStoriesCommerce);
 
 						approvalSequence.setDescription(returnText[1]);
 
-						if("ADD".equalsIgnoreCase(returnText[2])){
+						if(ADD_ACTION.equalsIgnoreCase(returnText[2])){
 							for(UserStories story :userStoriesCommerce){
 									if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(returnText[0])){
 									if(story.getCommerceApprovalSequencesList() == null){
@@ -833,7 +846,7 @@ public class XMLReader {
 									break;
 								}
 							}
-						}else if("CREATE".equalsIgnoreCase(returnText[2])){
+						}else if(CREATE_ACTION.equalsIgnoreCase(returnText[2])){
 							Printer.print("Creating new Commerce Approval Sequence: "+approvalSequence.getLabel() +" to : " + returnText[0] + " : " + approvalSequence.getDescription() + "\n");
 							UserStories storyTemp = new UserStories();
 							storyTemp.setUserStoryNum(returnText[0]);
@@ -874,13 +887,13 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						printerDocument.setDocName(childNode.getTextContent().trim());
 					}
 					if("varname".equals(childNode.getNodeName())){
 						printerDocument.setVariableName(childNode.getTextContent().trim());
 					}
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 
 						String[] returnText = childNode.getTextContent().trim().split(":");
 
@@ -931,15 +944,15 @@ public class XMLReader {
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						commerceStep.setStepName(TagReader.readName(childNode));
 						Printer.print("Step Name : " + commerceStep.getStepName()+"\n");
 					}
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						commerceStep.setVariableName(childNode.getTextContent().trim());
 						Printer.print("Variable Name : " + commerceStep.getVariableName()+"\n");
 					}
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
 						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
 						bm_cm_pp_loop:
@@ -947,12 +960,12 @@ public class XMLReader {
 							Node participant = participants.item(k);
 							if(Node.ELEMENT_NODE == participant.getNodeType()){
 								Element participantElement = (Element)participant;
-								NodeList names = participantElement.getElementsByTagName("name");
+								NodeList names = participantElement.getElementsByTagName(NAME);
 								for(int m = 0; m < names.getLength(); m++){
 									Node name = names.item(m);
 									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
 										Element labelElement = (Element)name;
-										NodeList enlabel = labelElement.getElementsByTagName("en");
+										NodeList enlabel = labelElement.getElementsByTagName(EN);
 										commerceStep.setParticipantProfileName(enlabel.item(0).getTextContent().trim());
 										Printer.print("participant profile Name : " + commerceStep.getParticipantProfileName()+"\n");
 										break bm_cm_pp_loop;
@@ -962,7 +975,7 @@ public class XMLReader {
 						}
 					}
 
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
 						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
 						bm_cm_pp_loop:
@@ -970,14 +983,14 @@ public class XMLReader {
 							Node participant = participants.item(k);
 							if(Node.ELEMENT_NODE == participant.getNodeType()){
 								Element participantElement = (Element)participant;
-								NodeList description = participantElement.getElementsByTagName("description");
+								NodeList description = participantElement.getElementsByTagName(DESCRIPTION);
 								for(int m = 0; m < description.getLength(); m++){
 									Node name = description.item(m);
 									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
 										Element labelElement = (Element)name;
-										NodeList enlabel = labelElement.getElementsByTagName("en");
+										NodeList enlabel = labelElement.getElementsByTagName(EN);
 										String descriptionText =  enlabel.item(0).getTextContent().trim();
-										if(descriptionText.startsWith("US#")){
+										if(descriptionText.startsWith(USSTORY)){
 											String[] temp = descriptionText.split(":");
 											if(temp.length > 1){
 												descriptionText = temp[1];
@@ -992,7 +1005,7 @@ public class XMLReader {
 						}
 					}
 
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
 						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
 						bm_cm_pp_Loop:
@@ -1000,7 +1013,7 @@ public class XMLReader {
 							Node participant = participants.item(k);
 							if(Node.ELEMENT_NODE == participant.getNodeType()){
 								Element participantElement = (Element)participant;
-								NodeList children = participantElement.getElementsByTagName("_children");
+								NodeList children = participantElement.getElementsByTagName(_CHILDREN);
 								for(int m = 0; m < children.getLength(); m++){
 									Node name = children.item(m);
 									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
@@ -1010,12 +1023,12 @@ public class XMLReader {
 											Node bm_cm_trans_rule = nodeList.item(k);
 											if(Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
 												Element trans_rule = (Element)bm_cm_trans_rule;
-												NodeList names = trans_rule.getElementsByTagName("name");
+												NodeList names = trans_rule.getElementsByTagName(NAME);
 												for(int n = 0; n < names.getLength(); n++){
 													Node trans_rule_name = names.item(m);
 													if(trans_rule_name != null && Node.ELEMENT_NODE == trans_rule_name.getNodeType()){
 														Element labelElement = (Element)trans_rule_name;
-														NodeList enlabel = labelElement.getElementsByTagName("en");
+														NodeList enlabel = labelElement.getElementsByTagName(EN);
 														commerceStep.setTransitionRule(enlabel.item(0).getTextContent().trim());
 														Printer.print("Transition Rule Name : " + commerceStep.getTransitionRule()+"\n");
 														break bm_cm_pp_Loop;
@@ -1029,7 +1042,7 @@ public class XMLReader {
 						}
 					}
 					
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
 						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_rule_meta");
 						bm_cm_pp_Loop:
@@ -1037,7 +1050,7 @@ public class XMLReader {
 							Node participant = participants.item(k);
 							if(Node.ELEMENT_NODE == participant.getNodeType()){
 								Element participantElement = (Element)participant;
-								NodeList children = participantElement.getElementsByTagName("_children");
+								NodeList children = participantElement.getElementsByTagName(_CHILDREN);
 								for(int m = 0; m < children.getLength(); m++){
 									Node name = children.item(m);
 									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
@@ -1047,7 +1060,7 @@ public class XMLReader {
 											Node bmFunction = nodeList.item(k);
 											if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
 												Element bmFunctionElement = (Element)bmFunction;
-												NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+												NodeList scriptTexts = bmFunctionElement.getElementsByTagName(SCRIPT_TEXT);
 												commerceStep.setAdvancedForwardingRule(scriptTexts.item(0).getTextContent().trim());
 												Printer.print("Advanced Forwarding Rule : " + commerceStep.getAdvancedForwardingRule()+"\n");
 												break bm_cm_pp_Loop;
@@ -1059,7 +1072,7 @@ public class XMLReader {
 						}
 					}
 
-					if("_children".equals(childNode.getNodeName())){
+					if(_CHILDREN.equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
 						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
 						bm_cm_pp_Loop:
@@ -1067,7 +1080,7 @@ public class XMLReader {
 							Node participant = participants.item(k);
 							if(Node.ELEMENT_NODE == participant.getNodeType()){
 								Element participantElement = (Element)participant;
-								NodeList children = participantElement.getElementsByTagName("_children");
+								NodeList children = participantElement.getElementsByTagName(_CHILDREN);
 								for(int m = 0; m < children.getLength(); m++){
 									Node name = children.item(m);
 									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
@@ -1077,7 +1090,7 @@ public class XMLReader {
 											Node bm_cm_trans_rule = nodeList.item(n);
 											if(Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
 												Element trans_rule = (Element)bm_cm_trans_rule;
-												NodeList _children = trans_rule.getElementsByTagName("_children");
+												NodeList _children = trans_rule.getElementsByTagName(_CHILDREN);
 												for(int o = 0; o < _children.getLength(); o++){
 													Node _child = _children.item(o);
 													if(_child != null && Node.ELEMENT_NODE == _child.getNodeType()){
@@ -1087,7 +1100,7 @@ public class XMLReader {
 															Node bmFunction = bm_function.item(k);
 															if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
 																Element bmFunctionElement = (Element)bmFunction;
-																NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+																NodeList scriptTexts = bmFunctionElement.getElementsByTagName(SCRIPT_TEXT);
 																commerceStep.setAdvancedConditionofTransitionRule(scriptTexts.item(0).getTextContent().trim());
 																Printer.print("Advanced Condition of Transition Rule : " + commerceStep.getAdvancedConditionofTransitionRule()+"\n");
 																break bm_cm_pp_Loop;
@@ -1103,16 +1116,16 @@ public class XMLReader {
 						}
 					}
 
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 
 									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
 										String[] temp = nameChildNode.getTextContent().trim().split(":");
-										if(temp.length > 1 && temp[0].startsWith("US#")){
+										if(temp.length > 1 && temp[0].startsWith(USSTORY)){
 											String storyNum = temp[0];
 											commerceStep.setDescription(temp[1]);
 											if(userStoriesCommerce.size() > 0){
@@ -1171,20 +1184,20 @@ public class XMLReader {
 
 		NodeList eachRecordNodeList = document.getElementsByTagName(string);
 		
-		Integration integration = null;
+		CommerceIntegration integration = null;
 		for (int i = 0; i < eachRecordNodeList.getLength(); i++){
-			integration = new Integration();
+			integration = new CommerceIntegration();
 			Node eachRecordNode = eachRecordNodeList.item(i);
 			NodeList eachRecordChildNodeList = eachRecordNode.getChildNodes();
 			for(int j = 0; j < eachRecordChildNodeList.getLength(); j++){
 				Node childNode = eachRecordChildNodeList.item(j);
 				if(Node.ELEMENT_NODE == childNode.getNodeType()){
-					if("name".equals(childNode.getNodeName())){
+					if(NAME.equals(childNode.getNodeName())){
 						integration.setIntegrationName(TagReader.readName(childNode));
 						Printer.print("Integration Name : " + integration.getIntegrationName()+"\n");
 					}
 					
-					if("variable_name".equals(childNode.getNodeName())){
+					if(VARIABLE_NAME.equals(childNode.getNodeName())){
 						integration.setVariableName(childNode.getTextContent().trim());
 						Printer.print("Variable Name : " + integration.getVariableName()+"\n");
 					}
@@ -1199,15 +1212,15 @@ public class XMLReader {
 						Printer.print("Endpoint URL : " + integration.getEndpointURL()+"\n");
 					}
 					
-					if("description".equals(childNode.getNodeName())){
+					if(DESCRIPTION.equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();
 						for(int k = 0; k < nameChildNodesList.getLength(); k++){
 							Node nameChildNode = nameChildNodesList.item(k);
 							if(Node.ELEMENT_NODE == nameChildNode.getNodeType()){
-								if("en".equals(nameChildNode.getNodeName())){
+								if(EN.equals(nameChildNode.getNodeName())){
 									if(nameChildNode.getTextContent().trim() != null && !nameChildNode.getTextContent().trim().isEmpty()){
 										String[] temp = nameChildNode.getTextContent().trim().split(":");
-										if(temp.length > 1 && temp[0].startsWith("US#")){
+										if(temp.length > 1 && temp[0].startsWith(USSTORY)){
 											String storyNum = temp[0];
 											integration.setDescription(temp[1]);
 											if(userStoriesCommerce.size() > 0){
@@ -1215,7 +1228,7 @@ public class XMLReader {
 												for(UserStories story :userStoriesCommerce){
 													if(!story.getUserStoryNum().isEmpty() && story.getUserStoryNum() != null && story.getUserStoryNum().equalsIgnoreCase(storyNum)){
 														if(story.getIntegrationsList() == null){
-															story.setIntegrationsList(new ArrayList<Integration>());
+															story.setIntegrationsList(new ArrayList<CommerceIntegration>());
 														}
 														Printer.print("adding Integration Step : "+integration.getIntegrationName()+"  to : " + story.getUserStoryNum() + " : " + integration.getDescription() + "\n");
 														story.getIntegrationsList().add(integration);
@@ -1227,7 +1240,7 @@ public class XMLReader {
 													Printer.print("1 creating new Integration Step : "+integration.getIntegrationName()+"  to : " + storyNum + " : " + integration.getDescription() + "\n");
 													UserStories storyTemp = new UserStories();
 													storyTemp.setUserStoryNum(storyNum);
-													storyTemp.setIntegrationsList(new ArrayList<Integration>());
+													storyTemp.setIntegrationsList(new ArrayList<CommerceIntegration>());
 													storyTemp.getIntegrationsList().add(integration);
 													userStoriesCommerce.add(storyTemp);
 												}
@@ -1235,7 +1248,7 @@ public class XMLReader {
 												Printer.print("2 creating new Integration Step : "+integration.getIntegrationName()+" to : " + storyNum + " : " + integration.getDescription() + "\n");
 												UserStories storyTemp = new UserStories();
 												storyTemp.setUserStoryNum(storyNum);
-												storyTemp.setIntegrationsList(new ArrayList<Integration>());
+												storyTemp.setIntegrationsList(new ArrayList<CommerceIntegration>());
 												storyTemp.getIntegrationsList().add(integration);
 												userStoriesCommerce.add(storyTemp);
 											}
@@ -1247,8 +1260,6 @@ public class XMLReader {
 							}
 						}
 					}
-					
-					
 				}
 			}
 		}

@@ -43,6 +43,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import translate.commerce.ApprovalSequence;
 import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
+import translate.commerce.CommerceIntegration;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
 import translate.commerce.CommerceStep;
@@ -387,7 +388,7 @@ public class DocxFileConverter {
 	 */
 	private void setTableSize(XWPFTable table, long row0, long row1, long row2, long row3, long row4, long row5){
 		if(row0 + row1 + row2 + row3 + row4 + row5 != 9200){
-			Printer.println("Table size not equal to standard table size(9200)");
+			Printer.println("Table size not equal to standard table size(9200). Is is: " + (row0 + row1 + row2 + row3 + row4 + row5));
 		}
 		for (int i = 0; i < table.getNumberOfRows(); i++) {
 			XWPFTableRow row = table.getRow(i);
@@ -454,11 +455,9 @@ public class DocxFileConverter {
 				}
 			}
 
-			docx.createParagraph();
-
 			List<Rule> ruleList = stories.getRuleList();
 			if(ruleList != null && ruleList.size() > 0){
-
+				docx.createParagraph();
 				List<Rule> recommendationRuleList = new ArrayList<Rule>();
 				List<Rule> constraintRuleList = new ArrayList<Rule>();
 				List<Rule> hidingRuleList = new ArrayList<Rule>();
@@ -501,10 +500,9 @@ public class DocxFileConverter {
 				}
 			}
 
-			docx.createParagraph();
-
 			List<Util> utilList = stories.getUtilList();
 			if(utilList != null && utilList.size() > 0){
+				docx.createParagraph();
 				boolean headerAdded = false;
 				for(Util util : utilList){
 					if(util != null){
@@ -582,12 +580,10 @@ public class DocxFileConverter {
 					}
 				}
 			}
-
-			docx.createParagraph();
 			
 			List<CommerceRules> ruleList = stories.getCommerceRuleList();
 			if(ruleList != null && ruleList.size() > 0){
-
+				docx.createParagraph();
 				List<CommerceRules> constraintRuleList = new ArrayList<CommerceRules>();
 				List<CommerceRules> hidingRuleList = new ArrayList<CommerceRules>();
 				List<CommerceRules> validationRule = new ArrayList<CommerceRules>();
@@ -612,10 +608,9 @@ public class DocxFileConverter {
 				}
 			}
 
-			docx.createParagraph();
-
 			List<CommerceLibraries> commerceLibraries= stories.getCommerceLibrariesList();
 			if(commerceLibraries != null && commerceLibraries.size() > 0){
+				docx.createParagraph();
 				boolean headerAdded = false;
 				for(CommerceLibraries libraries: commerceLibraries){
 					if(libraries != null){
@@ -651,10 +646,9 @@ public class DocxFileConverter {
 				}
 			}
 
-			docx.createParagraph();
-
 			List<CommerceAction> commerceActionsList= stories.getCommerceActionsList();
 			if(commerceActionsList != null && commerceActionsList.size() > 0){
+				docx.createParagraph();
 
 				addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Actions");
 
@@ -680,10 +674,9 @@ public class DocxFileConverter {
 				}
 			}
 
-			docx.createParagraph();
-
 			List<ApprovalSequence> commerceApprovalSequenceList= stories.getCommerceApprovalSequencesList();
 			if(commerceApprovalSequenceList != null && commerceApprovalSequenceList.size() > 0){
+				docx.createParagraph();
 				boolean headerAdded = false;
 				for(ApprovalSequence approvalSequence : commerceApprovalSequenceList){
 					if(approvalSequence != null){
@@ -722,11 +715,10 @@ public class DocxFileConverter {
 					}
 				}
 			}
-
-			docx.createParagraph();
 			
 			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
 			if(commerecStepList != null && commerecStepList.size() > 0){
+				docx.createParagraph();
 				boolean headerAdded = false;
 				for(CommerceStep commerceStep : commerecStepList){
 					if(commerceStep != null){
@@ -775,11 +767,10 @@ public class DocxFileConverter {
 					}
 				}
 			}
-			
-			docx.createParagraph();
 
 			List<PrinterDocument> commercePrinterDocuments= stories.getCommercePrinterDocumentList();
 			if(commercePrinterDocuments != null && commercePrinterDocuments.size() > 0){
+				docx.createParagraph();
 
 				addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Printer Friendly Documents");
 
@@ -803,6 +794,29 @@ public class DocxFileConverter {
 						newRow.getCell(3).setText(printerDocument.getCommerceProcessLinked());
 					}
 				}
+			}
+			
+			List<CommerceIntegration> commerceIntegrationsList = stories.getIntegrationsList();
+			if(commerceIntegrationsList != null && commerceIntegrationsList.size() > 0){
+				docx.createParagraph();
+				addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Integration");
+				int numOfColumns = 5;
+				XWPFTable commerceIntegrationTable = docx.createTable(2, numOfColumns);
+				XWPFTableRow headerRow = commerceIntegrationTable.getRow(0);
+				String[] headerNames = {"Integration Name", VARIABLE_NAME, DESCRIPTION, "ID Field", "Endpoint URL"};
+				setTableSize(commerceIntegrationTable, 1300, 1400, 3400, 1100, 2000, 0);
+				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+				int count = 1;
+				for(CommerceIntegration commerceIntegration: commerceIntegrationsList){
+					if(commerceIntegration != null){
+						XWPFTableRow newRow = commerceIntegrationTable.getRow(count++);
+						newRow.getCell(0).setText(commerceIntegration.getIntegrationName());
+						newRow.getCell(1).setText(commerceIntegration.getVariableName());
+						newRow.getCell(2).setText(commerceIntegration.getDescription());
+						newRow.getCell(3).setText(commerceIntegration.getIdField());
+						newRow.getCell(4).setText(commerceIntegration.getEndpointURL());
+					}
+				}				
 			}
 
 			docx.createParagraph().setPageBreak(true);

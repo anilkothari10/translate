@@ -1,6 +1,6 @@
 package translate.commerce;
 
-public class Integration {
+public class CommerceIntegration {
 	private String integrationName;
 	private String variableName;
 	private String description;
