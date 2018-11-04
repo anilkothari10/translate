@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- US#7661 : Updates an existing Transaction Quote information based on Transaction ID -->
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Header>
+<bm:userInfo xmlns:bm="urn:soap.bigmachines.com">
+<bm:sessionId>{{SESSION_ID}}</bm:sessionId>
+</bm:userInfo>
+<bm:category xmlns:bm="urn:soap.bigmachines.com">Commerce</bm:category>
+<bm:xsdInfo xmlns:bm="urn:soap.bigmachines.com">
+<bm:schemaLocation>https://cpq-p10-002.bigmachines.com/bmfsweb/cpq-p10-002/schema/v1_0/commerce/oraclecpqo.xsd</bm:schemaLocation>
+</bm:xsdInfo>
+</soapenv:Header>
+<soapenv:Body>
+<bm:updateTransaction xmlns:bm="urn:soap.bigmachines.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<bm:transaction>
+<bm:id>{{PTRANS_ID}}</bm:id>
+<bm:process_var_name>oraclecpqo</bm:process_var_name>
+<bm:buyer_company_name>{{BUYER_COMPANY_NAME}}</bm:buyer_company_name>
+<bm:supplier_company_name>{{SUPPLIER_COMPANY_NAME}}</bm:supplier_company_name>
+<bm:step_var_name>pending_process</bm:step_var_name>
+<bm:last_document_number>15</bm:last_document_number>
+<bm:date_added>2016-07-18 03:13:51</bm:date_added>
+<bm:date_modified>2016-07-18 04:16:46</bm:date_modified>
+<bm:data_xml>
+<bm:transaction bm:bs_id="37309049" bm:buyer_company_name="cpq-p10-002" bm:buyer_user_name="mrinalk" bm:currency_pref="USD" bm:data_type="0" bm:document_name="Transaction" bm:document_number="1" bm:document_var_name="transaction" bm:process_var_name="oraclecpqo" bm:supplier_company_name="cpq-p10-002">
+<bm:_document_number>1</bm:_document_number>
+<bm:createdBy_t>{{CREATED_BY}}</bm:createdBy_t>
+<bm:_price_book_var_name>_default_price_book</bm:_price_book_var_name>
+<bm:createdDate_t>2016-07-18 00:00:00</bm:createdDate_t>
+<bm:currency_t>USD</bm:currency_t>
+<bm:status_t>{{NEW_STATUS}}</bm:status_t>
+<bm:bs_id>{{PTRANS_ID}}</bm:bs_id>
+<!--<bm:version_number_versionTransaction_t>2</bm:version_number_versionTransaction_t>-->
+<bm:parent_transaction_id_versionTransaction_t/>
+<bm:currentTime>2016-07-18 03:14:05</bm:currentTime>
+<bm:obsolete_attributes>
+<bm:_price_quantity>1</bm:_price_quantity>
+<bm:_price_book_desc>Default Price Book (1.0 x base price)</bm:_price_book_desc>
+<bm:_price_book_name>Base Price</bm:_price_book_name>
+</bm:obsolete_attributes>
+<bm:approval_history/>
+<bm:approval_status/>
+<bm:sub_documents/>
+
+<bm:rule_data>
+<bm:bottomLineDiscountPercent_quote bm:constrained="false" bm:hidden="true"/>
+<bm:taxExemptReason_t bm:constrained="false" bm:hidden="true"/>
+<bm:commissionLost_quote bm:constrained="false" bm:hidden="true"/>
+</bm:rule_data>
+</bm:transaction>
+</bm:data_xml>
+<bm:action_data>
+<bm:action_var_name>{{ACTION_VAR_NAME}}</bm:action_var_name>
+<bm:_bm_cm_new_transaction_currency/>
+<bm:performer_comment/>
+<bm:reason_var_name/>
+<bm:performer_name/>
+<bm:performer_type/>
+<bm:performer_company_name/>
+</bm:action_data>
+<bm:sub_step_name/>
+<bm:buyer_user_name>mrinalk</bm:buyer_user_name>
+<bm:currency_pref>USD</bm:currency_pref>
+<bm:status>1</bm:status>
+<bm:update_count>10</bm:update_count>
+<bm:language_pref>English</bm:language_pref>
+<bm:offline_user_id>-1</bm:offline_user_id>
+<bm:num_transitions>2</bm:num_transitions>
+</bm:transaction>
+</bm:updateTransaction>
+</soapenv:Body>
+</soapenv:Envelope>

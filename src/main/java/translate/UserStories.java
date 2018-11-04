@@ -8,15 +8,16 @@ import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
 import translate.commerce.CommerceStep;
-import translate.commerce.CommerceIntegration;
+import translate.commerce.Integration;
 import translate.commerce.PrinterDocument;
+import webservices.Javascript;
+import webservices.Transaction;
 
 public class UserStories {
 	private String userStoryNum;
 	private List<Attribute> attributeList;
 	private List<Rule> ruleList;
 	private List<Util> utilList;
-
 	private List<CommerceAttribute> commerceAttributeList;
 	private List<CommerceRules> commerceRuleList;
 	private List<CommerceLibraries> commerceLibrariesList;
@@ -24,7 +25,9 @@ public class UserStories {
 	private List<ApprovalSequence> commerceApprovalSequencesList;
 	private List<PrinterDocument> commercePrinterDocumentList;
 	private List<CommerceStep> commerceStepsList;
-	private List<CommerceIntegration> integrationsList;
+	private List<Integration> integrationsList;
+	private List<Transaction> transactionList;
+	private List<Javascript> javascriptList;
 	public String getUserStoryNum() {
 		return userStoryNum;
 	}
@@ -91,11 +94,32 @@ public class UserStories {
 	public void setCommerceStepsList(List<CommerceStep> commerceStepsList) {
 		this.commerceStepsList = commerceStepsList;
 	}
-	public List<CommerceIntegration> getIntegrationsList() {
+	public List<Integration> getIntegrationsList() {
 		return integrationsList;
 	}
-	public void setIntegrationsList(List<CommerceIntegration> integrationsList) {
+	public void setIntegrationsList(List<Integration> integrationsList) {
 		this.integrationsList = integrationsList;
 	}
-	
+	public List<Transaction> getTransactionList() {
+		return transactionList;
+	}
+	public void setTransactionList(List<Transaction> transactionList) {
+		this.transactionList = transactionList;
+	}
+	public List<Javascript> getJavascriptList() {
+		return javascriptList;
+	}
+	public void setJavascriptList(List<Javascript> javasriptList) {
+		this.javascriptList = javasriptList;
+	}
+	@Override
+	public String toString() {
+		return "UserStories [userStoryNum=" + userStoryNum + ", attributeList=" + attributeList + ", ruleList="
+				+ ruleList + ", utilList=" + utilList + ", commerceAttributeList=" + commerceAttributeList
+				+ ", commerceRuleList=" + commerceRuleList + ", commerceLibrariesList=" + commerceLibrariesList
+				+ ", commerceActionsList=" + commerceActionsList + ", commerceApprovalSequencesList="
+				+ commerceApprovalSequencesList + ", commercePrinterDocumentList=" + commercePrinterDocumentList
+				+ ", commerceStepsList=" + commerceStepsList + ", integrationsList=" + integrationsList
+				+ ", transactionList=" + transactionList + ", javascriptList=" + javascriptList + "]";
+	}
 }

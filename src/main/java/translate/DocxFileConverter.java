@@ -17,7 +17,6 @@ import org.apache.poi.xwpf.usermodel.UnderlinePatterns;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFHeader;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-//import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
@@ -32,8 +31,6 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSimpleField;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTString;
-//import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
-//import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSimpleField;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTText;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STFldCharType;
@@ -43,12 +40,13 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 import translate.commerce.ApprovalSequence;
 import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
-import translate.commerce.CommerceIntegration;
 import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
 import translate.commerce.CommerceStep;
+import translate.commerce.Integration;
 import translate.commerce.PrinterDocument;
-//import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
+import webservices.Javascript;
+import webservices.Transaction;
 
 public class DocxFileConverter {
 
@@ -89,12 +87,12 @@ public class DocxFileConverter {
 				}
 			}
 		}
+		
+		/*docxTemp.close();
+		XWPFDocument docx = new XWPFDocument();*/
 		//docx.removeBodyElement(0);
 		createPageHeader(docx, Constants.DELOITTE_LOGO);
 		createPageNumber(docx);
-
-		/*docxTemp.close();
-		XWPFDocument docx = new XWPFDocument();*/
 
 		// Table of contents:
 		XWPFParagraph p = docx.getLastParagraph();
@@ -388,7 +386,7 @@ public class DocxFileConverter {
 	 */
 	private void setTableSize(XWPFTable table, long row0, long row1, long row2, long row3, long row4, long row5){
 		if(row0 + row1 + row2 + row3 + row4 + row5 != 9200){
-			Printer.println("Table size not equal to standard table size(9200). Is is: " + (row0 + row1 + row2 + row3 + row4 + row5));
+			Printer.println("Table size not equal to standard table size(9200)");
 		}
 		for (int i = 0; i < table.getNumberOfRows(); i++) {
 			XWPFTableRow row = table.getRow(i);
@@ -455,9 +453,11 @@ public class DocxFileConverter {
 				}
 			}
 
+			docx.createParagraph();
+
 			List<Rule> ruleList = stories.getRuleList();
 			if(ruleList != null && ruleList.size() > 0){
-				docx.createParagraph();
+
 				List<Rule> recommendationRuleList = new ArrayList<Rule>();
 				List<Rule> constraintRuleList = new ArrayList<Rule>();
 				List<Rule> hidingRuleList = new ArrayList<Rule>();
@@ -500,9 +500,10 @@ public class DocxFileConverter {
 				}
 			}
 
+			docx.createParagraph();
+
 			List<Util> utilList = stories.getUtilList();
 			if(utilList != null && utilList.size() > 0){
-				docx.createParagraph();
 				boolean headerAdded = false;
 				for(Util util : utilList){
 					if(util != null){
@@ -580,10 +581,12 @@ public class DocxFileConverter {
 					}
 				}
 			}
+
+			docx.createParagraph();
 			
 			List<CommerceRules> ruleList = stories.getCommerceRuleList();
 			if(ruleList != null && ruleList.size() > 0){
-				docx.createParagraph();
+
 				List<CommerceRules> constraintRuleList = new ArrayList<CommerceRules>();
 				List<CommerceRules> hidingRuleList = new ArrayList<CommerceRules>();
 				List<CommerceRules> validationRule = new ArrayList<CommerceRules>();
@@ -608,9 +611,10 @@ public class DocxFileConverter {
 				}
 			}
 
+			docx.createParagraph();
+
 			List<CommerceLibraries> commerceLibraries= stories.getCommerceLibrariesList();
 			if(commerceLibraries != null && commerceLibraries.size() > 0){
-				docx.createParagraph();
 				boolean headerAdded = false;
 				for(CommerceLibraries libraries: commerceLibraries){
 					if(libraries != null){
@@ -646,9 +650,10 @@ public class DocxFileConverter {
 				}
 			}
 
+			docx.createParagraph();
+
 			List<CommerceAction> commerceActionsList= stories.getCommerceActionsList();
 			if(commerceActionsList != null && commerceActionsList.size() > 0){
-				docx.createParagraph();
 
 				addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Actions");
 
@@ -674,9 +679,10 @@ public class DocxFileConverter {
 				}
 			}
 
+			docx.createParagraph();
+
 			List<ApprovalSequence> commerceApprovalSequenceList= stories.getCommerceApprovalSequencesList();
 			if(commerceApprovalSequenceList != null && commerceApprovalSequenceList.size() > 0){
-				docx.createParagraph();
 				boolean headerAdded = false;
 				for(ApprovalSequence approvalSequence : commerceApprovalSequenceList){
 					if(approvalSequence != null){
@@ -715,10 +721,11 @@ public class DocxFileConverter {
 					}
 				}
 			}
+
+			docx.createParagraph();
 			
 			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
 			if(commerecStepList != null && commerecStepList.size() > 0){
-				docx.createParagraph();
 				boolean headerAdded = false;
 				for(CommerceStep commerceStep : commerecStepList){
 					if(commerceStep != null){
@@ -767,10 +774,11 @@ public class DocxFileConverter {
 					}
 				}
 			}
+			
+			docx.createParagraph();
 
 			List<PrinterDocument> commercePrinterDocuments= stories.getCommercePrinterDocumentList();
 			if(commercePrinterDocuments != null && commercePrinterDocuments.size() > 0){
-				docx.createParagraph();
 
 				addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Printer Friendly Documents");
 
@@ -796,27 +804,73 @@ public class DocxFileConverter {
 				}
 			}
 			
-			List<CommerceIntegration> commerceIntegrationsList = stories.getIntegrationsList();
-			if(commerceIntegrationsList != null && commerceIntegrationsList.size() > 0){
-				docx.createParagraph();
+			//Add Integration
+			
+			docx.createParagraph();
+			List<Integration> commerceIntegrationList= stories.getIntegrationsList();
+			if(commerceIntegrationList != null && commerceIntegrationList.size() > 0){
 				addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Integration");
 				int numOfColumns = 5;
-				XWPFTable commerceIntegrationTable = docx.createTable(2, numOfColumns);
-				XWPFTableRow headerRow = commerceIntegrationTable.getRow(0);
+				XWPFTable commerceIntegrationsTable = docx.createTable(2, numOfColumns);
+				XWPFTableRow headerRow = commerceIntegrationsTable.getRow(0);
+
 				String[] headerNames = {"Integration Name", VARIABLE_NAME, DESCRIPTION, "ID Field", "Endpoint URL"};
-				setTableSize(commerceIntegrationTable, 1300, 1400, 3400, 1100, 2000, 0);
+
+				setTableSize(commerceIntegrationsTable, 1700, 1700, 2800, 1600, 1400, 0);
+
 				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+
 				int count = 1;
-				for(CommerceIntegration commerceIntegration: commerceIntegrationsList){
-					if(commerceIntegration != null){
-						XWPFTableRow newRow = commerceIntegrationTable.getRow(count++);
-						newRow.getCell(0).setText(commerceIntegration.getIntegrationName());
-						newRow.getCell(1).setText(commerceIntegration.getVariableName());
-						newRow.getCell(2).setText(commerceIntegration.getDescription());
-						newRow.getCell(3).setText(commerceIntegration.getIdField());
-						newRow.getCell(4).setText(commerceIntegration.getEndpointURL());
+				for(Integration integration: commerceIntegrationList){
+					if(integration != null){
+						XWPFTableRow newRow = commerceIntegrationsTable.getRow(count++);
+						newRow.getCell(0).setText(integration.getIntegrationName());
+						newRow.getCell(1).setText(integration.getVariableName());
+						newRow.getCell(2).setText(integration.getDescription());
+						newRow.getCell(3).setText(integration.getIdField());
+						newRow.getCell(3).setText(integration.getEndpointURL());
 					}
-				}				
+				}
+			}
+			
+			// Add web services transaction data
+			docx.createParagraph();
+			List<Transaction> transactionList= stories.getTransactionList();
+			boolean fileManagerHeaderAdded = false;
+			if(transactionList != null && transactionList.size() > 0){
+				if(!fileManagerHeaderAdded){
+					addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, 
+							UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "File Manager");
+					fileManagerHeaderAdded = true;
+				}
+				docx.createParagraph();
+				for(Transaction trans : transactionList){
+					addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, trans.getTransactionName());
+					XWPFRun run = docx.createParagraph().createRun();
+					for(String str : trans.getDescription().split(";")){
+						run.setText(str);
+						run.addBreak();
+					}
+				}
+			}
+			
+			// Add Javascript files data
+			docx.createParagraph();
+			List<Javascript> javascriptList= stories.getJavascriptList();
+			if(javascriptList != null && javascriptList.size() > 0){
+				if(!fileManagerHeaderAdded){
+					addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, 
+							UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "File Manager");
+				}
+				docx.createParagraph();
+				for(Javascript trans : javascriptList){
+					addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, trans.getJavascriptName()); 
+					XWPFRun run = docx.createParagraph().createRun();
+					for(String str : trans.getDescription().split(";")){
+						run.setText(str);
+						run.addBreak();
+					}
+				}
 			}
 
 			docx.createParagraph().setPageBreak(true);

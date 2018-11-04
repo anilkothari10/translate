@@ -63,6 +63,20 @@ public class XMLConverter {
 			//Read commerce files
 			List<UserStories> userStoriesCommerce = readCommerceXMLs(file, xmlReader);
 			
+			//Read Web services files
+			file = new File(Constants.WEB_SERVICES_DIR);
+			File[] webservicesList = file.listFiles();
+			if(webservicesList != null && webservicesList.length > 0){
+				xmlReader.readWebServicesFiles(webservicesList,userStoriesCommerce);
+			}
+			
+			//Read JS files
+			file = new File(Constants.JS_DIR);
+			File[] jsList = file.listFiles();
+			if(jsList != null && jsList.length > 0){
+				xmlReader.readJavascriptFiles(jsList,userStoriesCommerce);
+			}
+			
 			//Read Data table XML
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
 			file = new File(Constants.SOURCE_DATA_TABLE_DIR);
@@ -119,6 +133,8 @@ public class XMLConverter {
 		}
 	}
 	
+	
+
 	private static List<UserStories> readCommerceXMLs(File file, XMLReader xmlReader) throws Exception{
 		//Read Commerce attribute, Libraries, Rules
 		List<UserStories> userStoriesCommerce = new ArrayList<UserStories>();
@@ -176,20 +192,6 @@ public class XMLConverter {
 		}else{
 			Printer.println("Input files not present at location : "+ file.getAbsolutePath());
 		}
-		
-		//TODO:
-		/*
-		 *  Read Integration xsl_36244034.zip file contains integration scripts in XSL format.
-			I have added user story # in each of them.
-			This scripts need to be shown in the same way we did for Util functions.
-		*/
-
-		//TODO:
-		/*
-		 * File Manager (WebServices.zip & JS.zip)
-		 * Just display the scripts of each file with heading in this section.
-		 */
-		
 		return userStoriesCommerce;
 	}
 }
