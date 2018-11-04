@@ -2,8 +2,9 @@ package translate;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1261,25 +1262,26 @@ public class XMLReader {
 	public void readWebServicesFiles(File[] webservicesList, List<UserStories> userStoriesCommerce) throws IOException {
 		Transaction transaction = null;
 		String userStoryLine = null;
+		FileInputStream fIn = null;
 		BufferedReader br = null;
 		for(File file : webservicesList){
-			FileReader fr = new FileReader(file);
-			br = new BufferedReader(fr);
+			fIn = new FileInputStream(file);
+			br = new BufferedReader(new InputStreamReader(fIn));
 			boolean foundUserStory = false;
 
 			while((userStoryLine = br.readLine()) != null){
-				br.mark(0);
 				if(userStoryLine.contains("US#")){
 					transaction = new Transaction();
 					int startIndex = userStoryLine.indexOf("US#") + 3;
 					transaction.setUserStoryNum(userStoryLine.substring(startIndex, startIndex+4));
 					transaction.setTransactionName(file.getName());
 					foundUserStory = true;
+					fIn.getChannel().position(0);
 					break;
 				}
 			}
-			br.reset();
 			if(foundUserStory){
+				br = new BufferedReader(new InputStreamReader(fIn));
 				String desc = null;
 				StringBuilder sb = new StringBuilder();
 				while((desc = br.readLine()) != null){
@@ -1306,24 +1308,25 @@ public class XMLReader {
 	public void readJavascriptFiles(File[] jsList, List<UserStories> userStoriesCommerce) throws IOException {
 		Javascript javascript = null;
 		String userStoryLine = null;
-		BufferedReader br =null;
+		FileInputStream fIn = null;
+		BufferedReader br = null;
 		for(File file : jsList){
-			FileReader fr = new FileReader(file);
-			br = new BufferedReader(fr);
+			fIn = new FileInputStream(file);
+			br = new BufferedReader(new InputStreamReader(fIn));
 			boolean foundUserStory = false;
 			while((userStoryLine = br.readLine()) != null){
-				br.mark(0);
 				if(userStoryLine.contains("US#")){
 					javascript = new Javascript();
 					int startIndex = userStoryLine.indexOf("US#") + 3;
 					javascript.setUserStoryNum(userStoryLine.substring(startIndex, startIndex+4));
 					javascript.setJavascriptName(file.getName());
 					foundUserStory = true;
+					fIn.getChannel().position(0);
 					break;
 				}
 			}
-			br.reset();
 			if(foundUserStory){
+				br = new BufferedReader(new InputStreamReader(fIn));
 				String desc = null;
 				StringBuilder sb = new StringBuilder();
 				while((desc = br.readLine()) != null){
