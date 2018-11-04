@@ -862,7 +862,6 @@ public class DocxFileConverter {
 					addSectionTitle(docx,heading3Para, true, Constants.SECTIONTITLECOLOR, 
 							UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "File Manager");
 				}
-				docx.createParagraph();
 				for(Javascript trans : javascriptList){
 					addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, trans.getJavascriptName()); 
 					XWPFRun run = docx.createParagraph().createRun();
