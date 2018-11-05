@@ -44,6 +44,7 @@ import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
 import translate.commerce.CommerceStep;
 import translate.commerce.Integration;
+import translate.commerce.IntegrationScript;
 import translate.commerce.PrinterDocument;
 import webservices.Javascript;
 import webservices.Transaction;
@@ -830,6 +831,19 @@ public class DocxFileConverter {
 						newRow.getCell(3).setText(integration.getIdField());
 						newRow.getCell(3).setText(integration.getEndpointURL());
 					}
+					
+					if(integration.getIntegrationScript() != null){
+						docx.createParagraph();
+						IntegrationScript integrationScript = integration.getIntegrationScript();
+						addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, 
+								UnderlinePatterns.SINGLE, "Integration Script");
+						XWPFRun run = docx.createParagraph().createRun();
+						for(String str : integrationScript.getDescription().split(";")){
+							run.setText(str);
+							run.addBreak();
+						}
+					}
+
 				}
 			}
 			

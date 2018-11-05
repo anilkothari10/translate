@@ -6,6 +6,13 @@ public class Integration {
 	private String description;
 	private String idField;
 	private String endpointURL;
+	private IntegrationScript integrationScript;
+	public IntegrationScript getIntegrationScript() {
+		return integrationScript;
+	}
+	public void setIntegrationScript(IntegrationScript integrationScript) {
+		this.integrationScript = integrationScript;
+	}
 	public String getIntegrationName() {
 		return integrationName;
 	}

@@ -25,6 +25,7 @@ import translate.commerce.CommerceLibraries;
 import translate.commerce.CommerceRules;
 import translate.commerce.CommerceStep;
 import translate.commerce.Integration;
+import translate.commerce.IntegrationScript;
 import translate.commerce.PrinterDocument;
 import utilities.TagReader;
 import webservices.Javascript;
@@ -1343,6 +1344,54 @@ public class XMLReader {
 							userStory.setJavascriptList(new ArrayList<Javascript>());
 						}
 						userStory.getJavascriptList().add(javascript);
+					}
+				}
+				//System.out.println(userStoriesCommerce);
+			}
+		}
+	}
+	
+	public void readIntegrationScriptFiles(File[] integrationScriptList, List<UserStories> userStoriesCommerce) throws IOException {
+		IntegrationScript integrationScript= null;
+		String userStoryLine = null;
+		FileInputStream fIn = null;
+		BufferedReader br = null;
+		for(File file : integrationScriptList){
+			fIn = new FileInputStream(file);
+			br = new BufferedReader(new InputStreamReader(fIn));
+			boolean foundUserStory = false;
+
+			while((userStoryLine = br.readLine()) != null){
+				if(userStoryLine.contains("US#")){
+					integrationScript = new IntegrationScript();
+					int startIndex = userStoryLine.indexOf("US#") + 3;
+					integrationScript.setUserStoryNum(userStoryLine.substring(startIndex, startIndex+4));
+					integrationScript.setIntegrationScriptName(file.getName());
+					foundUserStory = true;
+					fIn.getChannel().position(0);
+					break;
+				}
+			}
+			if(foundUserStory){
+				br = new BufferedReader(new InputStreamReader(fIn));
+				String desc = null;
+				StringBuilder sb = new StringBuilder();
+				while((desc = br.readLine()) != null){
+					if(!desc.contains("US#")){
+						sb.append(desc.trim()+";");
+					}
+				}
+				integrationScript.setDescription(sb.toString());
+				br.close();
+				// Add to commerce user stories
+				for(UserStories userStory : userStoriesCommerce){
+					if(userStory.getUserStoryNum().contains(integrationScript.getUserStoryNum())){
+						if(userStory.getIntegrationsList()== null){
+							userStory.setIntegrationsList(new ArrayList<Integration>());
+						}
+						for(Integration integration: userStory.getIntegrationsList()){
+							integration.setIntegrationScript(integrationScript);
+						}
 					}
 				}
 				//System.out.println(userStoriesCommerce);

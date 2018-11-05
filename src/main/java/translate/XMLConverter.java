@@ -77,6 +77,13 @@ public class XMLConverter {
 				xmlReader.readJavascriptFiles(jsList,userStoriesCommerce);
 			}
 			
+			//Read Integration
+			file = new File(Constants.INTEGRATION_DIR);
+			File[] integrationScriptList = file.listFiles();
+			if(integrationScriptList != null && integrationScriptList.length > 0){
+				xmlReader.readIntegrationScriptFiles(integrationScriptList,userStoriesCommerce);
+			}
+			
 			//Read Data table XML
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
 			file = new File(Constants.SOURCE_DATA_TABLE_DIR);
