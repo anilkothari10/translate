@@ -829,7 +829,7 @@ public class DocxFileConverter {
 						newRow.getCell(1).setText(integration.getVariableName());
 						newRow.getCell(2).setText(integration.getDescription());
 						newRow.getCell(3).setText(integration.getIdField());
-						newRow.getCell(3).setText(integration.getEndpointURL());
+						newRow.getCell(4).setText(integration.getEndpointURL());
 					}
 					
 					if(integration.getIntegrationScript() != null){
