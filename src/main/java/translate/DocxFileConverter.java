@@ -38,6 +38,8 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STOnOff;
 
 import translate.commerce.ApprovalSequence;
+import translate.commerce.BmCmPp;
+import translate.commerce.BmCmTransRule;
 import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
@@ -737,7 +739,21 @@ public class DocxFileConverter {
 							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Commerce Steps");
 						}
 						int numOfColumns = 6;
-						XWPFTable commerceStepTable = docx.createTable(2,numOfColumns);
+						int bmCmPpRows = 1;
+						for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+							bmCmPpRows++;
+							if(bmCmPp.getBmCmTransRuleList().size() > 0){
+								bmCmPpRows--;
+								for(@SuppressWarnings("unused") BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+									bmCmPpRows++;
+								}
+							}
+
+						}
+						if(bmCmPpRows == 1){
+							bmCmPpRows = 2;
+						}
+						XWPFTable commerceStepTable = docx.createTable(bmCmPpRows,numOfColumns);
 
 						XWPFTableRow headerRow = commerceStepTable.getRow(0);
 
@@ -747,13 +763,44 @@ public class DocxFileConverter {
 
 						setTableSize(commerceStepTable, 1200, 3000, 1500, 1200, 1400, 900);
 
-						XWPFTableRow newRow = commerceStepTable.getRow(1);
-						newRow.getCell(0).setText(commerceStep.getStepName());
-						newRow.getCell(1).setText(commerceStep.getDescription());
-						newRow.getCell(2).setText(commerceStep.getVariableName());
-						newRow.getCell(3).setText(commerceStep.getParticipantProfileName());
-						newRow.getCell(4).setText(commerceStep.getProfileDescription());
-						newRow.getCell(5).setText(commerceStep.getTransitionRule());
+						String stepName =  commerceStep.getStepName();
+						String description =  commerceStep.getDescription();
+						String variableName =  commerceStep.getVariableName();
+						String participantProfileName = null;;
+						String profileDescription = null;
+
+						int rowNum = 1;
+						if(commerceStep.getBmCmPpList().size() > 0){
+							for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+								participantProfileName = bmCmPp.getParticipantProfileName();
+								profileDescription = bmCmPp.getProfileDescription();
+								if(bmCmPp.getBmCmTransRuleList().size() > 0){
+									for(BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+										XWPFTableRow newRow = commerceStepTable.getRow(rowNum++);
+										newRow.getCell(0).setText(stepName);
+										newRow.getCell(1).setText(description);
+										newRow.getCell(2).setText(variableName);
+										newRow.getCell(3).setText(participantProfileName);
+										newRow.getCell(4).setText(profileDescription);
+										newRow.getCell(5).setText(bmCmTransRule.getTransitionRule());
+									}
+								}else{
+									XWPFTableRow newRow = commerceStepTable.getRow(rowNum++);
+									newRow.getCell(0).setText(stepName);
+									newRow.getCell(1).setText(description);
+									newRow.getCell(2).setText(variableName);
+									newRow.getCell(3).setText(participantProfileName);
+									newRow.getCell(4).setText(profileDescription);
+								}
+
+							}
+						}else{
+							XWPFTableRow newRow = commerceStepTable.getRow(rowNum++);
+							newRow.getCell(0).setText(stepName);
+							newRow.getCell(1).setText(description);
+							newRow.getCell(2).setText(variableName);
+						}
+
 
 						if(commerceStep.getAdvancedForwardingRule() != null){
 							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Forwarding Rule");
@@ -763,13 +810,19 @@ public class DocxFileConverter {
 								scriptRun.addBreak();
 							}
 						}
-						
-						if(commerceStep.getAdvancedConditionofTransitionRule() != null){
-							addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Condition of Transition Rule");
-							XWPFRun scriptRun = docx.createParagraph().createRun();
-							for(String scriptText : commerceStep.getAdvancedConditionofTransitionRule().split(";")){
-								scriptRun.setText(scriptText + ";");
-								scriptRun.addBreak();
+
+						for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+							for(BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+								if(bmCmTransRule.getAdvancedConditionofTransitionRule() != null){
+									addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Advanced Condition of Transition Rule:");
+									addSectionTitle(docx,null, false, Constants.SECTIONTITLECOLOR, UnderlinePatterns.NONE, "Profile Description: " + profileDescription + ", Transition Rule Name: " + bmCmTransRule.getTransitionRule());
+									addSectionTitle(docx,null, false, Constants.SECTIONTITLECOLOR, UnderlinePatterns.NONE, "Script:");
+									XWPFRun scriptRun = docx.createParagraph().createRun();
+									for(String scriptText : bmCmTransRule.getAdvancedConditionofTransitionRule().split(";")){
+										scriptRun.setText(scriptText + ";");
+										scriptRun.addBreak();
+									}
+								}
 							}
 						}
 					}

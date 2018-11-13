@@ -19,6 +19,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import translate.commerce.ApprovalSequence;
+import translate.commerce.BmCmPp;
+import translate.commerce.BmCmTransRule;
 import translate.commerce.CommerceAction;
 import translate.commerce.CommerceAttribute;
 import translate.commerce.CommerceLibraries;
@@ -945,95 +947,6 @@ public class XMLReader {
 						commerceStep.setVariableName(childNode.getTextContent().trim());
 						Printer.print("Variable Name : " + commerceStep.getVariableName()+"\n");
 					}
-					if("_children".equals(childNode.getNodeName())){
-						Element nameChildNode = (Element)childNode;
-						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
-						bm_cm_pp_loop:
-						for(int k = 0; k < participants.getLength(); k++){
-							Node participant = participants.item(k);
-							if(Node.ELEMENT_NODE == participant.getNodeType()){
-								Element participantElement = (Element)participant;
-								NodeList names = participantElement.getElementsByTagName("name");
-								for(int m = 0; m < names.getLength(); m++){
-									Node name = names.item(m);
-									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
-										Element labelElement = (Element)name;
-										NodeList enlabel = labelElement.getElementsByTagName("en");
-										commerceStep.setParticipantProfileName(enlabel.item(0).getTextContent().trim());
-										Printer.print("participant profile Name : " + commerceStep.getParticipantProfileName()+"\n");
-										break bm_cm_pp_loop;
-									}
-								}
-							}
-						}
-					}
-
-					if("_children".equals(childNode.getNodeName())){
-						Element nameChildNode = (Element)childNode;
-						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
-						bm_cm_pp_loop:
-						for(int k = 0; k < participants.getLength(); k++){
-							Node participant = participants.item(k);
-							if(Node.ELEMENT_NODE == participant.getNodeType()){
-								Element participantElement = (Element)participant;
-								NodeList description = participantElement.getElementsByTagName("description");
-								for(int m = 0; m < description.getLength(); m++){
-									Node name = description.item(m);
-									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
-										Element labelElement = (Element)name;
-										NodeList enlabel = labelElement.getElementsByTagName("en");
-										String descriptionText =  enlabel.item(0).getTextContent().trim();
-										if(descriptionText.startsWith("US#")){
-											String[] temp = descriptionText.split(":");
-											if(temp.length > 1){
-												descriptionText = temp[1];
-											}
-										}
-										commerceStep.setProfileDescription(descriptionText);
-										Printer.print("Profile description: " + commerceStep.getProfileDescription()+"\n");
-										break bm_cm_pp_loop;
-									}
-								}
-							}
-						}
-					}
-
-					if("_children".equals(childNode.getNodeName())){
-						Element nameChildNode = (Element)childNode;
-						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
-						bm_cm_pp_Loop:
-						for(int k = 0; k < participants.getLength(); k++){
-							Node participant = participants.item(k);
-							if(Node.ELEMENT_NODE == participant.getNodeType()){
-								Element participantElement = (Element)participant;
-								NodeList children = participantElement.getElementsByTagName("_children");
-								for(int m = 0; m < children.getLength(); m++){
-									Node name = children.item(m);
-									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
-										Element nameInnerChildNode = (Element)childNode;
-										NodeList nodeList = nameInnerChildNode.getElementsByTagName("bm_cm_trans_rule");
-										for(int l = 0; l < nodeList.getLength(); l++){
-											Node bm_cm_trans_rule = nodeList.item(k);
-											if(Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
-												Element trans_rule = (Element)bm_cm_trans_rule;
-												NodeList names = trans_rule.getElementsByTagName("name");
-												for(int n = 0; n < names.getLength(); n++){
-													Node trans_rule_name = names.item(m);
-													if(trans_rule_name != null && Node.ELEMENT_NODE == trans_rule_name.getNodeType()){
-														Element labelElement = (Element)trans_rule_name;
-														NodeList enlabel = labelElement.getElementsByTagName("en");
-														commerceStep.setTransitionRule(enlabel.item(0).getTextContent().trim());
-														Printer.print("Transition Rule Name : " + commerceStep.getTransitionRule()+"\n");
-														break bm_cm_pp_Loop;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
 					
 					if("_children".equals(childNode.getNodeName())){
 						Element nameChildNode = (Element)childNode;
@@ -1066,48 +979,97 @@ public class XMLReader {
 					}
 
 					if("_children".equals(childNode.getNodeName())){
-						Element nameChildNode = (Element)childNode;
-						NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
-						bm_cm_pp_Loop:
-						for(int k = 0; k < participants.getLength(); k++){
-							Node participant = participants.item(k);
-							if(Node.ELEMENT_NODE == participant.getNodeType()){
-								Element participantElement = (Element)participant;
-								NodeList children = participantElement.getElementsByTagName("_children");
-								for(int m = 0; m < children.getLength(); m++){
-									Node name = children.item(m);
-									if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
-										Element nameInnerChildNode = (Element)childNode;
-										NodeList nodeList = nameInnerChildNode.getElementsByTagName("bm_cm_trans_rule");
-										for(int n = 0; n < nodeList.getLength(); n++){
-											Node bm_cm_trans_rule = nodeList.item(n);
-											if(Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
-												Element trans_rule = (Element)bm_cm_trans_rule;
-												NodeList _children = trans_rule.getElementsByTagName("_children");
-												for(int o = 0; o < _children.getLength(); o++){
-													Node _child = _children.item(o);
-													if(_child != null && Node.ELEMENT_NODE == _child.getNodeType()){
-														Element _innerchild = (Element)_child;
-														NodeList bm_function = _innerchild.getElementsByTagName("bm_function");
-														for(int l = 0; l < bm_function.getLength(); l++){
-															Node bmFunction = bm_function.item(k);
-															if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
-																Element bmFunctionElement = (Element)bmFunction;
-																NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
-																commerceStep.setAdvancedConditionofTransitionRule(scriptTexts.item(0).getTextContent().trim());
-																Printer.print("Advanced Condition of Transition Rule : " + commerceStep.getAdvancedConditionofTransitionRule()+"\n");
-																break bm_cm_pp_Loop;
-															}
+					Element nameChildNode = (Element)childNode;
+					commerceStep.setBmCmPpList(new ArrayList<BmCmPp>());
+					NodeList participants = nameChildNode.getElementsByTagName("bm_cm_pp");
+					for(int k = 0; k < participants.getLength(); k++){
+						BmCmPp bmCmPp = new BmCmPp();
+						Node participant = participants.item(k);
+						if(Node.ELEMENT_NODE == participant.getNodeType()){
+							Element participantElement = (Element)participant;
+							NodeList names = participantElement.getElementsByTagName("name");
+							bm_cm_pp_loop:
+							for(int m = 0; m < names.getLength(); m++){
+								Node name = names.item(m);
+								if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+									Element labelElement = (Element)name;
+									NodeList enlabel = labelElement.getElementsByTagName("en");
+									bmCmPp.setParticipantProfileName(enlabel.item(0).getTextContent().trim());
+									Printer.print("participant profile Name : " + bmCmPp.getParticipantProfileName()+"\n");
+									break bm_cm_pp_loop;
+								}
+							}
+							NodeList description = participantElement.getElementsByTagName("description");
+							bm_cm_pp_loop:
+							for(int m = 0; m < description.getLength(); m++){
+								Node name = description.item(m);
+								if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+									Element labelElement = (Element)name;
+									NodeList enlabel = labelElement.getElementsByTagName("en");
+									bmCmPp.setProfileDescription(enlabel.item(0).getTextContent().trim());
+									Printer.print("participant Profile Description : " + bmCmPp.getProfileDescription()+"\n");
+									break bm_cm_pp_loop;
+								}
+							}
+							NodeList _children = participantElement.getElementsByTagName("_children");
+							bmCmPp.setBmCmTransRuleList(new ArrayList<BmCmTransRule>());
+							for(int m = 0; m < _children.getLength(); m++){
+								Node child = _children.item(m);
+								if(child != null && Node.ELEMENT_NODE == child.getNodeType()){
+									Element childElement = (Element)child;
+									NodeList bm_cm_trans_rules = childElement.getElementsByTagName("bm_cm_trans_rule");
+									for(int o = 0; o < bm_cm_trans_rules.getLength() ; o++){
+										BmCmTransRule bmCmTransRule = new BmCmTransRule(); 
+										Node bm_cm_trans_rule = bm_cm_trans_rules.item(o);
+										if(bm_cm_trans_rule != null && Node.ELEMENT_NODE == bm_cm_trans_rule.getNodeType()){
+											Element bm_cm_trans_rule_Element = (Element)bm_cm_trans_rule;
+											NodeList nameNodeList = bm_cm_trans_rule_Element.getElementsByTagName("name");
+											bm_cm_trans_rule_loop:
+											for(int p = 0; p < nameNodeList.getLength(); p++){
+												Node name = nameNodeList.item(p);
+												if(name != null && Node.ELEMENT_NODE == name.getNodeType()){
+													Element labelElement = (Element)name;
+													NodeList enlabel = labelElement.getElementsByTagName("en");
+													bmCmTransRule.setTransitionRule(enlabel.item(0).getTextContent().trim());
+													Printer.print("Transition Rule : " + bmCmTransRule.getTransitionRule()+"\n");
+													break bm_cm_trans_rule_loop;
+												}
+											}
+											
+											NodeList bm_cm_trans_rule_children = bm_cm_trans_rule_Element.getElementsByTagName("_children");
+											for(int p = 0; p < bm_cm_trans_rule_children.getLength(); p++){
+												Node _child = bm_cm_trans_rule_children.item(p);
+												if(_child != null && Node.ELEMENT_NODE == _child.getNodeType()){
+													Element _innerchild = (Element)_child;
+													NodeList bm_function = _innerchild.getElementsByTagName("bm_function");
+													for(int l = 0; l < bm_function.getLength(); l++){
+														Node bmFunction = bm_function.item(l);
+														if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
+															Element bmFunctionElement = (Element)bmFunction;
+															NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
+															bmCmTransRule.setAdvancedConditionofTransitionRule(scriptTexts.item(0).getTextContent().trim());
+															Printer.print("Advanced Condition of Transition Rule : " + bmCmTransRule.getAdvancedConditionofTransitionRule()+"\n");
 														}
 													}
 												}
 											}
 										}
+										bmCmPp.getBmCmTransRuleList().add(bmCmTransRule);
 									}
 								}
 							}
 						}
+						if(bmCmPp.getProfileDescription().contains("US#")){
+							String[] tempString = bmCmPp.getProfileDescription().split(":");
+							if(tempString.length > 1){
+								bmCmPp.setProfileDescription(tempString[1]);
+							}
+							Printer.print(bmCmPp.toString()+"\n");
+							commerceStep.getBmCmPpList().add(bmCmPp);
+						}
+
 					}
+				}
 
 					if("description".equals(childNode.getNodeName())){
 						NodeList nameChildNodesList = childNode.getChildNodes();

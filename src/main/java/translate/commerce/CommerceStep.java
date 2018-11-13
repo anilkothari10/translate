@@ -1,14 +1,13 @@
 package translate.commerce;
 
+import java.util.List;
+
 public class CommerceStep {
 	private String stepName;
 	private String variableName;
 	private String description;
 	private String advancedForwardingRule;
-	private String participantProfileName;
-	private String profileDescription;
-	private String transitionRule;
-	private String advancedConditionofTransitionRule;
+	private List<BmCmPp> bmCmPpList;
 	public String getStepName() {
 		return stepName;
 	}
@@ -33,29 +32,11 @@ public class CommerceStep {
 	public void setAdvancedForwardingRule(String advancedForwardingRule) {
 		this.advancedForwardingRule = advancedForwardingRule;
 	}
-	public String getParticipantProfileName() {
-		return participantProfileName;
+	public List<BmCmPp> getBmCmPpList() {
+		return bmCmPpList;
 	}
-	public void setParticipantProfileName(String participantProfileName) {
-		this.participantProfileName = participantProfileName;
+	public void setBmCmPpList(List<BmCmPp> bmCmPpList) {
+		this.bmCmPpList = bmCmPpList;
 	}
-	public String getProfileDescription() {
-		return profileDescription;
-	}
-	public void setProfileDescription(String profileDescription) {
-		this.profileDescription = profileDescription;
-	}
-	public String getTransitionRule() {
-		return transitionRule;
-	}
-	public void setTransitionRule(String transitionRule) {
-		this.transitionRule = transitionRule;
-	}
-	public String getAdvancedConditionofTransitionRule() {
-		return advancedConditionofTransitionRule;
-	}
-	public void setAdvancedConditionofTransitionRule(String advancedConditionofTransitionRule) {
-		this.advancedConditionofTransitionRule = advancedConditionofTransitionRule;
-	}
-	
+
 }
