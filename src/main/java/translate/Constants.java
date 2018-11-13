@@ -25,10 +25,12 @@ public class Constants {
 	public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument/";
 	public static final String CONFIGURATION_SECTION = "Configuration Section";
 	public static final String COMMERCE_SECTION = "Commerce Section";
+	public static final String FILE_MANAGER_SECTION = "File Manager";
+	public static final String TOC = "Table of Contents";
 	public static final String WEB_SERVICES_DIR = "files/input/WebServices/";
 	public static final String INTEGRATION_DIR = "files/input/Integration/";
 	public static final String JS_DIR = "files/input/JS/";
-	public static final List<String> SECTION_TITILES = new ArrayList<String>(Arrays.asList(CONFIGURATION_SECTION, COMMERCE_SECTION));
+	public static final List<String> SECTION_TITILES = new ArrayList<String>(Arrays.asList(CONFIGURATION_SECTION, COMMERCE_SECTION,FILE_MANAGER_SECTION,TOC));
 	public static final int SECTION_FONT_SIZE = 15;
 	public static final String DELOITTE_LOGO = "files/input/Deloitte_logo.png";
 	
