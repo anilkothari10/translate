@@ -1328,7 +1328,14 @@ public class XMLReader {
 					integrationScript = new IntegrationScript();
 					int startIndex = userStoryLine.indexOf("US#") + 3;
 					integrationScript.setUserStoryNum(userStoryLine.substring(startIndex, startIndex+4));
-					integrationScript.setIntegrationScriptName(file.getName());
+					String[] userStroryText = userStoryLine.split(":");
+					if(userStroryText.length == 2){
+						String integrationScriptName = userStroryText[1];
+						integrationScriptName = integrationScriptName.replaceAll("-", "");
+						integrationScriptName = integrationScriptName.replaceAll(">", "");
+						integrationScriptName = integrationScriptName.trim();
+						integrationScript.setIntegrationScriptName(integrationScriptName);
+					}
 					foundUserStory = true;
 					fIn.getChannel().position(0);
 					break;
@@ -1352,7 +1359,10 @@ public class XMLReader {
 							userStory.setIntegrationsList(new ArrayList<Integration>());
 						}
 						for(Integration integration: userStory.getIntegrationsList()){
-							integration.setIntegrationScript(integrationScript);
+							if(integration.getIntegrationScriptList() == null){
+								integration.setIntegrationScriptList(new ArrayList<IntegrationScript>());
+							}
+							integration.getIntegrationScriptList().add(integrationScript);
 						}
 					}
 				}

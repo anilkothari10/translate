@@ -889,19 +889,22 @@ public class DocxFileConverter {
 						newRow.getCell(3).setText(integration.getIdField());
 						newRow.getCell(4).setText(integration.getEndpointURL());
 					}
-					
-					if(integration.getIntegrationScript() != null){
+
+					if(integration.getIntegrationScriptList() != null){
 						docx.createParagraph();
-						IntegrationScript integrationScript = integration.getIntegrationScript();
 						addSectionTitle(docx,null, true, Constants.SECTIONTITLECOLOR, 
-								UnderlinePatterns.SINGLE, "Integration Script");
-						XWPFRun run = docx.createParagraph().createRun();
-						for(String str : integrationScript.getDescription().split(";")){
-							run.setText(str);
-							run.addBreak();
+								UnderlinePatterns.SINGLE, "Integration Details");
+						List<IntegrationScript> integrationScriptList = integration.getIntegrationScriptList();
+						for(IntegrationScript integrationScript : integrationScriptList){
+							addSectionTitle(docx,null, false, Constants.SECTIONTITLECOLOR, 
+									UnderlinePatterns.SINGLE, integrationScript.getIntegrationScriptName());
+							XWPFRun run = docx.createParagraph().createRun();
+							for(String str : integrationScript.getDescription().split(";")){
+								run.setText(str);
+								run.addBreak();
+							}
 						}
 					}
-
 				}
 			}
 			

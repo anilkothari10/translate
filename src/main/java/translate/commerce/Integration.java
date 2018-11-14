@@ -1,17 +1,20 @@
 package translate.commerce;
 
+import java.util.List;
+
 public class Integration {
 	private String integrationName;
 	private String variableName;
 	private String description;
 	private String idField;
 	private String endpointURL;
-	private IntegrationScript integrationScript;
-	public IntegrationScript getIntegrationScript() {
-		return integrationScript;
+	private List<IntegrationScript> integrationScriptList;
+
+	public List<IntegrationScript> getIntegrationScriptList() {
+		return integrationScriptList;
 	}
-	public void setIntegrationScript(IntegrationScript integrationScript) {
-		this.integrationScript = integrationScript;
+	public void setIntegrationScriptList(List<IntegrationScript> integrationScriptList) {
+		this.integrationScriptList = integrationScriptList;
 	}
 	public String getIntegrationName() {
 		return integrationName;
