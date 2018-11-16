@@ -88,7 +88,7 @@ public class DocxFileConverter {
 			int numOfColumns;
 			// Add Data Table List
 			if(dataTableList.size() > 0){
-				addSectionTitle(docx,"Heading2", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Data Table List");
+				addSectionTitle(docx,"Heading1", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Data Table List");
 
 				numOfColumns = 2;
 
@@ -118,7 +118,7 @@ public class DocxFileConverter {
 
 			// Add users Lis
 			if(usersList.size() > 0){
-				addSectionTitle(docx,"Heading2", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Users List");
+				addSectionTitle(docx,"Heading1", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Users List");
 
 				numOfColumns = 2;
 				XWPFTable userTable = docx.createTable(usersList.size() + 1, numOfColumns );
@@ -146,7 +146,7 @@ public class DocxFileConverter {
 			}
 
 			if(groupList.size() > 0){
-				addSectionTitle(docx,"Heading2", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Groups List");
+				addSectionTitle(docx,"Heading1", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, "Groups List");
 
 				numOfColumns = 2;
 				XWPFTable groupTable = docx.createTable(groupList.size() + 1, numOfColumns );
