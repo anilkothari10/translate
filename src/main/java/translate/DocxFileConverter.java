@@ -190,7 +190,7 @@ public class DocxFileConverter {
 					addSectionTitle(docx,"Heading3", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, 
 							storyNum + "." + storySubNum++ + " " + trans.getTransactionName());
 					XWPFRun run = docx.createParagraph().createRun();
-					for(String str : trans.getDescription().split(";")){
+					for(String str : trans.getDescription().split(Constants.LINE_DELIMITER)){
 						run.setText(str);
 						run.addBreak();
 					}
@@ -204,7 +204,7 @@ public class DocxFileConverter {
 					addSectionTitle(docx,"Heading3", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, 
 							storyNum + "." + storySubNum++ + " " + trans.getJavascriptName()); 
 					XWPFRun run = docx.createParagraph().createRun();
-					for(String str : trans.getDescription().split(";")){
+					for(String str : trans.getDescription().split(Constants.LINE_DELIMITER)){
 						run.setText(str);
 						run.addBreak();
 					}
@@ -899,7 +899,7 @@ public class DocxFileConverter {
 							addSectionTitle(docx,null, false, Constants.SECTIONTITLECOLOR, 
 									UnderlinePatterns.SINGLE, integrationScript.getIntegrationScriptName());
 							XWPFRun run = docx.createParagraph().createRun();
-							for(String str : integrationScript.getDescription().split(";")){
+							for(String str : integrationScript.getDescription().split(Constants.LINE_DELIMITER)){
 								run.setText(str);
 								run.addBreak();
 							}

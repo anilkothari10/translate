@@ -33,6 +33,7 @@ public class Constants {
 	public static final List<String> SECTION_TITILES = new ArrayList<String>(Arrays.asList(CONFIGURATION_SECTION, COMMERCE_SECTION,FILE_MANAGER_SECTION,TOC));
 	public static final int SECTION_FONT_SIZE = 15;
 	public static final String DELOITTE_LOGO = "files/input/Deloitte_logo.png";
+	public static final String LINE_DELIMITER = "@!";
 	
 	private static Map<String, String> dataTypesMap = null;
 	

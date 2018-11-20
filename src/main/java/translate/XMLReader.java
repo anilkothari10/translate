@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -1248,8 +1249,8 @@ public class XMLReader {
 				String desc = null;
 				StringBuilder sb = new StringBuilder();
 				while((desc = br.readLine()) != null){
-					if(!desc.contains("US#")){
-						sb.append(desc.trim()+";");
+					if(!desc.contains("US#") && StringUtils.isNotBlank(desc)){
+						sb.append(desc.trim()+Constants.LINE_DELIMITER);
 					}
 				}
 				transaction.setDescription(sb.toString());
@@ -1293,8 +1294,8 @@ public class XMLReader {
 				String desc = null;
 				StringBuilder sb = new StringBuilder();
 				while((desc = br.readLine()) != null){
-					if(!desc.contains("US#")){
-						sb.append(desc.trim()+";");
+					if(!desc.contains("US#") && StringUtils.isNotBlank(desc)){
+						sb.append(desc.trim()+Constants.LINE_DELIMITER);
 					}
 				}
 				javascript.setDescription(sb.toString());
@@ -1346,8 +1347,8 @@ public class XMLReader {
 				String desc = null;
 				StringBuilder sb = new StringBuilder();
 				while((desc = br.readLine()) != null){
-					if(!desc.contains("US#")){
-						sb.append(desc.trim()+";");
+					if(!desc.contains("US#") && StringUtils.isNotBlank(desc)){
+						sb.append(desc.trim()+Constants.LINE_DELIMITER);
 					}
 				}
 				integrationScript.setDescription(sb.toString());
