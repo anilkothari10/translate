@@ -180,6 +180,8 @@ public class DocxFileConverter {
 	private void createUserStoriesTablesForFileManager(List<UserStories> userStories, XWPFDocument docx) {
 		addSectionTitle(docx,"Heading1", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, Constants.FILE_MANAGER_SECTION);
 		int storyNum = 1;
+		String webServiceFolderName = Constants.WEB_SERVICES_DIR.split("/")[2];
+		String jsFolderName = Constants.JS_DIR.split("/")[2];
 		for(UserStories stories : userStories){
 			int storySubNum = 1;
 			addSectionTitle(docx,"Heading2", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, storyNum + " " + stories.getUserStoryNum());
@@ -188,7 +190,7 @@ public class DocxFileConverter {
 			if(transactionList != null && transactionList.size() > 0){
 				for(Transaction trans : transactionList){
 					addSectionTitle(docx,"Heading3", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, 
-							storyNum + "." + storySubNum++ + " " + trans.getTransactionName());
+							storyNum + "." + storySubNum++ + " " + webServiceFolderName + " : " + trans.getTransactionName());
 					XWPFRun run = docx.createParagraph().createRun();
 					for(String str : trans.getDescription().split(Constants.LINE_DELIMITER)){
 						run.setText(str);
@@ -202,7 +204,7 @@ public class DocxFileConverter {
 			if(javascriptList != null && javascriptList.size() > 0){
 				for(Javascript trans : javascriptList){
 					addSectionTitle(docx,"Heading3", true, Constants.SECTIONTITLECOLOR, UnderlinePatterns.SINGLE, 
-							storyNum + "." + storySubNum++ + " " + trans.getJavascriptName()); 
+							storyNum + "." + storySubNum++ + " " + jsFolderName + " : " + trans.getJavascriptName()); 
 					XWPFRun run = docx.createParagraph().createRun();
 					for(String str : trans.getDescription().split(Constants.LINE_DELIMITER)){
 						run.setText(str);
