@@ -8,8 +8,6 @@ import java.util.Map;
 
 public class Constants {
 
-	public static final String DOC_EXT = "doc";
-	public static final String DOCX_EXT = "docx";
 	public static final String SOURCE_CONFIG_FILE = "files/input/config.xml";
 	public static final String SOURCE_FILE = "files/input/Sample TDD.docx";
 	public static final String SOURCE_ATTR_XML_FILE = "files/input/config_attr_1534771316317.xml";
@@ -34,6 +32,7 @@ public class Constants {
 	public static final int SECTION_FONT_SIZE = 15;
 	public static final String DELOITTE_LOGO = "files/input/Deloitte_logo.png";
 	public static final String LINE_DELIMITER = "@!";
+	public static final String PROPERTIES_FILE = "properties/font.properties";
 	
 	private static Map<String, String> dataTypesMap = null;
 	
