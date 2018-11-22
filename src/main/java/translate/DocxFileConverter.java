@@ -9,6 +9,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
@@ -538,7 +540,7 @@ public class DocxFileConverter {
 
 						setTableSize(utilTable, 2600, 3000, 3600, 0, 0, 0);
 
-						addSectionTitle(docx,null, true, sectionTitleColor, UnderlinePatterns.SINGLE, "Script Text");
+						addSectionTitle(docx,null, true, sectionTitleColor, UnderlinePatterns.SINGLE, "Script");
 
 						XWPFRun scriptRun = docx.createParagraph().createRun();
 						for(String scriptText : util.getScriptText().split(";")){
@@ -649,7 +651,7 @@ public class DocxFileConverter {
 
 						setTableSize(commerceLibTable, 2600, 3000, 3600, 0, 0, 0);
 
-						addSectionTitle(docx,null, true, sectionTitleColor, UnderlinePatterns.SINGLE, "Script Text");
+						addSectionTitle(docx,null, true, sectionTitleColor, UnderlinePatterns.SINGLE, "Script");
 
 						XWPFRun scriptRun = docx.createParagraph().createRun();
 						for(String scriptText : libraries.getScriptText().split(";")){
@@ -897,6 +899,19 @@ public class DocxFileConverter {
 						addSectionTitle(docx,null, true, sectionTitleColor, 
 								UnderlinePatterns.SINGLE, "Integration Details");
 						List<IntegrationScript> integrationScriptList = integration.getIntegrationScriptList();
+						Collections.sort(integrationScriptList, new Comparator<IntegrationScript>() {
+
+							@Override
+							public int compare(IntegrationScript o1, IntegrationScript o2) {
+								if("SOAP Generator XSL".equalsIgnoreCase(o1.getIntegrationScriptName()) && o1.getIntegrationScriptName().equalsIgnoreCase(o2.getIntegrationScriptName())){
+									return 0;
+								}else if("SOAP Generator XSL".equalsIgnoreCase(o1.getIntegrationScriptName())){
+									return -1;
+								}else{
+									return 1;
+								}
+							}
+						});
 						for(IntegrationScript integrationScript : integrationScriptList){
 							addSectionTitle(docx,null, false, sectionTitleColor, 
 									UnderlinePatterns.SINGLE, integrationScript.getIntegrationScriptName());

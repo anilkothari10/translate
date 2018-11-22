@@ -778,13 +778,13 @@ public class XMLReader {
 								Element approverElement = (Element)childNode;
 								NodeList approverDetails = approverElement.getElementsByTagName("bm_cm_approver_detail");
 								for(int l = 0; l < approverDetails.getLength(); l++){
-									Node approverDetail = approverDetails.item(k);
+									Node approverDetail = approverDetails.item(l);
 									ApproverLoop:
 										if(Node.ELEMENT_NODE == approverDetail.getNodeType()){
 											Element approverDetailElement = (Element)approverDetail;
 											NodeList labels = approverDetailElement.getElementsByTagName("label");
 											for(int m = 0; m < labels.getLength(); m++){
-												Node label = labels.item(k);
+												Node label = labels.item(m);
 												if(label != null && Node.ELEMENT_NODE == label.getNodeType()){
 													Element labelElement = (Element)label;
 													NodeList enlabel = labelElement.getElementsByTagName("en");
@@ -797,7 +797,7 @@ public class XMLReader {
 
 								NodeList approvalTemplateDetails = approverElement.getElementsByTagName("bm_cm_approval_notification");
 								for(int l = 0; l < approvalTemplateDetails.getLength(); l++){
-									Node approvalTemplateDetail = approvalTemplateDetails.item(k);
+									Node approvalTemplateDetail = approvalTemplateDetails.item(l);
 									if(approvalTemplateDetail != null && Node.ELEMENT_NODE == approvalTemplateDetail.getNodeType()){
 										Element approvalTemplateDetailElement = (Element)approvalTemplateDetail;
 										NodeList temlateVarnames = approvalTemplateDetailElement.getElementsByTagName("template_varname");
@@ -814,7 +814,7 @@ public class XMLReader {
 								Element metaRuleElement = (Element)metaRule;
 								NodeList bmFunctionDetails = metaRuleElement.getElementsByTagName("bm_function");
 								for(int l = 0; l < bmFunctionDetails.getLength(); l++){
-									Node bmFunction = bmFunctionDetails.item(k);
+									Node bmFunction = bmFunctionDetails.item(l);
 									if(bmFunction != null && Node.ELEMENT_NODE == bmFunction.getNodeType()){
 										Element bmFunctionElement = (Element)bmFunction;
 										NodeList scriptTexts = bmFunctionElement.getElementsByTagName("script_text");
