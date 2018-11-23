@@ -739,38 +739,44 @@ public class DocxFileConverter {
 			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
 			if(commerecStepList != null && commerecStepList.size() > 0){
 				boolean headerAdded = false;
+				
+				int bmCmPpRows = 1;
+				for(CommerceStep commerceStep : commerecStepList){
+					for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+						bmCmPpRows++;
+						if(bmCmPp.getBmCmTransRuleList().size() > 0){
+							bmCmPpRows--;
+							for(@SuppressWarnings("unused") BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+								bmCmPpRows++;
+							}
+						}
+					}
+				}
+				if(bmCmPpRows == 1){
+					bmCmPpRows = 2;
+				}
+				
+				if(!headerAdded){
+					addSectionTitle(docx,"Heading3", true, sectionTitleColor, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
+					headerAdded =true;
+				}else{
+					addSectionTitle(docx,null, true, sectionTitleColor, UnderlinePatterns.SINGLE, "Commerce Steps");
+				}
+				int numOfColumns = 6;
+				XWPFTable commerceStepTable = docx.createTable(bmCmPpRows,numOfColumns);
+
+				XWPFTableRow headerRow = commerceStepTable.getRow(0);
+
+				String[] headerNames = {"Step Name", "Description", "Variable Name", "Participant Profile Name", "Profile Description", "Transition Rule"};
+
+				addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+
+				setTableSize(commerceStepTable, 1200, 3000, 1500, 1200, 1400, 900);
+				
+				int rowNum = 1;
+				
 				for(CommerceStep commerceStep : commerecStepList){
 					if(commerceStep != null){
-						if(!headerAdded){
-							addSectionTitle(docx,"Heading3", true, sectionTitleColor, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
-							headerAdded =true;
-						}else{
-							addSectionTitle(docx,null, true, sectionTitleColor, UnderlinePatterns.SINGLE, "Commerce Steps");
-						}
-						int numOfColumns = 6;
-						int bmCmPpRows = 1;
-						for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
-							bmCmPpRows++;
-							if(bmCmPp.getBmCmTransRuleList().size() > 0){
-								bmCmPpRows--;
-								for(@SuppressWarnings("unused") BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
-									bmCmPpRows++;
-								}
-							}
-
-						}
-						if(bmCmPpRows == 1){
-							bmCmPpRows = 2;
-						}
-						XWPFTable commerceStepTable = docx.createTable(bmCmPpRows,numOfColumns);
-
-						XWPFTableRow headerRow = commerceStepTable.getRow(0);
-
-						String[] headerNames = {"Step Name", "Description", "Variable Name", "Participant Profile Name", "Profile Description", "Transition Rule"};
-
-						addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
-
-						setTableSize(commerceStepTable, 1200, 3000, 1500, 1200, 1400, 900);
 
 						String stepName =  commerceStep.getStepName();
 						String description =  commerceStep.getDescription();
@@ -778,7 +784,6 @@ public class DocxFileConverter {
 						String participantProfileName = null;;
 						String profileDescription = null;
 
-						int rowNum = 1;
 						if(commerceStep.getBmCmPpList().size() > 0){
 							for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
 								participantProfileName = bmCmPp.getParticipantProfileName();
