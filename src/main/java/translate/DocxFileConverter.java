@@ -63,6 +63,7 @@ public class DocxFileConverter {
 	
 	private static String SECTION_TITLE_COLOR ;
 	private static String FONT_FAMILY ;
+	private static String HEADER_FONT_FAMILY ;
 	private static int FONT_SIZE = 0;
 	private static int HEADING1 = 0;
 	private static int HEADING2 = 0;
@@ -80,6 +81,7 @@ public class DocxFileConverter {
 			HEADING2 = Integer.parseInt(prop.getProperty("heading2"));
 			HEADING3 = Integer.parseInt(prop.getProperty("heading3"));
 			FONT_FAMILY = prop.getProperty("fontFamily");
+			HEADER_FONT_FAMILY = prop.getProperty("headerFontFamily");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -314,6 +316,7 @@ public class DocxFileConverter {
 		XWPFRun run = createRun(para);
 		if(StringUtils.isNotBlank(string)){
 			para.setStyle(string);
+			run.setFontFamily(HEADER_FONT_FAMILY);
 			if("Heading1".equals(string)){
 				run.setFontSize(HEADING1);
 			}
