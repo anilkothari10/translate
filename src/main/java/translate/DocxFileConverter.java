@@ -70,6 +70,8 @@ public class DocxFileConverter {
 	private static int HEADING3 = 0;
 	private static int NORMAL_FONT_SIZE = 0;
 	
+	private static Properties staticData = new Properties();
+
 	static {
 		Properties prop = new Properties();
 		try {
@@ -83,6 +85,11 @@ public class DocxFileConverter {
 			FONT_FAMILY = prop.getProperty("fontFamily");
 			HEADER_FONT_FAMILY = prop.getProperty("headerFontFamily");
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try{
+			staticData.load(new FileInputStream(Constants.STATIC_DATA_PROPERTIES_FILE));
+		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
@@ -108,6 +115,64 @@ public class DocxFileConverter {
 
 		if (docx != null) {
 
+			addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("documentOverview"));
+			//addText(docx, staticData.getProperty("documentOverview"));
+			addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("section1.1"));
+			//addText(docx, staticData.getProperty("section1.1"));
+			addText(docx, staticData.getProperty("section1.1Text"));
+			addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("section1.2"));
+			//addText(docx, staticData.getProperty("section1.2"));
+			addText(docx, staticData.getProperty("section1.2Text"));
+			addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("section1.3"));
+			//addText(docx, staticData.getProperty("section1.3"));
+			addText(docx, staticData.getProperty("section1.3Text"));
+
+			String keyTermsTableColumns =  staticData.getProperty("keyTermsTableColumns");
+			if(keyTermsTableColumns != null){
+				String[] allKeyTermsTableColumns = keyTermsTableColumns.split(",");
+				if(allKeyTermsTableColumns .length > 0){
+					XWPFTable keyTermsTable = docx.createTable(allKeyTermsTableColumns.length + 1, 2);
+					XWPFTableRow headerRow = keyTermsTable.getRow(0);
+					String[] keyTermsTableHeaderNames = {staticData.getProperty("table1Column1Title"), staticData.getProperty("table1Column2Title")};
+					addHeaderNameColorBold(headerRow, keyTermsTableHeaderNames ,2);
+					setTableSize(keyTermsTable, 4600, 4600, 0, 0, 0, 0);
+					int rowCount = 1;
+					for(String columnName : allKeyTermsTableColumns){
+						XWPFTableRow keyTermsTableNewRow = keyTermsTable.getRow(rowCount++);
+						keyTermsTableNewRow.getCell(0).setText(columnName.trim());
+						keyTermsTableNewRow.getCell(1).setText(staticData.getProperty(columnName));
+					}
+				}
+			}
+
+			addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("section1.4"));
+			//addText(docx, staticData.getProperty("section1.4"));
+			addText(docx, staticData.getProperty("section1.4Text"));
+			addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("section1.5"));
+			//addText(docx, staticData.getProperty("section1.5"));
+			addText(docx, staticData.getProperty("section1.5.1Text"));
+			addText(docx, staticData.getProperty("section1.5.2Text"));
+			addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("section1.6"));
+			//addText(docx, staticData.getProperty("section1.6"));
+			addText(docx, staticData.getProperty("section1.6Text"));
+
+			XWPFTable relatedDocumentation = docx.createTable(3, 2);
+			XWPFTableRow relatedDocumentationHeaderRow = relatedDocumentation.getRow(0);
+			String[] relatedDocumentationHeaderNames = {staticData.getProperty("table2Column1Title"), staticData.getProperty("table2Column2Title")};
+			addHeaderNameColorBold(relatedDocumentationHeaderRow, relatedDocumentationHeaderNames ,2);
+			setTableSize(relatedDocumentation, 4600, 4600, 0, 0, 0, 0);
+			XWPFTableRow keyTermsTableNewRow1 = relatedDocumentation.getRow(1);
+			keyTermsTableNewRow1.getCell(0).setText(staticData.getProperty("rowOneColumnOne"));
+			keyTermsTableNewRow1.getCell(1).setText(staticData.getProperty("rowOneColumnTwo"));
+			XWPFTableRow keyTermsTableNewRow2 = relatedDocumentation.getRow(2);
+			keyTermsTableNewRow2.getCell(0).setText(staticData.getProperty("rowTwoColumnOne"));
+			keyTermsTableNewRow2.getCell(1).setText(staticData.getProperty("rowTwoColumnTwo"));
+
+			docx.createParagraph().setPageBreak(true);
+			addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, staticData.getProperty("ImplementationArea"));
+			//addText(docx, staticData.getProperty("ImplementationArea"));
+			addText(docx, staticData.getProperty("ImplementationAreaText"));
+
 			//createUserStoryTables for config.xml
 			createUserStoriesTables(userStories, docx);
 			//createUserStoryTables for commerce
@@ -119,7 +184,8 @@ public class DocxFileConverter {
 			// Add Data Table List
 			if(dataTableList.size() > 0){
 				addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Data Table List");
-
+				//addText(docx, staticData.getProperty("DataTables"));
+				addText(docx, staticData.getProperty("DataTablesText"));
 				numOfColumns = 2;
 
 				XWPFTable dataTable = docx.createTable(dataTableList.size() + 1,numOfColumns );
@@ -149,6 +215,8 @@ public class DocxFileConverter {
 			// Add users Lis
 			if(usersList.size() > 0){
 				addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Users List");
+				//addText(docx, staticData.getProperty("Users"));
+				addText(docx, staticData.getProperty("UsersText"));
 
 				numOfColumns = 2;
 				XWPFTable userTable = docx.createTable(usersList.size() + 1, numOfColumns );
@@ -177,7 +245,8 @@ public class DocxFileConverter {
 
 			if(groupList.size() > 0){
 				addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Groups List");
-
+				//addText(docx, staticData.getProperty("Groups"));
+				addText(docx, staticData.getProperty("GroupsText"));
 				numOfColumns = 2;
 				XWPFTable groupTable = docx.createTable(groupList.size() + 1, numOfColumns );
 				XWPFTableRow groupHeaderRow = groupTable.getRow(0);
@@ -209,6 +278,8 @@ public class DocxFileConverter {
 
 	private void createUserStoriesTablesForFileManager(List<UserStories> userStories, XWPFDocument docx) {
 		addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, Constants.FILE_MANAGER_SECTION);
+		//addText(docx, staticData.getProperty("FileManager"));
+		addText(docx, staticData.getProperty("FileManagerText"));
 		int storyNum = 1;
 		String webServiceFolderName = Constants.WEB_SERVICES_DIR.split("/")[2];
 		String jsFolderName = Constants.JS_DIR.split("/")[2];
@@ -338,6 +409,17 @@ public class DocxFileConverter {
 			run.setFontSize(Constants.SECTION_FONT_SIZE);
 		}*/
 	}
+	
+	private void addText(XWPFDocument docx, String text) {
+		if(text != null && !text.isEmpty()){
+			for(String line: text.split("\\n")){
+				XWPFParagraph para = docx.createParagraph();
+				XWPFRun run = createRun(para);
+				run.setText(line);
+			}
+
+		}
+	}
 
 	private void createRuleTable(XWPFDocument docx, List<Rule> ruleList, String string, int storyNum, int storySubNum) {
 		if(ruleList.size() > 0){
@@ -452,7 +534,7 @@ public class DocxFileConverter {
 	private void createUserStoriesTables(List<UserStories> userStories, XWPFDocument docx){
 
 		addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, Constants.CONFIGURATION_SECTION);
-
+		addText(docx, staticData.getProperty("Configuration"));
 		int storyNum = 1;
 		for(UserStories stories : userStories){
 			int storySubNum = 1;
@@ -463,6 +545,7 @@ public class DocxFileConverter {
 			if(attributeList != null && attributeList.size() > 0){
 
 				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Configuration Attributes");
+				addText(docx, staticData.getProperty("ConfigurationAttributes"));
 
 				int numOfColumns = 4;
 				XWPFTable utilTable = docx.createTable(attributeList.size()+1,numOfColumns);
@@ -492,6 +575,8 @@ public class DocxFileConverter {
 			List<Rule> ruleList = stories.getRuleList();
 			if(ruleList != null && ruleList.size() > 0){
 
+				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " +Constants.RULES_SECTION);
+				addText(docx, staticData.getProperty("Rules"));
 				List<Rule> recommendationRuleList = new ArrayList<Rule>();
 				List<Rule> constraintRuleList = new ArrayList<Rule>();
 				List<Rule> hidingRuleList = new ArrayList<Rule>();
@@ -543,6 +628,7 @@ public class DocxFileConverter {
 					if(util != null){
 						if(!headerAdded){
 							addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "BML Util Libraries");
+							addText(docx, staticData.getProperty("BMLLibraries"));
 							headerAdded = true;
 						}
 						else{
@@ -582,6 +668,7 @@ public class DocxFileConverter {
 
 	private void createUserStoriesTablesForCommerce(List<UserStories> userStories, XWPFDocument docx){
 		addSectionTitle(docx,"Heading1", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, Constants.COMMERCE_SECTION);
+		addText(docx, staticData.getProperty("Commerce"));
 		int storyNum = 1;
 		for(UserStories stories : userStories){
 			int storySubNum = 1;
@@ -592,7 +679,7 @@ public class DocxFileConverter {
 			if(commerceAttributeList != null && commerceAttributeList.size() > 0){
 
 				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Attributes");
-
+				addText(docx, staticData.getProperty("CommerceAttributes"));
 				int numOfColumns = 4;
 				XWPFTable commerceAttributesTable = docx.createTable(commerceAttributeList.size()+1,numOfColumns);
 
@@ -620,7 +707,8 @@ public class DocxFileConverter {
 			
 			List<CommerceRules> ruleList = stories.getCommerceRuleList();
 			if(ruleList != null && ruleList.size() > 0){
-
+				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " +Constants.RULES_SECTION);
+				addText(docx, staticData.getProperty("CommerceRules"));
 				List<CommerceRules> constraintRuleList = new ArrayList<CommerceRules>();
 				List<CommerceRules> hidingRuleList = new ArrayList<CommerceRules>();
 				List<CommerceRules> validationRule = new ArrayList<CommerceRules>();
@@ -690,7 +778,7 @@ public class DocxFileConverter {
 			if(commerceActionsList != null && commerceActionsList.size() > 0){
 
 				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Actions");
-
+				addText(docx, staticData.getProperty("CommerceActions"));
 				int numOfColumns = 3;
 				XWPFTable commerceActionTable = docx.createTable(commerceActionsList.size()+1,numOfColumns);
 
@@ -758,13 +846,14 @@ public class DocxFileConverter {
 
 			docx.createParagraph();
 			
-			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
+/*			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
 			if(commerecStepList != null && commerecStepList.size() > 0){
 				boolean headerAdded = false;
 				for(CommerceStep commerceStep : commerecStepList){
 					if(commerceStep != null){
 						if(!headerAdded){
 							addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
+							addText(docx, staticData.getProperty("CommerceWorkflow"));
 							headerAdded =true;
 						}else{
 							addSectionTitle(docx,null, true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Commerce Steps");
@@ -858,7 +947,118 @@ public class DocxFileConverter {
 						}
 					}
 				}
+			}*/
+			
+			List<CommerceStep> commerecStepList= stories.getCommerceStepsList();
+			if(commerecStepList != null && commerecStepList.size() > 0){
+				boolean headerAdded = false;
+				
+				int bmCmPpRows = 1;
+				for(CommerceStep commerceStep : commerecStepList){
+					for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+						bmCmPpRows++;
+						if(bmCmPp.getBmCmTransRuleList().size() > 0){
+							bmCmPpRows--;
+							for(@SuppressWarnings("unused") BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+								bmCmPpRows++;
+							}
+						}
+					}
+				}
+				if(bmCmPpRows == 1){
+					bmCmPpRows = 2;
+				}
+				
+				
+				if(!headerAdded){
+					addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Commerce Steps");
+					addText(docx, staticData.getProperty("CommerceWorkflow"));
+					headerAdded =true;
+				}else{
+					addSectionTitle(docx,null, true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Commerce Steps");
+				}
+
+				int numOfColumns = 6;
+				XWPFTable commerceStepTable = docx.createTable(bmCmPpRows,numOfColumns);
+
+						XWPFTableRow headerRow = commerceStepTable.getRow(0);
+
+						String[] headerNames = {"Step Name", "Description", "Variable Name", "Participant Profile Name", "Profile Description", "Transition Rule"};
+
+						addHeaderNameColorBold(headerRow, headerNames ,numOfColumns);
+
+				setTableSize(commerceStepTable, 1200, 3000, 1500, 1200, 1400, 900);
+				
+				int rowNum = 1;
+				
+				for(CommerceStep commerceStep : commerecStepList){
+					if(commerceStep != null){
+
+						String stepName =  commerceStep.getStepName();
+						String description =  commerceStep.getDescription();
+						String variableName =  commerceStep.getVariableName();
+						String participantProfileName = null;;
+						String profileDescription = null;
+
+						if(commerceStep.getBmCmPpList().size() > 0){
+							for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+								participantProfileName = bmCmPp.getParticipantProfileName();
+								profileDescription = bmCmPp.getProfileDescription();
+								if(bmCmPp.getBmCmTransRuleList().size() > 0){
+									for(BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+										XWPFTableRow newRow = commerceStepTable.getRow(rowNum++);
+										newRow.getCell(0).setText(stepName);
+										newRow.getCell(1).setText(description);
+										newRow.getCell(2).setText(variableName);
+										newRow.getCell(3).setText(participantProfileName);
+										newRow.getCell(4).setText(profileDescription);
+										newRow.getCell(5).setText(bmCmTransRule.getTransitionRule());
+									}
+								}else{
+									XWPFTableRow newRow = commerceStepTable.getRow(rowNum++);
+									newRow.getCell(0).setText(stepName);
+									newRow.getCell(1).setText(description);
+									newRow.getCell(2).setText(variableName);
+									newRow.getCell(3).setText(participantProfileName);
+									newRow.getCell(4).setText(profileDescription);
+								}
+
+							}
+						}else{
+							XWPFTableRow newRow = commerceStepTable.getRow(rowNum++);
+							newRow.getCell(0).setText(stepName);
+							newRow.getCell(1).setText(description);
+							newRow.getCell(2).setText(variableName);
+						}
+
+
+						if(commerceStep.getAdvancedForwardingRule() != null){
+							addSectionTitle(docx,null, true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Advanced Forwarding Rule");
+							XWPFRun scriptRun = createRun(docx.createParagraph());
+							for(String scriptText : commerceStep.getAdvancedForwardingRule().split(";")){
+								scriptRun.setText(scriptText + ";");
+								scriptRun.addBreak();
+							}
+						}
+
+						for(BmCmPp bmCmPp : commerceStep.getBmCmPpList()){
+							for(BmCmTransRule bmCmTransRule : bmCmPp.getBmCmTransRuleList()){
+								if(bmCmTransRule.getAdvancedConditionofTransitionRule() != null){
+									addSectionTitle(docx,null, true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, "Advanced Condition of Transition Rule:");
+									addSectionTitle(docx,null, false, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, "Profile Description: " + profileDescription + ", Transition Rule Name: " + bmCmTransRule.getTransitionRule());
+									addSectionTitle(docx,null, false, SECTION_TITLE_COLOR, UnderlinePatterns.NONE, "Script:");
+									XWPFRun scriptRun = createRun(docx.createParagraph());
+									for(String scriptText : bmCmTransRule.getAdvancedConditionofTransitionRule().split(";")){
+										scriptRun.setText(scriptText + ";");
+										scriptRun.addBreak();
+									}
+								}
+							}
+						}
+					}
+				}
 			}
+
 			
 			docx.createParagraph();
 
@@ -866,7 +1066,7 @@ public class DocxFileConverter {
 			if(commercePrinterDocuments != null && commercePrinterDocuments.size() > 0){
 
 				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Printer Friendly Documents");
-
+				addText(docx, staticData.getProperty("PrinterFriendlyDoc"));
 				int numOfColumns = 4;
 				XWPFTable commercePrinterDocumentTable = docx.createTable(2, numOfColumns);
 				XWPFTableRow headerRow = commercePrinterDocumentTable.getRow(0);
@@ -895,6 +1095,7 @@ public class DocxFileConverter {
 			List<Integration> commerceIntegrationList= stories.getIntegrationsList();
 			if(commerceIntegrationList != null && commerceIntegrationList.size() > 0){
 				addSectionTitle(docx,"Heading3", true, SECTION_TITLE_COLOR, UnderlinePatterns.SINGLE, storyNum + "." + storySubNum++ + " " + "Integration");
+				addText(docx, staticData.getProperty("Integration"));
 				int numOfColumns = 5;
 				XWPFTable commerceIntegrationsTable = docx.createTable(2, numOfColumns);
 				XWPFTableRow headerRow = commerceIntegrationsTable.getRow(0);

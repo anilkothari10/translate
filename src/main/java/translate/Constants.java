@@ -23,6 +23,7 @@ public class Constants {
 	public static final String SOURCE_COMMERCE_DOCEDDOCUMENT_FILE = "files/input/Commerce/DocEdDocument/";
 	public static final String CONFIGURATION_SECTION = "Configuration Section";
 	public static final String COMMERCE_SECTION = "Commerce Section";
+	public static final String RULES_SECTION = "Rules";
 	public static final String FILE_MANAGER_SECTION = "File Manager";
 	public static final String TOC = "Table of Contents";
 	public static final String WEB_SERVICES_DIR = "files/input/WebServices/";
@@ -33,6 +34,7 @@ public class Constants {
 	public static final String DELOITTE_LOGO = "files/input/Deloitte_logo.png";
 	public static final String LINE_DELIMITER = "@!";
 	public static final String PROPERTIES_FILE = "properties/font.properties";
+	public static final String STATIC_DATA_PROPERTIES_FILE = "properties/staticText.properties";
 	
 	private static Map<String, String> dataTypesMap = null;
 	
