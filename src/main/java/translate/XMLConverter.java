@@ -3,6 +3,11 @@ package translate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import org.apache.commons.lang3.StringUtils;
+
+import utilities.FileSearch;
 
 public class XMLConverter {
 
@@ -14,37 +19,36 @@ public class XMLConverter {
 		
 		List<UserStories> userStoriesRules = new ArrayList<UserStories>();
 		try {
+			System.out.println("Please input the source directory:");
+			Scanner scanner = new Scanner(System.in);
+			String inputDir = scanner.nextLine();
+			if(StringUtils.isBlank(inputDir)){
+				System.out.println("Reading files from default directory...");
+				inputDir = Constants.SOURCE_RULE_ATTRIBUTE_DIR;
+			}
+			else{
+				System.out.println("Reading files from input directory...");
+			}
+			scanner.close();
+			
 			XMLReader xmlReader = new XMLReader();
-
-			file = new File(Constants.SOURCE_RULE_ATTRIBUTE_DIR);
-			File[] ruleAttributeFileList = file.listFiles();
-			if(ruleAttributeFileList != null && ruleAttributeFileList.length > 0){
-				Printer.println("#### Number of files in Rules_Attributes folder = " + ruleAttributeFileList.length);
-				for(File ruleAttributeFile : ruleAttributeFileList){
-					if (!ruleAttributeFile.exists()) {
-						throw new Exception("Input file not present at location : " + ruleAttributeFile.getAbsolutePath());
-					}
-					
-					Printer.println("#### Reading Rules from : "+ ruleAttributeFile.getName());
-					
-					xmlReader.readConfigRuleXML(ruleAttributeFile, "bm_config_rule", userStoriesRules);
-					
-					Printer.println("#### Reading Attributes from : "+ ruleAttributeFile.getName());
-					
-					xmlReader.readConfigAttributeXML(ruleAttributeFile, "bm_config_attr", userStoriesRules);
-				}
-			}else{
-				Printer.println("Input files not present at location : "+ file.getAbsolutePath());
+			file = new File(inputDir);
+			File ruleAttributeFile = FileSearch.searchFileOrDirectory(file, "config.xml");
+			if (ruleAttributeFile != null) {
+				Printer.println("#### Reading Rules from : "+ ruleAttributeFile.getName());
+				xmlReader.readConfigRuleXML(ruleAttributeFile, "bm_config_rule", userStoriesRules);
+				Printer.println("#### Reading Attributes from : "+ ruleAttributeFile.getName());
+				xmlReader.readConfigAttributeXML(ruleAttributeFile, "bm_config_attr", userStoriesRules);
+			}
+			else{
+				Printer.println("config.xml file not present");
 			}
 
 			//Read UserStories from UTIL Libraries
-			file = new File(Constants.SOURCE_UTIL_LIBRARIES_DIR);
-			File[] fileList = file.listFiles();
-			if(fileList != null && fileList.length > 0){
-				
+			File UtilDir = FileSearch.searchFileOrDirectory(file, "UTIL Libraries");;
+			if(UtilDir != null && UtilDir.exists()){
 				Printer.println("#### Reading UTIL Libraries");
-				
-				for(File utilFolder : fileList){
+				for(File utilFolder : UtilDir.listFiles()){
 					if(utilFolder.exists() && utilFolder.isDirectory()){
 						File[] utilFiles = utilFolder.listFiles();
 						if(utilFiles != null && utilFiles.length > 0){
@@ -57,7 +61,7 @@ public class XMLConverter {
 					}
 				}
 			}else{
-				Printer.println("Input files not present at location : "+ file.getAbsolutePath());
+				Printer.println("UTIL Libraries not present");
 			}
 			
 			//Read commerce files
