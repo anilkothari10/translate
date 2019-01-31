@@ -51,6 +51,7 @@ import translate.commerce.CommerceStep;
 import translate.commerce.Integration;
 import translate.commerce.IntegrationScript;
 import translate.commerce.PrinterDocument;
+import utilities.FileSearch;
 import webservices.Javascript;
 import webservices.Transaction;
 
@@ -61,21 +62,37 @@ public class DocxFileConverter {
 	private static final String DESCRIPTION = "Description";
 	private static final String VARIABLE_NAME = "Variable Name";
 	
-	private static String SECTION_TITLE_COLOR ;
-	private static String FONT_FAMILY ;
-	private static String HEADER_FONT_FAMILY ;
-	private static int FONT_SIZE = 0;
-	private static int HEADING1 = 0;
-	private static int HEADING2 = 0;
-	private static int HEADING3 = 0;
-	private static int NORMAL_FONT_SIZE = 0;
+	private String SECTION_TITLE_COLOR ;
+	private String FONT_FAMILY ;
+	private String HEADER_FONT_FAMILY ;
+	private int FONT_SIZE = 0;
+	private int HEADING1 = 0;
+	private int HEADING2 = 0;
+	private int HEADING3 = 0;
+	private int NORMAL_FONT_SIZE = 0;
+	private File inputFile = null;
 	
-	private static Properties staticData = new Properties();
+	public File getInputFile() {
+		return inputFile;
+	}
 
-	static {
+	public void setInputFile(File inputFile) {
+		this.inputFile = inputFile;
+	}
+
+	private Properties staticData = new Properties();
+
+	public static void main(String[] args) throws FileNotFoundException, IOException{
+		Properties prope = new Properties();
+		prope.load(new FileInputStream(Constants.PROPERTIES_FILE));
+		System.out.println(prope);
+	}
+	
+	public void setProperties(){
 		Properties prop = new Properties();
 		try {
-			prop.load(new FileInputStream(Constants.PROPERTIES_FILE));
+			prop.load(new FileInputStream(inputFile + "/" + Constants.PROPERTIES_FILE));
+			staticData.load(new FileInputStream(inputFile + "/" + Constants.STATIC_DATA_PROPERTIES_FILE));
 			SECTION_TITLE_COLOR = prop.getProperty("sectionTitleColor");
 			FONT_SIZE = Integer.parseInt(prop.getProperty("fontSize"));
 			NORMAL_FONT_SIZE = Integer.parseInt(prop.getProperty("normalFontSize"));
@@ -87,20 +104,19 @@ public class DocxFileConverter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try{
-			staticData.load(new FileInputStream(Constants.STATIC_DATA_PROPERTIES_FILE));
-		}catch(IOException e){
-			e.printStackTrace();
-		}
 	}
-
+	
 	public void docxFileConverter(List<UserStories> userStories, List<UserStories> commerceUserStories, List<DataTable> dataTableList ,
 			List<Users> usersList , List<Groups> groupList) throws Exception {
-		File outputFile = new File("files/output/Sample TDD_temp.docx");
+		setProperties();
+		File outputFile = new File(inputFile + "/Sample TDD_temp.docx");
+		if(!outputFile.exists()){
+			outputFile.createNewFile();
+		}
 		FileOutputStream fos = new FileOutputStream(outputFile);
-		
-		XWPFDocument docx = new XWPFDocument(new FileInputStream("files/input/template.docx"));
-		createPageHeader(docx, Constants.DELOITTE_LOGO);
+		File docxFile = FileSearch.searchFileOrDirectory(inputFile, "template.docx");
+		XWPFDocument docx = new XWPFDocument(new FileInputStream(docxFile));
+		createPageHeader(docx, inputFile + "/" + Constants.DELOITTE_LOGO);
 		createPageNumber(docx);
 
 		// Table of contents:

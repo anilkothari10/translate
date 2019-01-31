@@ -31,7 +31,7 @@ public class Constants {
 	public static final String JS_DIR = "files/input/Javascript/";
 	public static final List<String> SECTION_TITILES = new ArrayList<String>(Arrays.asList(CONFIGURATION_SECTION, COMMERCE_SECTION,FILE_MANAGER_SECTION,TOC));
 	public static final int SECTION_FONT_SIZE = 15;
-	public static final String DELOITTE_LOGO = "files/input/Deloitte_logo.png";
+	public static final String DELOITTE_LOGO = "Deloitte_logo.png";
 	public static final String LINE_DELIMITER = "@!";
 	public static final String PROPERTIES_FILE = "properties/font.properties";
 	public static final String STATIC_DATA_PROPERTIES_FILE = "properties/staticText.properties";

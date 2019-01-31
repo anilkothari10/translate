@@ -138,6 +138,7 @@ public class XMLConverter {
 			Printer.println("#### Number of Commerce User Stories : " + userStoriesCommerce.size());
 
 			DocxFileConverter converter = new DocxFileConverter();
+			converter.setInputFile(new File(inputDir));
 			converter.docxFileConverter(userStoriesRules, userStoriesCommerce, dataTableList, usersList, groupList);
 		} catch (Exception e) {
 			throw e;
