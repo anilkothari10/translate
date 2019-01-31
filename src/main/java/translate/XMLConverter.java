@@ -67,7 +67,7 @@ public class XMLConverter {
 			
 			//Read commerce files
 			file = new File(inputDir);
-			File commerceDir = FileSearch.searchFileOrDirectory(file, "Process");
+			File commerceDir = FileSearch.searchFileOrDirectory(file, "Commerce");
 			List<UserStories> userStoriesCommerce = readCommerceXMLs(commerceDir, xmlReader);
 			
 			//Read Web services files
@@ -159,7 +159,8 @@ public class XMLConverter {
 		//Read Commerce attribute, Libraries, Rules
 		List<UserStories> userStoriesCommerce = new ArrayList<UserStories>();
 	
-		File[] commerceProcessList = file.listFiles();
+		File processDir = FileSearch.searchFileOrDirectory(file, "Process");
+		File[] commerceProcessList = processDir.listFiles();
 		if(commerceProcessList != null && commerceProcessList.length > 0){
 			for(File commerceProcessFile : commerceProcessList){
 				//Read Commerce attribute
@@ -195,8 +196,8 @@ public class XMLConverter {
 		}
 
 		//Read Commerce Printer Friendly Documents 
-		file = new File(Constants.SOURCE_COMMERCE_DOCEDDOCUMENT_FILE);
-		File[] commerceDocEdDocumentList = file.listFiles();
+		File docEDDir = FileSearch.searchFileOrDirectory(file, "DocEdDocument");
+		File[] commerceDocEdDocumentList = docEDDir.listFiles();
 		if(commerceDocEdDocumentList != null && commerceDocEdDocumentList.length > 0){
 			Printer.println("#### Reading Printer Friendly Documents");
 			Printer.println("#### Number of files in Commerce/DocEdDocuments folder = " + commerceDocEdDocumentList.length);

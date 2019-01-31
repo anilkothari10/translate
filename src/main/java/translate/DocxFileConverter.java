@@ -109,7 +109,7 @@ public class DocxFileConverter {
 	public void docxFileConverter(List<UserStories> userStories, List<UserStories> commerceUserStories, List<DataTable> dataTableList ,
 			List<Users> usersList , List<Groups> groupList) throws Exception {
 		setProperties();
-		File outputFile = new File(inputFile + "/Sample TDD_temp.docx");
+		File outputFile = new File(inputFile + "/Output_TDD.docx");
 		if(!outputFile.exists()){
 			outputFile.createNewFile();
 		}
