@@ -45,7 +45,8 @@ public class XMLConverter {
 			}
 
 			//Read UserStories from UTIL Libraries
-			File UtilDir = FileSearch.searchFileOrDirectory(file, "UTIL Libraries");;
+			file = new File(inputDir);
+			File UtilDir = FileSearch.searchFileOrDirectory(file, "UTIL Libraries");
 			if(UtilDir != null && UtilDir.exists()){
 				Printer.println("#### Reading UTIL Libraries");
 				for(File utilFolder : UtilDir.listFiles()){
@@ -65,33 +66,39 @@ public class XMLConverter {
 			}
 			
 			//Read commerce files
-			List<UserStories> userStoriesCommerce = readCommerceXMLs(file, xmlReader);
+			file = new File(inputDir);
+			File commerceDir = FileSearch.searchFileOrDirectory(file, "Process");
+			List<UserStories> userStoriesCommerce = readCommerceXMLs(commerceDir, xmlReader);
 			
 			//Read Web services files
-			file = new File(Constants.WEB_SERVICES_DIR);
-			File[] webservicesList = file.listFiles();
+			file = new File(inputDir);
+			File webServices = FileSearch.searchFileOrDirectory(file, "WebServices");
+			File[] webservicesList = webServices.listFiles();
 			if(webservicesList != null && webservicesList.length > 0){
 				xmlReader.readWebServicesFiles(webservicesList,userStoriesCommerce);
 			}
 			
 			//Read JS files
-			file = new File(Constants.JS_DIR);
-			File[] jsList = file.listFiles();
+			file = new File(inputDir);
+			File jsFiles = FileSearch.searchFileOrDirectory(file, "Javascript");
+			File[] jsList = jsFiles.listFiles();
 			if(jsList != null && jsList.length > 0){
 				xmlReader.readJavascriptFiles(jsList,userStoriesCommerce);
 			}
 			
 			//Read Integration
-			file = new File(Constants.INTEGRATION_DIR);
-			File[] integrationScriptList = file.listFiles();
+			file = new File(inputDir);
+			File integrationFiles = FileSearch.searchFileOrDirectory(file, "Integration");
+			File[] integrationScriptList = integrationFiles.listFiles();
 			if(integrationScriptList != null && integrationScriptList.length > 0){
 				xmlReader.readIntegrationScriptFiles(integrationScriptList,userStoriesCommerce);
 			}
 			
 			//Read Data table XML
+			file = new File(inputDir);
+			File dataTableFiles = FileSearch.searchFileOrDirectory(file, "Data_Tables");
+			File[] dataTableFileList = dataTableFiles.listFiles();
 			List<DataTable> dataTableList = new ArrayList<DataTable>();
-			file = new File(Constants.SOURCE_DATA_TABLE_DIR);
-			File[] dataTableFileList = file.listFiles();
 			if(dataTableFileList != null && dataTableFileList.length > 0){
 				
 				Printer.println("#### Reading Data table XMLs. Number of files in Data_Tables folder: " + dataTableFileList.length);
@@ -112,8 +119,9 @@ public class XMLConverter {
 			//read user and Groups
 			List<Groups> groupList= new ArrayList<Groups>();
 			List<Users> usersList = new ArrayList<Users>();
-			file = new File(Constants.SOURCE_USERS_GROUPS_XML_FILE);
-			File[] userGroupFileList = file.listFiles();
+			file = new File(inputDir);
+			File userGroupFiles = FileSearch.searchFileOrDirectory(file, "UserGroups");
+			File[] userGroupFileList = userGroupFiles.listFiles();
 			if(userGroupFileList != null && userGroupFileList.length > 0){
 				for(File userGroupFile : userGroupFileList){
 					if (!userGroupFile.exists()) {
@@ -151,7 +159,6 @@ public class XMLConverter {
 		//Read Commerce attribute, Libraries, Rules
 		List<UserStories> userStoriesCommerce = new ArrayList<UserStories>();
 	
-		file = new File(Constants.SOURCE_COMMERCE_PROCESS_FILE);
 		File[] commerceProcessList = file.listFiles();
 		if(commerceProcessList != null && commerceProcessList.length > 0){
 			for(File commerceProcessFile : commerceProcessList){
