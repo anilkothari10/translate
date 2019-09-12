@@ -19,9 +19,16 @@ public class XMLConverter {
 		
 		List<UserStories> userStoriesRules = new ArrayList<UserStories>();
 		try {
-			System.out.println("Please input the source directory:");
-			Scanner scanner = new Scanner(System.in);
-			String inputDir = scanner.nextLine();
+			String inputDir = null;
+			if(args != null && args.length > 0 && args[0] != null){
+				inputDir = args[0].trim();
+			} 
+			else {
+				System.out.println("Please input the source directory:");
+				Scanner scanner = new Scanner(System.in);
+				inputDir = scanner.nextLine();
+				scanner.close();
+			}
 			if(StringUtils.isBlank(inputDir)){
 				System.out.println("Reading files from default directory...");
 				inputDir = Constants.SOURCE_RULE_ATTRIBUTE_DIR;
@@ -29,7 +36,6 @@ public class XMLConverter {
 			else{
 				System.out.println("Reading files from input directory...");
 			}
-			scanner.close();
 			
 			XMLReader xmlReader = new XMLReader();
 			file = new File(inputDir);
